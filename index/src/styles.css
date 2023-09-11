@@ -1,0 +1,42 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body::-webkit-scrollbar {
+    display: none !important; /* for Chrome, Safari, and Opera */
+}
+body {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    /* overflow-y: scroll;  */
+}
+
+button{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.H_ib_body {
+    background: white;
+    position: absolute;
+    bottom: 0.5em;
+    padding: 0;
+    right: 0px;
+    border-radius: 5px;
+    margin-right: -3em;
+    box-shadow: 0px 0 4px 0 rgba(15, 22, 33, 0.6);
+    margin-bottom: 0.5em;
+  }
+  /** Style for the info bubble tail */
+  .H_ib.H_ib_top .H_ib_tail::after {
+  }
+
+  .H_ib_close{
+    display: none;
+  }
+
+  .H_ib_content{
+    margin: 0.5em;
+    min-width: 4em;
+  }

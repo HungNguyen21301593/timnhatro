@@ -1,0 +1,14 @@
+<div className="image-container" fxLayout="row" fxLayoutAlign="center">
+  <div>
+    <mat-button-toggle-group [dir]="'ltr'" [vertical]="true">
+      <mat-button-toggle *ngFor="let imageUrl of images" (click)="selectedImage = imageUrl">
+        <img [src]="imageUrl" class="image-icon">
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <div class="image-container" fxLayout="row" fxLayoutAlign="center center">
+    <a [href]="selectedImage" target="_blank" fxLayout="row" fxLayoutAlign="center center">
+      <img class="image" [src]="selectedImage" loading="lazy">
+    </a>
+  </div>
+</div>

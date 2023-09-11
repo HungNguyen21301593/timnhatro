@@ -1,0 +1,14 @@
+<mat-card class="geoitem-container" *ngIf="getList().length > 0">
+  <mat-action-list>
+    <mat-list-item
+      *ngFor="let geocodeAddedItem of getList()"
+      (click)="target(geocodeAddedItem)">
+      <img *ngIf="geocodeAddedItem?.type === 'Home'" matListItemIcon src="/assets/image/home.png">
+      <img *ngIf="geocodeAddedItem?.type === 'Office'" matListItemIcon src="/assets/image/office.png">
+      <div matListItemTitle> {{geocodeAddedItem?.address?.label}}</div>
+      <button mat-icon-button matListItemMeta (click)="deleteItem(geocodeAddedItem)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-action-list>
+</mat-card>

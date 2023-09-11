@@ -1,0 +1,54 @@
+/* Styles for wrapping the search box */
+
+.main {
+    /* width: 30%;
+    top: 20px;
+    left: 20px;
+    
+    position: fixed;
+    z-index: 1000; */
+}
+
+/* Bootstrap 4 text input with search icon */
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+    border-width: thick !important;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+.app-geocode-added-item{
+    color: darkblue;
+}
+
+.search-results-container {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    height: 20%;
+    overflow-y: scroll;
+}
+.search-results-container::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+
+.geoitem-container{
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    height: 15%;
+    overflow-y: scroll;
+}
+
+.geoitem-container::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}

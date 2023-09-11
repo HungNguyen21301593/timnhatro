@@ -1,0 +1,26 @@
+.mat-stepper-horizontal {
+  margin-top: 8px;
+}
+
+.mat-mdc-form-field {
+  margin-top: 16px;
+}
+
+
+mat-form-field {
+  width: 100%;
+  color: white;
+}
+
+.step-container {
+  width: 95%;
+}
+
+.map-preview-iframe{
+  width: 100%;
+  min-height: 800px;
+}
+
+mat-spinner{
+  margin: 10px;
+}

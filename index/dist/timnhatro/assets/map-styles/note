@@ -1,0 +1,4 @@
+import:
+  - https://js.api.here.com/v3/3.1/styles/omv/skeleton.yaml
+  - https://js.api.here.com/v3/3.1/styles/omv/road_shields.day.yaml
+  - https://js.api.here.com/v3/3.1/styles/omv/poi.day.yaml

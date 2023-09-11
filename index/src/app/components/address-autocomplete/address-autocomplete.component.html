@@ -1,0 +1,13 @@
+<div class="main">
+  <app-geo-added-item-list [types]="'Office'"></app-geo-added-item-list>
+  <div class="form-group has-search">
+    <span class="fa fa-search form-control-feedback"></span>
+    <input type="text" class="form-control" placeholder="Search" [(ngModel)]="searchValue"
+      (ngModelChange)="search(searchValue)">
+  </div>
+
+  <div class="search-results-container">
+    <app-search-result *ngFor="let option of filteredOptions" [result]="option" (addedItem)="addItem($event)">
+    </app-search-result>
+  </div>
+</div>

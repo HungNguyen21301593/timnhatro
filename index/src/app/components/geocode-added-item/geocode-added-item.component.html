@@ -1,0 +1,11 @@
+<mat-card>
+  <mat-card-header>
+    <mat-icon>{{item?.type === 'Home'?'home':'business_center'}}</mat-icon>
+    <mat-card-content> {{item?.address?.label}}</mat-card-content>
+  </mat-card-header>
+  <mat-card-actions>
+    <button mat-button (click)="delete(item)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

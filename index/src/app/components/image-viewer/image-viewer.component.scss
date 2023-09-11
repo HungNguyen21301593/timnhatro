@@ -1,0 +1,24 @@
+.image-container {
+    height: 400px;
+    width: 600px;
+    background-color: black;
+    overflow: hidden;
+}
+
+.image-icon {
+    height: 40px;
+}
+
+.image {
+    max-height: 90% !important;
+    max-width: 100%;
+}
+
+mat-button-toggle-group{
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+mat-button-toggle-group::-webkit-scrollbar{
+    display: none;  /* Safari and Chrome */
+}

@@ -1,0 +1,11 @@
+mat-form-field {
+    width: 80%;
+}
+
+.button-front {
+    left: 0
+}
+
+.button-end {
+    right: 0
+}

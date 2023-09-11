@@ -1,0 +1,92 @@
+<mat-stepper linear #stepper [animationDuration]="'0'">
+  <mat-step [stepControl]="agentFormGroup">
+
+    <div fxLayoutAlign="center center">
+      <div class="step-container">
+        <form [formGroup]="agentFormGroup">
+          <div>
+            <button mat-raised-button color="primary" matStepperNext (click)="save()">Sao Lưu & Tiếp Theo</button>
+          </div>
+
+          <ng-template matStepLabel>Thêm thông tin cá nhân</ng-template>
+          <div fxLayout="row" fxLayoutAlign="start start">
+            <div fxFlex="60">
+              <mat-form-field>
+                <mat-label>Tên</mat-label>
+                <input matInput formControlName="name" placeholder="Hùng Nguyễn" required>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Số điện thoại</mat-label>
+                <input matInput formControlName="phone" placeholder="0858008266" type="number" required>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Mô tả</mat-label>
+                <textarea matInput formControlName="description" placeholder="..." multiple rows="5"></textarea>
+              </mat-form-field>
+            </div>
+            <div fxFlexOffset="10" fxLayout="column" fxLayoutAlign="start start">
+              <mat-label></mat-label>
+              <div fxLayout="row">
+                <button type="button" mat-raised-button (click)="fileInput.click()">Thêm ảnh đại diện</button>
+                <mat-spinner [diameter]="40" [hidden]="!imagesUploadInProgress"></mat-spinner>
+              </div>
+              <input hidden #fileInput (change)="onAvatarFileSelected(fileInput.files)" placeholder="Mô tả" required
+                type="file" accept="image/png, image/gif, image/jpeg">
+              <img [src]="uploadedImageUrl" [height]="'300'" loading="lazy">
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </mat-step>
+
+
+  <!-- ------------------------------------------------------------------------------------ -->
+  <mat-step [stepControl]="RealstateDatasFormGroup">
+
+    <div fxLayoutAlign="center center">
+      <div class="step-container">
+        <form [formGroup]="RealstateDatasFormGroup">
+          <div>
+            <button mat-raised-button color="primary" matStepperPrevious>Trở lại</button>
+            <button mat-raised-button color="primary" matStepperNext (click)="save()">Sao Lưu & Tiếp Theo</button>
+          </div>
+          <ng-template matStepLabel>Thêm danh mục nhà trọ</ng-template>
+          <app-input-sheet-table formControlName="RealstateDatas"></app-input-sheet-table>
+        </form>
+      </div>
+    </div>
+
+    <!-- ------------------------------------------------------------------------------------ -->
+
+  </mat-step>
+  <mat-step>
+    <div fxLayoutAlign="center center">
+      <div class="step-container">
+        <div>
+          <button mat-raised-button color="primary" matStepperPrevious>Trở lại</button>
+          <button mat-raised-button color="primary" matStepperNext>Sao Lưu & Tiếp Theo</button>
+        </div>
+        <ng-template matStepLabel>Xem trước bản đồ của bạn</ng-template>
+        <iframe #mapIframe class="map-preview-iframe" [src]="mapUrl"></iframe>
+      </div>
+    </div>
+  </mat-step>
+
+  <!-- ------------------------------------------------------------------------------------ -->
+  <mat-step>
+    <div fxLayoutAlign="center center">
+      <div class="step-container">
+        <div>
+          <button mat-raised-button color="primary" matStepperPrevious>Trở lại</button>
+          <button mat-raised-button color="primary" (click)="publish()">Hoàn tất</button>
+        </div>
+        <ng-template matStepLabel>Sao lưu và hoàn tất</ng-template>
+        <p>Bạn đã hoàn tất, hãy nhấn xem map để xem thành quả.</p>
+      </div>
+    </div>
+  </mat-step>
+</mat-stepper>

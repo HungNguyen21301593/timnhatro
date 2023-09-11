@@ -1,0 +1,32 @@
+<mat-drawer-container class="map-container" autosize [hasBackdrop]="false">
+  <mat-drawer #drawerAutoSearch class="map-sidenav-search-bar" mode="push" [opened]="true">
+    <app-address-autocomplete></app-address-autocomplete>
+  </mat-drawer>
+
+  <mat-drawer #drawerHomeAddedItems class="map-sidenav-homeList"  mode="push" [opened]="true">
+    <app-geo-added-item-list [types]="'Home'"></app-geo-added-item-list>
+  </mat-drawer>
+
+  <mat-drawer #drawerItem class="map-sidenav-item" mode="push" (closed)="drawerItemClosed()">
+    <app-restate-view-content></app-restate-view-content>
+  </mat-drawer>
+
+  <mat-drawer #drawerAgent class="map-sidenav-agent" mode="push" [position]="'end'" [opened]="false">
+    <app-agent-profile></app-agent-profile>
+  </mat-drawer>
+
+  <mat-drawer #drawerControls class="map-sidenav-controls" mode="push" [opened]="true">
+    <button mat-icon-button (click)="drawerAutoSearch.toggle()">
+      <img src="/assets/image/office.png">
+    </button>
+    
+    <button mat-icon-button (click)="drawerHomeAddedItems.toggle()">
+      <img src="/assets/image/home.png">
+    </button>
+    
+    <button mat-icon-button (click)="drawerAgent.toggle()">
+      <img src="/assets/image/agent.png">
+    </button>
+  </mat-drawer>
+  
+</mat-drawer-container>

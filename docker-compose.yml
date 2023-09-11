@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  server:
+    container_name: server
+    build: ./index
+    restart: always
+    privileged: true
+    ports:
+      - 8000:80
+
+  web-api:
+    container_name: web-api
+    build: ./webapi
+    restart: always
+    privileged: true
+    ports:
+      - 5173:5173
+    environment:
+      - ASPNETCORE_URLS=http://+:5173

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "iEmk/AMd3ifSWh2bkSMrwzhDnyTApKb8bAAiBUSF/fBSLjBptfWbZpH6Lus18SLXxTVfAwYRu5jvbU5ObAyStw==",
+  "success": true,
+  "projectFilePath": "C:\\Personal\\Projects\\rs-agent-helper\\timnhatro\\webapi\\webapi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\nmh\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.2\\microsoft.visualstudio.azure.containers.tools.targets.1.17.2.nupkg.sha512",
+    "C:\\Users\\nmh\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
