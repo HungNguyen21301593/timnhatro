@@ -10,21 +10,12 @@ import { MapStateService } from 'src/app/services/map-state.service';
 })
 export class RestateViewContentComponent implements OnInit, OnDestroy {
   @Input()
-    
-  subscription?: Subscription;
   public item: GeocodeResult | undefined = undefined;
 
   constructor(private mapStateService: MapStateService) { }
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
   }
 
   ngOnInit() {
-    this.subscription = this.mapStateService.itemSelectedObservable.subscribe((item => {
-      if (item === null) {
-        return;
-      }
-      this.item = item;
-    }))
   }
 }

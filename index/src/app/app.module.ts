@@ -37,6 +37,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
 import { MainComponent } from './components/main/main.component';
 import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
+import { GeoAddedHomeComponent } from './components/geo-added-home/geo-added-home.component';
+import { GeoAddedHomeListComponent } from './components/geo-added-home-list/geo-added-home-list.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,9 @@ import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
     DrawerControlsComponent,
     ImageViewerComponent,
     ImageUploaderComponent,
-    MainComponent
+    MainComponent,
+    GeoAddedHomeComponent,
+    GeoAddedHomeListComponent
     ],
   imports: [
     NgFor,

@@ -6,16 +6,7 @@
 
 <mat-drawer-container class="map-container" autosize [hasBackdrop]="false" fxLayout="column" fxLayoutAlign="center center">
   <mat-drawer #drawerHomeAddedItems class="map-sidenav-homeList"  mode="push" [opened]="true">
-    <app-geo-added-item-list [types]="'Home'"></app-geo-added-item-list>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Xem thêm
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <app-restate-view-content></app-restate-view-content>
-    </mat-expansion-panel>
-    
+    <app-geo-added-home-list></app-geo-added-home-list>
   </mat-drawer>
 </mat-drawer-container>
 
