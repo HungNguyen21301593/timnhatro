@@ -13,11 +13,16 @@ export class WebApiService {
 
   constructor(private httpClient: HttpClient) { }
 
+  async createNewUserStateByPhone(phone: string, state: MapState): Promise<MapState> {
+    var dburl = UrlUtil.getDbUrlForUser(phone);
+    var res = (await this.httpClient.put(dburl, { state: state }).toPromise()) as any;
+    return res?.state;
+  }
+
   async getUserStateByPhone(phone: string): Promise<MapState> {
     var dburl = UrlUtil.getDbUrlForUser(phone);
-    var res = await this.httpClient.get(dburl).toPromise();
-    var state = (res as any).state as MapState;
-    return state;
+    var res = (await this.httpClient.get(dburl).toPromise()) as any;
+    return res?.state;
   }
 
   async saveUserStateByPhone(phone: string, state: MapState) {

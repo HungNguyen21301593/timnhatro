@@ -30,7 +30,7 @@ export class SettingStepperComponent implements OnInit {
     description: ['', null],
     image: ['', Validators.required],
   });
-  public mapUrl: null | SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('map');
+  public mapUrl: null | SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('main');
   public imagesUploadInProgress = false;
   public uploadedImageUrl = '';
 
@@ -44,13 +44,30 @@ export class SettingStepperComponent implements OnInit {
   async ngOnInit() {
 
     this.activatedRoute.params.subscribe(async params => {
-      var state = await this.mapStateService.reloadStateFromUrlParams(params);
+      var phone = params['phone'];
+      if (!phone) {
+        throw new Error('there is no phone in url param')
+      }
+      var state = await this.mapStateService.reloadStateFromUrlParams(phone);
+      if (state == null) {
+        state = await this.webApiService.createNewUserStateByPhone(phone, {
+          agent: {
+            phone: phone,
+            name: "",
+            image: "",
+            description: ""
+          },
+          geoItems: [],
+          geoRoutePairs: []
+        });
+
+      }
       this.realoadUser(state);
     })
   }
 
   realoadUser(state: MapState) {
-    this.agentFormGroup.setValue({
+    this.agentFormGroup.patchValue({
       name: state.agent.name,
       phone: state.agent.phone,
       description: state.agent.description,
@@ -61,7 +78,7 @@ export class SettingStepperComponent implements OnInit {
     }
 
     var realstate = state.geoItems.map(item => item.realstateData).flat();
-    this.RealstateDatasFormGroup.setValue({
+    this.RealstateDatasFormGroup.patchValue({
       RealstateDatas: realstate
     });
   }
@@ -77,7 +94,7 @@ export class SettingStepperComponent implements OnInit {
     this.imagesUploadInProgress = false;
   }
 
-  
+
 
   async done() {
     var items = this.RealstateDatasFormGroup.value.RealstateDatas;
@@ -91,8 +108,7 @@ export class SettingStepperComponent implements OnInit {
     await this.save();
   }
 
-  async save()
-  {
+  async save() {
     var phone = this.agentFormGroup.value.phone;
     if (!phone) {
       return;
@@ -101,16 +117,14 @@ export class SettingStepperComponent implements OnInit {
     this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(UrlUtil.getMapUrlForUser(phone));
   }
 
-  private async extractAndSave(phone: string)
-  {
+  private async extractAndSave(phone: string) {
     var state = this.mapStateService.stateObservable.value;
     var newState = await this.extractMapState(state);
     this.mapStateService.stateObservable.next(newState);
     await this.webApiService.saveUserStateByPhone(phone, newState);
   }
 
-  private async extractMapState(state: MapState): Promise<MapState>
-  {
+  private async extractMapState(state: MapState): Promise<MapState> {
     var items = this.RealstateDatasFormGroup.value.RealstateDatas;
     if (!items) {
       return state;
@@ -122,9 +136,9 @@ export class SettingStepperComponent implements OnInit {
     var newState = _.cloneDeep(state);
     newState.agent = {
       name: agent.name,
-        phone: agent.phone,
-        description: agent.description,
-        image: agent.image
+      phone: agent.phone,
+      description: agent.description,
+      image: agent.image
     };
     newState.geoItems = await this.mapToGeoItems(items);
     return newState;
@@ -139,6 +153,11 @@ export class SettingStepperComponent implements OnInit {
       if (!key) {
         continue;
       }
+      for (let index = 0; index < value.length; index++) {
+        const element = value[index];
+        element.id = index.toString();
+      }
+      
       var geocodeResults = await this.mapStateService.getGeoCodeResult(key, true);
       var geoItem: GeocodeResult = {
         address: { label: key },
@@ -152,6 +171,6 @@ export class SettingStepperComponent implements OnInit {
   }
 
   publish() {
-    this.router.navigate(['map', this.agentFormGroup.value.phone ?? '']);
+    this.router.navigate(['main', this.agentFormGroup.value.phone ?? '']);
   }
 }

@@ -20,7 +20,7 @@ export class GeoAddedItemListComponent implements OnInit {
 
   getList(): GeocodeResult[] {
     return this.mapStateService.stateObservable.value.
-      geoItems.filter(a => this.types?.includes(a.type ?? ''));
+      geoItems?.filter(a => this.types?.includes(a.type ?? ''));
   }
 
   deleteItem(result: GeocodeResult) {

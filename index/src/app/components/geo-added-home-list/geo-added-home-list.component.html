@@ -1,4 +1,4 @@
 <span *ngFor="let item of items;let indexOfelement=index;" (click)="selectedItem(indexOfelement)">
-  <app-geo-added-home [item]="item" [expanded]="selectedItemIndex==indexOfelement">
+  <app-geo-added-home [item]="item" [expanded]="selectedItemIndex==indexOfelement" [agent]="agent">
   </app-geo-added-home>
 </span>

@@ -24,7 +24,7 @@ mat-drawer-container {
 }
 
 .map-sidenav-homeList {
-    width: 95%;
+    width: 90%;
     position: fixed;
     /* left: 10px; */
     top: auto;

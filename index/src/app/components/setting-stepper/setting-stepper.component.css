@@ -13,7 +13,8 @@ mat-form-field {
 }
 
 .step-container {
-  width: 95%;
+  width: 100%;
+  height: 80%;
 }
 
 .map-preview-iframe{

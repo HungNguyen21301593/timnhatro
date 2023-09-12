@@ -8,7 +8,6 @@ const routes: Routes = [
   { path: 'main', component: MainComponent },
   { path: '', component: MainComponent },
   { path: 'main/:phone', component: MainComponent },
-  { path: 'setting', component: SettingStepperComponent },
   { path: 'setting/:phone', component: SettingStepperComponent }
 ];
 

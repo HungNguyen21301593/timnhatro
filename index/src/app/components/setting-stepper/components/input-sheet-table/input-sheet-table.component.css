@@ -47,7 +47,7 @@ tr.example-element-row:not(.example-expanded-row):active {
 }
 
 app-sheet-item-edit {
-  width: 80%;
+  width: 100%;
 }
 
 .button-cell {

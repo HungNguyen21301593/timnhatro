@@ -5,25 +5,21 @@
         <b>{{'10 triệu'}} - {{realstateData.title}}</b>
       </mat-panel-title>
     </mat-expansion-panel-header>
-
-    <mat-panel-description fxLayout="column">
-      <app-image-viewer *ngIf="realstateData.images?.length??0 >0" [images]="realstateData.images"
-        [height]="'200'"></app-image-viewer>
-
-    </mat-panel-description>
+    <app-image-viewer *ngIf="realstateData.images?.length??0 >0" [images]="realstateData.images"
+      [height]="'200'"></app-image-viewer>
     <span><u>Địa chỉ:</u> {{realstateData.address}}</span>
     <br>
     <span><u>Mô tả:</u> {{realstateData.description}}</span>
     <br>
-    <div>
+    <div fxLayout="row">
       <button mat-mini-fab color="primary" (click)="back()">
         <mat-icon>arrow_back</mat-icon>
       </button>
       <button mat-mini-fab color="primary" (click)="target()">
         <mat-icon> location_on</mat-icon>
       </button>
-      <button mat-mini-fab color="primary" (click)="target()">
-        <mat-icon>motorcycle</mat-icon>
+      <button mat-mini-fab color="primary" (click)= "share()">
+        <mat-icon>share</mat-icon>
       </button>
     </div>
   </mat-expansion-panel>

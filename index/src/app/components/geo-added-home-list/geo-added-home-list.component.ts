@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { AgentProfile } from 'src/app/interfaces/agent-profile';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { MapStateService } from 'src/app/services/map-state.service';
 
@@ -12,6 +13,7 @@ export class GeoAddedHomeListComponent implements OnInit, OnDestroy {
   public items!: GeocodeResult[];
   public selectedItemIndex = -1;
   subscripbe: Subscription | undefined;
+  public agent!: AgentProfile;
 
   constructor(private mapstateService: MapStateService) { }
   ngOnDestroy(): void {
@@ -21,6 +23,7 @@ export class GeoAddedHomeListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscripbe = this.mapstateService.stateObservable.subscribe(state => {
       this.items = state.geoItems;
+      this.agent = state.agent;
     })
   }
 

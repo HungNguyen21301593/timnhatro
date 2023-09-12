@@ -33,11 +33,11 @@ export class MapStateService {
     })
   }
 
-  async reloadStateFromUrlParams(params: Params): Promise<MapState> {
-    if (!params['phone']) {
-      return this.stateObservable.value;
+  async reloadStateFromUrlParams(phone: string): Promise<MapState | null> {
+    var state = await this.webApiService.getUserStateByPhone(phone);
+    if (!state) {
+      return null;
     }
-    var state = await this.webApiService.getUserStateByPhone(params['phone']);
     this.stateObservable.next(state);
     return state;
   }

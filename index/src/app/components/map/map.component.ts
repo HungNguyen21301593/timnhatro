@@ -33,7 +33,10 @@ export class MapComponent implements OnInit {
     if (!this.map && this.mapDiv) {
       this.map = this.mapApiService.initMap(this.mapDiv.nativeElement);
       this.router.params.subscribe(async param => {
-        await this.mapStateService.reloadStateFromUrlParams(param);
+        if (!param['phone']) {
+          return;
+        }
+        await this.mapStateService.reloadStateFromUrlParams(param['phone']);
       })
     }
   }
