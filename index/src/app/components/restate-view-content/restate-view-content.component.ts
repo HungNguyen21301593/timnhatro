@@ -12,8 +12,7 @@ export class RestateViewContentComponent implements OnInit, OnDestroy {
   @Input()
     
   subscription?: Subscription;
-  public currentItem?: GeocodeResult | null | undefined;
-  selectedImage?: string;
+  public item: GeocodeResult | undefined = undefined;
 
   constructor(private mapStateService: MapStateService) { }
   ngOnDestroy(): void {
@@ -22,8 +21,10 @@ export class RestateViewContentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.mapStateService.itemSelectedObservable.subscribe((item => {
-      this.currentItem = item;
-      this.selectedImage = item?.realstateData[0]?.images[0];
+      if (item === null) {
+        return;
+      }
+      this.item = item;
     }))
   }
 }

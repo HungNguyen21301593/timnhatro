@@ -2,7 +2,7 @@
   <div>
     <mat-button-toggle-group [dir]="'ltr'" [vertical]="true">
       <mat-button-toggle *ngFor="let imageUrl of images" (click)="selectedImage = imageUrl">
-        <img [src]="imageUrl" class="image-icon">
+        <img [src]="imageUrl" [height]="height" class="image-icon">
       </mat-button-toggle>
     </mat-button-toggle-group>
   </div>

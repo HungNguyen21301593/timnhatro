@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MapComponent } from './components/map/map.component';
 import { SettingStepperComponent } from './components/setting-stepper/setting-stepper.component';
+import { MainComponent } from './components/main/main.component';
 
 const routes: Routes = [
-  { path: 'map', component: MapComponent },
-  { path: '', component: MapComponent },
-  { path: 'map/:phone', component: MapComponent },
+  { path: 'main', component: MainComponent },
+  { path: '', component: MainComponent },
+  { path: 'main/:phone', component: MainComponent },
   { path: 'setting', component: SettingStepperComponent },
   { path: 'setting/:phone', component: SettingStepperComponent }
 ];

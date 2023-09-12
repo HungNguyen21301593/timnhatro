@@ -35,6 +35,8 @@ import { ImageViewerComponent } from './components/image-viewer/image-viewer.com
 import { HttpClientModule } from '@angular/common/http';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
+import { MainComponent } from './components/main/main.component';
+import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { ImageUploaderComponent } from './components/image-uploader/image-upload
     GeoAddedItemListComponent,
     DrawerControlsComponent,
     ImageViewerComponent,
-    ImageUploaderComponent
+    ImageUploaderComponent,
+    MainComponent
     ],
   imports: [
     NgFor,
@@ -77,6 +80,8 @@ import { ImageUploaderComponent } from './components/image-uploader/image-upload
     MatListModule,
     MatSidenavModule,
     MatProgressSpinnerModule,
+    MatIconModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -33,7 +33,7 @@ export class MapApiService {
     this.notesGroup = new H.map.Group();
     window.addEventListener('resize', () => this.map?.getViewPort().resize());
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
-    this.ui = H.ui.UI.createDefault(this.map, defaultLayers);
+    // this.ui = H.ui.UI.createDefault(this.map, defaultLayers);
     this.setStyle();
     return this.map;
   }
@@ -98,7 +98,7 @@ export class MapApiService {
         geocodingParameters,
         (result: any) => {
           var locations = result.items;
-          resolve(locations);
+          resolve(locations.slice(0, 5));
         },
         reject
       );
@@ -164,32 +164,6 @@ export class MapApiService {
     for (var i = 0; i < locations.length; i += 1) {
       let location = locations[i];
       var marker = new H.map.Marker(location.position);
-      marker.addEventListener('contextmenu', (e: any) => {
-        console.log('open context menu');
-        e.items.push(
-          new H.util.ContextItem({
-            label: 'Remove',
-            callback: function () {
-              interactionCallBack(InteractToItem.Remove, location);
-            }
-          })
-        );
-
-        e.items.push(
-          new H.util.ContextItem({
-            label: 'Go to',
-            callback: function () {
-              console.log('context item called');
-            }
-          })
-        );
-      })
-
-      marker.addEventListener('tap', (e: any) => {
-
-      });
-
-
       location.type == 'Home' ? marker.setIcon(new H.map.Icon('/assets/image/home.png')) : marker.setIcon(new H.map.Icon('/assets/image/office.png'));
 
       // marker.label = location.address.label;

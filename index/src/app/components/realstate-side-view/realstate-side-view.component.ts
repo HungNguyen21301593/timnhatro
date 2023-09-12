@@ -23,16 +23,16 @@ export class RealstateSideViewComponent implements OnInit {
   constructor(private mapStateService: MapStateService) { }
 
   ngOnInit() {
-    this.subscription = this.mapStateService.itemSelectedObservable.subscribe((item: GeocodeResult | null) => {
-      if (item?.type != 'Home') {
-        return;
-      }
-      if (item === null || !this.drawerItem) {
-        this.backToDefault();
-        return;
-      }
-      this.closeOthers(this.drawerItem);
-    });
+    // this.subscription = this.mapStateService.itemSelectedObservable.subscribe((item: GeocodeResult | null) => {
+    //   if (item?.type != 'Home') {
+    //     return;
+    //   }
+    //   if (item === null || !this.drawerItem) {
+    //     this.backToDefault();
+    //     return;
+    //   }
+    //   this.closeOthers(this.drawerItem);
+    // });
   }
 
   drawerItemClosed() {

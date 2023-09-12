@@ -1,5 +1,5 @@
 .image-container {
-    height: 400px;
+    max-height: 400px;
     width: 600px;
     background-color: black;
     overflow: hidden;
@@ -19,6 +19,7 @@ mat-button-toggle-group{
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
 }
+
 mat-button-toggle-group::-webkit-scrollbar{
     display: none;  /* Safari and Chrome */
 }

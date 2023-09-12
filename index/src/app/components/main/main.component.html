@@ -1,0 +1,22 @@
+<mat-drawer-container class="map-container" autosize [hasBackdrop]="false" fxLayoutAlign="center center">
+  <mat-drawer fxFlex="100" #drawerAutoSearch class="map-sidenav-search-bar" mode="side" [opened]="true">
+    <app-address-autocomplete></app-address-autocomplete>
+  </mat-drawer>
+</mat-drawer-container>
+
+<mat-drawer-container class="map-container" autosize [hasBackdrop]="false" fxLayout="column" fxLayoutAlign="center center">
+  <mat-drawer #drawerHomeAddedItems class="map-sidenav-homeList"  mode="push" [opened]="true">
+    <app-geo-added-item-list [types]="'Home'"></app-geo-added-item-list>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Xem thêm
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-restate-view-content></app-restate-view-content>
+    </mat-expansion-panel>
+    
+  </mat-drawer>
+</mat-drawer-container>
+
+<app-map></app-map>
