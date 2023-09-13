@@ -35,12 +35,19 @@ export class MapStateService {
 
   async reloadStateFromUrlParams(phone: string): Promise<MapState | null> {
     var state = await this.webApiService.getUserStateByPhone(phone);
-    document.title = `Thông tin nhà trọ của ${state.agent.name}, liên lạc: ${state.agent.phone}`;
+    this.updateMetaAndTitle(state.agent);
     if (!state) {
       return null;
     }
     this.stateObservable.next(state);
     return state;
+  }
+
+  private updateMetaAndTitle(agent:AgentProfile)
+  {
+    document.title = `Thông tin nhà trọ của ${agent.name}`;
+    document.querySelector('meta[property="og:description"]')?.setAttribute("content", `Thông tin nhà trọ của ${agent.name}`);
+    document.querySelector('meta[property="og:image"]')?.setAttribute("content", `${agent.image}`);
   }
 
   onMapStateChanges() {
