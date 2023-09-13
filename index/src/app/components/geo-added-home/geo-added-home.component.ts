@@ -52,11 +52,7 @@ export class GeoAddedHomeComponent implements OnInit {
     this.closed.emit();
   }
 
-  share() {
-    var link = "http://localhost:4200/main/0858008266";
-    var message = `Hi bạn, mình có nhu cầu được tư vấn thêm về nhà trọ này: ${link}`;
-    navigator.clipboard.writeText(message);
-    this.snackBar.open(`Đã sao chép: ${message}`, "", { duration: 2000 });
+  share(link:string) {
+    window.location.href = link;
   }
-
 }
