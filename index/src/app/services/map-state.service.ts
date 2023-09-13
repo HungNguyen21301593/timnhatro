@@ -35,6 +35,7 @@ export class MapStateService {
 
   async reloadStateFromUrlParams(phone: string): Promise<MapState | null> {
     var state = await this.webApiService.getUserStateByPhone(phone);
+    document.title = `Thông tin nhà trọ của ${state.agent.name}, liên lạc: ${state.agent.phone}`;
     if (!state) {
       return null;
     }
