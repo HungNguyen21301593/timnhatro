@@ -7,6 +7,8 @@ services:
     privileged: true
     ports:
       - 8000:80
+    volumes:
+      -/dist/src/app/dist/timnhatro:/usr/share/nginx/html:rw
 
   web-api:
     container_name: web-api
