@@ -2,15 +2,17 @@
   <mat-expansion-panel *ngFor="let realstateData of item.realstateData" [expanded]="expanded" #mep="matExpansionPanel">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <b>{{'10 triệu'}} - {{realstateData.title}}</b>
+        <b>{{realstateData.title}}</b>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <app-image-viewer *ngIf="realstateData.images?.length??0 >0" [images]="realstateData.images"
+    <br>
+    <!-- <app-image-viewer *ngIf="realstateData.images?.length??0 >0" [images]="realstateData.images"
       [height]="'200'"></app-image-viewer>
     <span><u>Địa chỉ:</u> {{realstateData.address}}</span>
     <br>
     <span><u>Mô tả:</u> {{realstateData.description}}</span>
-    <br>
+    <br> -->
+    <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FDuyVanDu%2Fposts%2Fpfbid0mPxUmaWXMEJ3eC59PzzVjuwPscjiT41vuve7i3nSNWNybifyAobATvc6hSC78yeal&show_text=true&width=500" width="500" height="625" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
     <div fxLayout="row">
       <button mat-mini-fab color="primary" (click)="back()">
         <mat-icon>arrow_back</mat-icon>
@@ -24,3 +26,4 @@
     </div>
   </mat-expansion-panel>
 </mat-accordion>
+

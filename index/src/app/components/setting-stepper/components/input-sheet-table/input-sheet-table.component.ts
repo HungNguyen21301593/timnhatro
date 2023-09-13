@@ -122,6 +122,7 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
       return;
     }
     var newData = this.moveElementToLast(element);
+    this.value = newData;
     this.dataSource = newData;
     this.onChange(this.value);
     this.stateChanges.next();
@@ -133,6 +134,9 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
       return [];
     }
     var index = this.value?.findIndex(RealstateData => RealstateData.title == element.title);
+    if (index == -1) {
+      var index = this.value?.findIndex(RealstateData => RealstateData.title == Constant.newPostTitle);
+    }
     this.value[index] = element;
     var newData: RealstateData[] = [];
     newData.push(... this.value);

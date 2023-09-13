@@ -3,7 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
-import { SettingResult } from 'src/app/interfaces/setting-result';
 import { MapStateService } from 'src/app/services/map-state.service';
 import { UrlUtil } from 'src/environment';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
