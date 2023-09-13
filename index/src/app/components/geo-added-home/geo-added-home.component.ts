@@ -53,6 +53,7 @@ export class GeoAddedHomeComponent implements OnInit {
   }
 
   share(link:string) {
-    window.location.href = link;
+    window.open(link, '_system');
+    // window.location.href = link;
   }
 }
