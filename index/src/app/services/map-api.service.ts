@@ -178,7 +178,7 @@ export class MapApiService {
     this.map?.setCenter(this.locationsGroup?.getBoundingBox()?.getCenter());
   }
 
-  zoomToLocations(locations: GeocodeResult[], resolution = 14) {
+  zoomToLocations(locations: GeocodeResult[], resolution = 13) {
     var dummyGroup = new H.map.Group();
     for (var i = 0; i < locations.length; i += 1) {
       let location = locations[i];
@@ -187,7 +187,7 @@ export class MapApiService {
     }
     this.map?.getViewModel().setLookAtData({
       bounds: dummyGroup.getBoundingBox(),
-      zoom: resolution
+      zoom: resolution,
     });
   }
 

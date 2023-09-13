@@ -12,7 +12,7 @@
     <br>
     <span><u>Mô tả:</u> {{realstateData.description}}</span>
     <br> -->
-    <div [innerHTML]="realstateData.html | safeHtml"></div>
+    <div [innerHTML]="generateIframe(realstateData.html) | safeHtml"></div>
     <div fxLayout="row">
       <button mat-mini-fab color="primary" (click)="back()">
         <mat-icon>arrow_back</mat-icon>
