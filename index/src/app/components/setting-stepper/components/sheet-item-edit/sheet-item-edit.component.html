@@ -15,6 +15,10 @@
       <mat-label>Mô tả</mat-label>
       <textarea matInput formControlName="description" placeholder="Mô tả" required rows="10"></textarea>
     </mat-form-field>
+    <mat-form-field>
+      <mat-label>Mô tả</mat-label>
+      <textarea matInput formControlName="html" placeholder="Iframe Code" required rows="10"></textarea>
+    </mat-form-field>
     <app-image-uploader [inputImages]="RealstateData?.images" (imagesChanged)="imagesUpdated($event)"></app-image-uploader>
     <div>
       <button class="button-front" mat-raised-button color="primary" (click)="update()" mat-button>Cập nhật thay

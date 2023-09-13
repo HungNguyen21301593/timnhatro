@@ -98,7 +98,8 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
       address: "",
       description: "",
       images: [],
-      title: Constant.newPostTitle
+      title: Constant.newPostTitle,
+      html:""
     }
 
     this.value?.push(

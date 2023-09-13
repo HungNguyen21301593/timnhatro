@@ -22,6 +22,7 @@ export class SheetItemEditComponent implements OnInit {
     title: ['', Validators.required],
     address: ['', Validators.required],
     description: ['', Validators.required],
+    html: ['', Validators.required],
   });
 
   imageIndex = 0;
@@ -43,7 +44,8 @@ export class SheetItemEditComponent implements OnInit {
       title: formValue.title ?? '',
       address: formValue.address ?? '',
       description: formValue.description ?? '',
-      images: this.selectedImages
+      images: this.selectedImages,
+      html: formValue.html ?? ''
     }
     this.updated.emit(value)
   }
@@ -56,7 +58,8 @@ export class SheetItemEditComponent implements OnInit {
       title: formValue.title ?? '',
       address: formValue.address ?? '',
       description: formValue.description ?? '',
-      images: this.selectedImages
+      images: this.selectedImages,
+      html: formValue.html ?? ''
     }
     this.deleted.emit(value)
   }

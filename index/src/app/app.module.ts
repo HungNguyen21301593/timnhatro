@@ -40,6 +40,7 @@ import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
 import { GeoAddedHomeComponent } from './components/geo-added-home/geo-added-home.component';
 import { GeoAddedHomeListComponent } from './components/geo-added-home-list/geo-added-home-list.component';
 import {MatSnackBar, MatSnackBarRef, MatSnackBarModule} from '@angular/material/snack-bar';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import {MatSnackBar, MatSnackBarRef, MatSnackBarModule} from '@angular/material/
     MainComponent,
     GeoAddedHomeComponent,
     GeoAddedHomeListComponent,
+    SafeHtmlPipe
     ],
   imports: [
     NgFor,

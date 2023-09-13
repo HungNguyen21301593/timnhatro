@@ -4,4 +4,5 @@ export interface RealstateData {
     address: string;
     description: string;
     images: string[];
+    html: string;
 }
