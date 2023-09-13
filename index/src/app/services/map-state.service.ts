@@ -35,10 +35,10 @@ export class MapStateService {
 
   async reloadStateFromUrlParams(phone: string): Promise<MapState | null> {
     var state = await this.webApiService.getUserStateByPhone(phone);
-    this.updateMetaAndTitle(state.agent);
     if (!state) {
       return null;
     }
+    this.updateMetaAndTitle(state.agent);
     this.stateObservable.next(state);
     return state;
   }
