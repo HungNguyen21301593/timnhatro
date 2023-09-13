@@ -13,14 +13,15 @@
     <span><u>Mô tả:</u> {{realstateData.description}}</span>
     <br> -->
     <div class="iframe-container" [innerHTML]="generateIframe(realstateData.html) | safeHtml"></div>
-    <div fxLayout="row">
+    <div fxLayout="row" fxLayout="start center">
       <button mat-mini-fab color="primary" (click)="back()">
         <mat-icon>arrow_back</mat-icon>
       </button>
       <button mat-mini-fab color="primary" (click)="target()">
         <mat-icon> location_on</mat-icon>
       </button>
-      <button mat-mini-fab color="primary" (click)= "share(realstateData.html)">
+      <button mat-flat-button color="primary" (click)= "share(realstateData.html)">
+        <span>Xem toàn bộ bài đăng</span>
         <mat-icon>share</mat-icon>
       </button>
     </div>
