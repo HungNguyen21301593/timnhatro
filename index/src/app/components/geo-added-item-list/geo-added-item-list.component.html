@@ -1,10 +1,12 @@
-<div class="geoitem-container" *ngIf="getList().length > 0">
-  <span *ngFor="let geocodeAddedItem of getList()">
-    <div fxLayout="row" fxLayoutAlign="start center">
-      <button class="button-text" mat-raised-button color="primary" (click)="target(geocodeAddedItem)" fxLayoutAlign="start center">
-        {{geocodeAddedItem?.address?.label}}
-      </button>
+<div *ngIf="getList().length > 0" fxLayout="column" class="geoitem-container">
+  <span *ngFor="let geocodeAddedItem of getList()" fxLayout="row" fxLayoutAlign="start center" >
+    <button class="button-text" mat-raised-button color="primary" (click)="target(geocodeAddedItem)" fxFlex="80"
+      fxLayoutAlign="start center">
+      <span>{{geocodeAddedItem?.address?.label?.split(',')![0]}}</span>
+    </button>
+    <div>
       <button mat-mini-fab color="warn" (click)="deleteItem(geocodeAddedItem)"><mat-icon>delete</mat-icon></button>
     </div>
+
   </span>
 </div>

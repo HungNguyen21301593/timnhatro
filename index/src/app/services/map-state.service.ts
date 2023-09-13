@@ -103,11 +103,11 @@ export class MapStateService {
 
   interactionCallBack = (type: InteractToItem, item: GeocodeResult) => {
     switch (type) {
-      case InteractToItem.Remove:
-        console.log("called back");
-        this.removeItem(item);
+      case InteractToItem.Open:
+        this.itemSelectedObservable.next(item);
         break;
       case InteractToItem.Remove:
+        this.removeItem(item);
         console.log("open item");
         break;
       default:

@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
+import { Subscription } from 'rxjs';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { MapStateService } from 'src/app/services/map-state.service';
 
@@ -8,16 +9,28 @@ import { MapStateService } from 'src/app/services/map-state.service';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
   @ViewChild('drawerHomeAddedItems') drawerHomeAddedItems?: MatDrawer;
 
   @ViewChild('drawerAutoSearch') drawerAutoSearch?: MatDrawer;
 
-  public items!: GeocodeResult[];
-  constructor() {
+  public item!: GeocodeResult;
+  subs: Subscription;
+  constructor(private mapstateService: MapStateService) {
+    this.subs = this.mapstateService.itemSelectedObservable.subscribe(item => {
+      if (!item) {
+        return;
+      }
+      this.item = item;
+      this.drawerHomeAddedItems?.open();
+    })
+  }
+  
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   ngOnInit() {
-   
+
   }
 }

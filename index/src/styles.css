@@ -40,3 +40,16 @@ button{
     margin: 0.5em;
     min-width: 4em;
   }
+
+  .H_ui{
+    visibility: hidden;
+    z-index: 0;
+  }
+
+
+  
+.mdc-button__label{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

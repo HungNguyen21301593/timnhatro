@@ -31,6 +31,6 @@ export class GeocodeAddedItemComponent implements OnInit {
     if (!item) {
       return
     }
-    this.mapApiService.zoomToLocations([item], 16);
+    this.mapApiService.zoomToLocations([item], 14);
   }
 }

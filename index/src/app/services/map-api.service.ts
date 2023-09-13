@@ -33,7 +33,7 @@ export class MapApiService {
     this.notesGroup = new H.map.Group();
     window.addEventListener('resize', () => this.map?.getViewPort().resize());
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
-    // this.ui = H.ui.UI.createDefault(this.map, defaultLayers);
+    this.ui = H.ui.UI.createDefault(this.map, defaultLayers);
     this.setStyle();
     return this.map;
   }
@@ -116,7 +116,6 @@ export class MapApiService {
         console.log(section);
 
         // Create a polyline to display the route:
-        var randomColor = Math.floor(Math.random()*16777215).toString(16);
         let polyline = new H.map.Polyline(linestring,
           {
             style: {
@@ -165,9 +164,12 @@ export class MapApiService {
     for (var i = 0; i < locations.length; i += 1) {
       let location = locations[i];
       var marker = new H.map.Marker(location.position);
+
+      marker.addEventListener('tap', function (evt:any) {
+        interactionCallBack(InteractToItem.Open, location);
+      }, false);
       location.type == 'Home' ? marker.setIcon(new H.map.Icon('/assets/image/home.png')) : marker.setIcon(new H.map.Icon('/assets/image/office.png'));
 
-      // marker.label = location.address.label;
       this.locationsGroup?.addObject(marker);
     }
 

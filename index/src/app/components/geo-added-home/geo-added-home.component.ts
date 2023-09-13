@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgentProfile } from 'src/app/interfaces/agent-profile';
@@ -21,6 +21,9 @@ export class GeoAddedHomeComponent implements OnInit {
   @Input()
   expanded = false;
 
+  @Output()
+  closed = new EventEmitter();
+
   @ViewChild(MatAccordion) accordion: MatAccordion | undefined;
 
   constructor(private mapApiService: MapApiService, private snackBar: MatSnackBar) { }
@@ -32,12 +35,12 @@ export class GeoAddedHomeComponent implements OnInit {
     if (!this.item) {
       return
     }
-    this.accordion?.closeAll();
+    this.closed.emit();
     this.mapApiService.zoomToLocations([this.item], 16);
   }
 
   back() {
-    this.accordion?.closeAll();
+    this.closed.emit();
   }
 
   share() {
@@ -46,4 +49,5 @@ export class GeoAddedHomeComponent implements OnInit {
     navigator.clipboard.writeText(message);
     this.snackBar.open(`Đã sao chép: ${message}`, "", { duration: 2000 });
   }
+
 }

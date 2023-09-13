@@ -5,9 +5,9 @@
 </mat-drawer-container>
 
 <mat-drawer-container class="map-container" autosize [hasBackdrop]="false" fxLayout="column" fxLayoutAlign="center center">
-  <mat-drawer #drawerHomeAddedItems class="map-sidenav-homeList"  mode="push" [opened]="true">
-    <app-geo-added-home-list></app-geo-added-home-list>
+  <mat-drawer #drawerHomeAddedItems class="map-sidenav-homeList"  mode="push" [opened]="false">
+    <app-geo-added-home *ngIf="item" [item]="item" [expanded]="true" (closed)="drawerHomeAddedItems.close()">
+    </app-geo-added-home>
   </mat-drawer>
 </mat-drawer-container>
-
 <app-map></app-map>
