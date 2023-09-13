@@ -37,7 +37,7 @@ export class GeoAddedHomeComponent implements OnInit {
   generateIframe(link: string)
   {
     var encodedLink = encodeURIComponent(link);
-    return `<iframe src="https://www.facebook.com/plugins/post.php?href=${encodedLink}&show_text=true&width=500" width="500" height="625" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>`
+    return `<iframe src="https://www.facebook.com/plugins/post.php?href=${encodedLink}&show_text=true&width=500&autoplay=0" autoplay=0 width="500" height="625" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>`
   }
 
   target() {
