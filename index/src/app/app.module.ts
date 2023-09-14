@@ -29,7 +29,6 @@ import { RestateViewContentComponent } from './components/restate-view-content/r
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { AgentProfileComponent } from './components/agent-profile/agent-profile.component';
 import { GeoAddedItemListComponent } from './components/geo-added-item-list/geo-added-item-list.component';
-import { DrawerControlsComponent } from './components/drawer-controls/drawer-controls.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ImageViewerComponent } from './components/image-viewer/image-viewer.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -41,6 +40,8 @@ import { GeoAddedHomeComponent } from './components/geo-added-home/geo-added-hom
 import { GeoAddedHomeListComponent } from './components/geo-added-home-list/geo-added-home-list.component';
 import {MatSnackBar, MatSnackBarRef, MatSnackBarModule} from '@angular/material/snack-bar';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
 
 @NgModule({
   declarations: [
@@ -57,13 +58,13 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     RestateViewContentComponent,
     AgentProfileComponent,
     GeoAddedItemListComponent,
-    DrawerControlsComponent,
     ImageViewerComponent,
     ImageUploaderComponent,
     MainComponent,
     GeoAddedHomeComponent,
     GeoAddedHomeListComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    LoginDialogComponent
     ],
   imports: [
     NgFor,
@@ -90,6 +91,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     MatIconModule,
     MatExpansionModule,
     MatSnackBarModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

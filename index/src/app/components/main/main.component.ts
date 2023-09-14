@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { MapStateService } from 'src/app/services/map-state.service';
+import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 
 @Component({
   selector: 'ngx-main',
@@ -17,7 +19,11 @@ export class MainComponent implements OnInit, OnDestroy {
 
   public item!: GeocodeResult;
   subs: Subscription;
-  constructor(private mapstateService: MapStateService, private snackBar: MatSnackBar) {
+  constructor(
+    private mapstateService: MapStateService,
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog
+  ) {
     this.subs = this.mapstateService.itemSelectedObservable.subscribe(item => {
       if (!item) {
         return;
@@ -25,6 +31,8 @@ export class MainComponent implements OnInit, OnDestroy {
       this.item = item;
       this.drawerHomeAddedItems?.open();
     })
+
+
   }
 
   ngOnDestroy(): void {
@@ -32,6 +40,13 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    if (this.mapstateService.stateObservable.value) {
+      this.dialog.open(LoginDialogComponent, {
+        enterAnimationDuration: '200ms',
+        exitAnimationDuration: '200ms',
+      });
+    }
     this.snackBar.open("Trải nghiệm tốt hơn bằng cách mở trong trình duyệt!", "OK", { duration: 2000 });
+
   }
 }

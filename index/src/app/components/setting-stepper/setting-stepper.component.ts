@@ -72,6 +72,7 @@ export class SettingStepperComponent implements OnInit {
       description: state.agent.description,
       image: state.agent.image
     });
+    this.agentFormGroup.get('phone')?.disable();
     if (state.agent.image) {
       this.uploadedImageUrl = state.agent.image;
     }
@@ -80,6 +81,7 @@ export class SettingStepperComponent implements OnInit {
     this.RealstateDatasFormGroup.patchValue({
       RealstateDatas: realstate
     });
+
   }
 
   async onAvatarFileSelected(files: FileList | null) {

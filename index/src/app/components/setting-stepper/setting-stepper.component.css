@@ -19,7 +19,7 @@ mat-form-field {
 
 .map-preview-iframe{
   width: 100%;
-  min-height: 800px;
+  min-height: 600px;
 }
 
 mat-spinner{
