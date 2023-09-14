@@ -10,5 +10,4 @@ export class UrlUtil {
     public static getMapUrlForUser(userphone: string) {
         return `${UrlUtil.base}${userphone}`;
     }
-
 }

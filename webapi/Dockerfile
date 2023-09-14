@@ -17,6 +17,10 @@ FROM build AS publish
 RUN dotnet publish "webapi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
+RUN apt-get update
+RUN apt-get --assume-yes install wget
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt --assume-yes install ./google-chrome-stable_current_amd64.deb
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "webapi.dll"]

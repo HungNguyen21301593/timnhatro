@@ -89,7 +89,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     MatProgressSpinnerModule,
     MatIconModule,
     MatExpansionModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -5,7 +5,8 @@ import { AgentProfile } from 'src/app/interfaces/agent-profile';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { MapApiService } from 'src/app/services/map-api.service';
 import { MapStateService } from 'src/app/services/map-state.service';
-
+// import { useLinkPreview } from "get-link-preview"; 
+declare const useLinkPreview: Function;
 @Component({
   selector: 'app-geo-added-home',
   templateUrl: './geo-added-home.component.html',
@@ -26,12 +27,14 @@ export class GeoAddedHomeComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion: MatAccordion | undefined;
 
+
   public iframeElement: string = '';
 
   constructor(private mapApiService: MapApiService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    
+    const { getLinkPreviewData, loading, error, data } = useLinkPreview("https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562355187365027/");
+    console.log(data);
   }
 
   generateIframe(link: string)

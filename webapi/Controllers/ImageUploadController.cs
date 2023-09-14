@@ -1,58 +1,89 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium;
 using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using WebDriverManager.DriverConfigs.Impl;
+using WebDriverManager;
+using core.Service;
 
 namespace YourApiNamespace.Controllers
 {
-  [Route("api/images")]
-  [ApiController]
-  public class ImageUploadController : ControllerBase
-  {
-    private readonly string cloudflareApiUrl = "https://api.cloudflare.com/client/v4/accounts/ee931afd697673b7d6841a64430b280c/images/v1";
-    private readonly string cloudflareApiKey = "G5QqNRQ5jQFpN8o8fq8foojIVeTRl9CckVS3bjqP";
-
-    [HttpPost("upload")]
-    public async Task<IActionResult> UploadImage(IFormFile file)
+    [Route("api/images")]
+    [ApiController]
+    public class ImageUploadController : ControllerBase
     {
-      if (file == null || file.Length == 0)
-      {
-        return BadRequest("Please select a valid image file.");
-      }
+        private readonly string cloudflareApiUrl = "https://api.cloudflare.com/client/v4/accounts/ee931afd697673b7d6841a64430b280c/images/v1";
+        private readonly string cloudflareApiKey = "G5QqNRQ5jQFpN8o8fq8foojIVeTRl9CckVS3bjqP";
+        private readonly WebDriverManagerService webDriverManagerService;
 
-      try
-      {
-        using var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {cloudflareApiKey}");
-
-        using var formData = new MultipartFormDataContent
+        public ImageUploadController(WebDriverManagerService webDriverManagerService)
         {
-          { new StreamContent(file.OpenReadStream()), "file", file.FileName }
-        };
-
-        var response = await httpClient.PostAsync(cloudflareApiUrl, formData);
-
-        if (response.IsSuccessStatusCode)
-        {
-          // Image uploaded successfully
-          var responseContent = await response.Content.ReadAsStringAsync();
-          var cloudflareResponse = JsonConvert.DeserializeObject<CloudflareApiResponse>(responseContent);
-          return Ok(cloudflareResponse); // Return Cloudflare response to the frontend
+            this.webDriverManagerService = webDriverManagerService ?? throw new ArgumentNullException(nameof(webDriverManagerService));
         }
-        else
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadImage(IFormFile file)
         {
-          // Handle error response from Cloudflare API
-          var errorMessage = await response.Content.ReadAsStringAsync();
-          return BadRequest($"Image upload failed: {errorMessage}");
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Please select a valid image file.");
+            }
+
+            return await UploadToCloudFare(file.Name, file.OpenReadStream());
         }
-      }
-      catch (Exception ex)
-      {
-        return StatusCode(500, $"Internal server error: {ex.Message}");
-      }
+
+
+        [HttpPost("upload-from-url")]
+        public async Task<IActionResult> UploadImage(string url)
+        {
+            url ??= "https://www.facebook.com/permalink.php?story_fbid=pfbid02DcAMQiRLFsVYMnu3W1DChxeF8DU5t66QniBfPLAUpeX8KYSewxXbgtNiYyYxQjjJl&id=100007145808912";
+            var driver = webDriverManagerService.GetDriver();
+            driver.Manage().Window.Size = new System.Drawing.Size(600, 1200);
+            driver.Navigate().GoToUrl(url);
+            var jsDriver = (IJavaScriptExecutor)driver;
+            jsDriver.ExecuteScript("document.body.style.zoom='40%'");
+            var ss = ((ITakesScreenshot)driver).GetScreenshot();
+            Stream stream = new MemoryStream(ss.AsByteArray);
+            return await UploadToCloudFare("image.png", stream);
+        }
+
+        private async Task<IActionResult> UploadToCloudFare(string Filename, Stream stream)
+        {
+            try
+            {
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {cloudflareApiKey}");
+
+                using var formData = new MultipartFormDataContent
+                {
+                    { new StreamContent(stream), "file",Filename }
+                };
+
+                var response = await httpClient.PostAsync(cloudflareApiUrl, formData);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Image uploaded successfully
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var cloudflareResponse = JsonConvert.DeserializeObject<CloudflareApiResponse>(responseContent);
+                    return Ok(cloudflareResponse); // Return Cloudflare response to the frontend
+                }
+                else
+                {
+                    // Handle error response from Cloudflare API
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    return BadRequest($"Image upload failed: {errorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
-  }
 }
