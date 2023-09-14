@@ -6,7 +6,7 @@ import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { MapStateService } from 'src/app/services/map-state.service';
 
 @Component({
-  selector: 'ngx-main',
+  selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
@@ -25,13 +25,20 @@ export class MainComponent implements OnInit, OnDestroy {
       this.item = item;
       this.drawerHomeAddedItems?.open();
     })
+    
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    var phone = localStorage.getItem('phone');
+    if (!phone) {
+      // should show dialog
+      return;
+    }
+    await this.mapstateService.reloadStateFromUrlParams(phone);
     this.snackBar.open("Trải nghiệm tốt hơn bằng cách mở trong trình duyệt!", "OK", { duration: 2000 });
   }
 }

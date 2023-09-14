@@ -6,9 +6,8 @@ import { MainComponent } from './components/main/main.component';
 
 const routes: Routes = [
   { path: 'main', component: MainComponent },
-  { path: '', component: MainComponent },
   { path: 'main/:phone', component: MainComponent },
-  { path: 'setting/:phone', component: SettingStepperComponent }
+  { path: 'setting', component: SettingStepperComponent }
 ];
 
 @NgModule({

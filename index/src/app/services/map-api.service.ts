@@ -106,6 +106,9 @@ export class MapApiService {
   }
 
   renderRouteShapesToMap(routes: RouteResult[]) {
+    if (!this.map) {
+      return;
+    }
     this.clearAllBubble();
     this.routesGroup?.removeAll();
     var polylines: H.map.Polyline[] = [];
@@ -156,6 +159,9 @@ export class MapApiService {
   }
 
   renderLocationsToMap(locations: GeocodeResult[], interactionCallBack: (type: InteractToItem, item: GeocodeResult) => void) {
+    if (!this.map) {
+      return;
+    }
     if (!this.locationsGroup) {
       this.locationsGroup = new H.map.Group();
     }
@@ -179,6 +185,9 @@ export class MapApiService {
   }
 
   zoomToLocations(locations: GeocodeResult[], resolution = 13) {
+    if (!this.map) {
+      return;
+    }
     var dummyGroup = new H.map.Group();
     for (var i = 0; i < locations.length; i += 1) {
       let location = locations[i];
