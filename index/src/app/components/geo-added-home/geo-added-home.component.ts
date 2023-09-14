@@ -33,8 +33,6 @@ export class GeoAddedHomeComponent implements OnInit {
   constructor(private mapApiService: MapApiService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    const { getLinkPreviewData, loading, error, data } = useLinkPreview("https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562355187365027/");
-    console.log(data);
   }
 
   generateIframe(link: string)

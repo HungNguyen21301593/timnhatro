@@ -18,16 +18,26 @@ export class MapComponent implements OnInit {
   private map?: H.Map;
   @ViewChild('map') mapDiv?: ElementRef;
 
-  constructor(private mapApiService: MapApiService  ) {
+  constructor(private mapApiService: MapApiService,
+    private mapStateService: MapStateService,
+    private router: ActivatedRoute
+  ) {
 
   }
 
   selectedItem?: GeocodeResult;
   ngOnInit(): void {
   }
+
   async ngAfterViewInit(): Promise<void> {
     if (!this.map && this.mapDiv) {
       this.map = this.mapApiService.initMap(this.mapDiv.nativeElement);
+      this.router.params.subscribe(async param => {
+        if (!param['phone']) {
+          return;
+        }
+        await this.mapStateService.reloadStateFromUrlParams(param['phone']);
+      })
     }
   }
 }

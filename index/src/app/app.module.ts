@@ -41,7 +41,6 @@ import { GeoAddedHomeComponent } from './components/geo-added-home/geo-added-hom
 import { GeoAddedHomeListComponent } from './components/geo-added-home-list/geo-added-home-list.component';
 import {MatSnackBar, MatSnackBarRef, MatSnackBarModule} from '@angular/material/snack-bar';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
-import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -91,7 +90,6 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatIconModule,
     MatExpansionModule,
     MatSnackBarModule,
-    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

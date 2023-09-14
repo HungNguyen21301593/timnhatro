@@ -34,15 +34,35 @@ export class SettingStepperComponent implements OnInit {
   public uploadedImageUrl = '';
 
   constructor(private _formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private mapStateService: MapStateService,
     private sanitizer: DomSanitizer,
     private webApiService: WebApiService) { }
 
   async ngOnInit() {
-     this.mapStateService.stateObservable.subscribe(state=>{
+
+    this.activatedRoute.params.subscribe(async params => {
+      var phone = params['phone'];
+      if (!phone) {
+        throw new Error('there is no phone in url param')
+      }
+      var state = await this.mapStateService.reloadStateFromUrlParams(phone);
+      if (state == null) {
+        state = await this.webApiService.createNewUserStateByPhone(phone, {
+          agent: {
+            phone: phone,
+            name: "",
+            image: "",
+            description: ""
+          },
+          geoItems: [],
+          geoRoutePairs: []
+        });
+
+      }
       this.realoadUser(state);
-     });
+    })
   }
 
   realoadUser(state: MapState) {
@@ -150,6 +170,6 @@ export class SettingStepperComponent implements OnInit {
   }
 
   publish() {
-    this.router.navigate(['main']);
+    this.router.navigate(['main', this.agentFormGroup.value.phone ?? '']);
   }
 }
