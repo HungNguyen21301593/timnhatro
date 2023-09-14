@@ -43,11 +43,11 @@ namespace YourApiNamespace.Controllers
         {
             url ??= "https://www.facebook.com/permalink.php?story_fbid=pfbid02DcAMQiRLFsVYMnu3W1DChxeF8DU5t66QniBfPLAUpeX8KYSewxXbgtNiYyYxQjjJl&id=100007145808912";
             var driver = webDriverManagerService.GetDriver();
-            TryLogin(driver, "hung.nuyen.abc123@gmail.com", "Hung991995");
-            driver.Manage().Window.Size = new System.Drawing.Size(600, 1200);
+            await TryLogin(driver, "hung.nuyen.abc123@gmail.com", "Hung991995");
             //driver.Navigate().GoToUrl(url);
+            driver.Manage().Window.Size = new System.Drawing.Size(600, 1200);
             var jsDriver = (IJavaScriptExecutor)driver;
-            jsDriver.ExecuteScript("document.body.style.zoom='40%'");
+            jsDriver.ExecuteScript("document.body.style.zoom='60%'");
             var ss = ((ITakesScreenshot)driver).GetScreenshot();
             Stream stream = new MemoryStream(ss.AsByteArray);
             return await UploadToCloudFare("image.png", stream);
@@ -87,16 +87,17 @@ namespace YourApiNamespace.Controllers
             }
         }
 
-        public void TryLogin(IWebDriver webDriver, string email, string password)
+        public async Task TryLogin(IWebDriver webDriver, string email, string password)
         {
             webDriver.Navigate().GoToUrl("https://mbasic.facebook.com/");
+           
             var emails = webDriver.FindElements(By.XPath("//input[@id='m_login_email']"));
             if (emails.Any()) { emails.First().SendKeys(email); };
 
             var passwords = webDriver.FindElements(By.XPath("//section[@id='password_input_with_placeholder']/input"));
             if (passwords.Any()) { passwords.First().SendKeys(password); };
-
-            var submits = webDriver.FindElements(By.XPath("//input[@value='Log In']"));
+            await Task.Delay(500);
+            var submits = webDriver.FindElements(By.XPath("//input[@value='Log In']/parent::li"));
 
             if (submits.Any()) { submits.First().Click(); };
         }
