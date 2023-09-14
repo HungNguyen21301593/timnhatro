@@ -43,6 +43,7 @@ namespace YourApiNamespace.Controllers
         {
             url ??= "https://www.facebook.com/permalink.php?story_fbid=pfbid02DcAMQiRLFsVYMnu3W1DChxeF8DU5t66QniBfPLAUpeX8KYSewxXbgtNiYyYxQjjJl&id=100007145808912";
             var driver = webDriverManagerService.GetDriver();
+            TryLogin(driver, "hung.nuyen.abc123@gmail.com", "Hung991995");
             driver.Manage().Window.Size = new System.Drawing.Size(600, 1200);
             driver.Navigate().GoToUrl(url);
             var jsDriver = (IJavaScriptExecutor)driver;
@@ -84,6 +85,20 @@ namespace YourApiNamespace.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
+
+        public void TryLogin(IWebDriver webDriver, string email, string password)
+        {
+            webDriver.Navigate().GoToUrl("https://mbasic.facebook.com/");
+            var emails = webDriver.FindElements(By.XPath("//input[@id='m_login_email']"));
+            if (emails.Any()) { emails.First().SendKeys(email); };
+
+            var passwords = webDriver.FindElements(By.XPath("//section[@id='password_input_with_placeholder']/input"));
+            if (passwords.Any()) { passwords.First().SendKeys(password); };
+
+            var submits = webDriver.FindElements(By.XPath("//input[@value='Log In']"));
+
+            if (submits.Any()) { submits.First().Click(); };
         }
     }
 }
