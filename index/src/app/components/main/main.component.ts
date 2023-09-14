@@ -40,13 +40,12 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.mapstateService.stateObservable.value) {
+    if (!this.mapstateService.stateObservable.value.agent.phone) {
       this.dialog.open(LoginDialogComponent, {
         enterAnimationDuration: '200ms',
         exitAnimationDuration: '200ms',
       });
     }
     this.snackBar.open("Trải nghiệm tốt hơn bằng cách mở trong trình duyệt!", "OK", { duration: 2000 });
-
   }
 }
