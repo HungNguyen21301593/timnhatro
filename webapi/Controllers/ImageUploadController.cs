@@ -45,7 +45,7 @@ namespace YourApiNamespace.Controllers
             var driver = webDriverManagerService.GetDriver();
             TryLogin(driver, "hung.nuyen.abc123@gmail.com", "Hung991995");
             driver.Manage().Window.Size = new System.Drawing.Size(600, 1200);
-            driver.Navigate().GoToUrl(url);
+            //driver.Navigate().GoToUrl(url);
             var jsDriver = (IJavaScriptExecutor)driver;
             jsDriver.ExecuteScript("document.body.style.zoom='40%'");
             var ss = ((ITakesScreenshot)driver).GetScreenshot();
