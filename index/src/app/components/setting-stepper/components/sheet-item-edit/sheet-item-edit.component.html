@@ -10,7 +10,7 @@
       <mat-label>ID</mat-label>
       <input matInput formControlName="id" placeholder="Id" required>
     </mat-form-field>
-    <mat-form-field hidden>
+    <mat-form-field>
       <mat-label>Tiêu đề</mat-label>
       <input matInput formControlName="title" placeholder="Tựa đề" required>
     </mat-form-field>
@@ -18,12 +18,12 @@
       <mat-label>Địa chỉ</mat-label>
       <input matInput formControlName="address" placeholder="Địa chỉ" required>
     </mat-form-field>
-    <mat-form-field hidden>
+    <mat-form-field>
       <mat-label>Mô tả</mat-label>
       <textarea matInput formControlName="description" placeholder="Mô tả" required rows="10"
         [disabled]="true"></textarea>
     </mat-form-field>
-    <app-image-viewer *ngIf="selectedImages.length >0" [images]="selectedImages" [height]="'150'" hidden></app-image-viewer>
+    <app-image-uploader [inputImages]="RealstateData?.images" (imagesChanged)="imagesUpdated($event)"></app-image-uploader>
     <div>
       <button class="button-front" mat-raised-button color="primary" (click)="update()" mat-button>Cập nhật thay
         đổi</button>

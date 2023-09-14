@@ -43,8 +43,7 @@ export class MapStateService {
     return state;
   }
 
-  private updateMetaAndTitle(agent:AgentProfile)
-  {
+  private updateMetaAndTitle(agent: AgentProfile) {
     document.title = `Thông tin nhà trọ của ${agent.name}`;
     document.querySelector('meta[property="og:description"]')?.setAttribute("content", `Thông tin nhà trọ của ${agent.name}`);
     document.querySelector('meta[property="og:image"]')?.setAttribute("content", `${agent.image}`);
@@ -124,6 +123,9 @@ export class MapStateService {
   }
 
   async process() {
+    if (!this.stateObservable.value.geoItems) {
+      return;
+    }
     var offices = this.stateObservable.value.geoItems.filter(value => value.type == 'Office');
     var homes = this.stateObservable.value.geoItems.filter(value => value.type == 'Home');
     var pairs: { from: GeocodeResult, to: GeocodeResult }[] = [];

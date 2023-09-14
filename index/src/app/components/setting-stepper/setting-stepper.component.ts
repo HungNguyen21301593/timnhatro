@@ -72,11 +72,13 @@ export class SettingStepperComponent implements OnInit {
       description: state.agent.description,
       image: state.agent.image
     });
-    this.agentFormGroup.get('phone')?.disable();
     if (state.agent.image) {
       this.uploadedImageUrl = state.agent.image;
     }
 
+    if (!state.geoItems) {
+      state.geoItems = [];
+    }
     var realstate = state.geoItems.map(item => item.realstateData).flat();
     this.RealstateDatasFormGroup.patchValue({
       RealstateDatas: realstate
