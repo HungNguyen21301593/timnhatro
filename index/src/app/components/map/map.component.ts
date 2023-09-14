@@ -37,15 +37,13 @@ export class MapComponent implements OnInit {
       this.map = this.mapApiService.initMap(this.mapDiv.nativeElement);
       this.router.params.subscribe(async param => {
         if (!param['phone']) {
-          return;
-        }
-        await this.mapStateService.reloadStateFromUrlParams(param['phone']);
-        if (!this.mapStateService.stateObservable.value.agent.phone) {
           this.dialog.open(LoginDialogComponent, {
             enterAnimationDuration: '200ms',
             exitAnimationDuration: '200ms',
           });
+          return;
         }
+        await this.mapStateService.reloadStateFromUrlParams(param['phone']);
       })
     }
   }
