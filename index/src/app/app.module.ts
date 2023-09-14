@@ -24,7 +24,6 @@ import { SheetItemEditComponent } from './components/setting-stepper/components/
 import { MatListModule } from '@angular/material/list';
 import { OrderByPipe } from './pipes/sort.pipe';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { RealstateSideViewComponent } from './components/realstate-side-view/realstate-side-view.component';
 import { RestateViewContentComponent } from './components/restate-view-content/restate-view-content.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { AgentProfileComponent } from './components/agent-profile/agent-profile.component';
@@ -54,7 +53,6 @@ import { LoginDialogComponent } from './components/login-dialog/login-dialog.com
     InputSheetTableComponent,
     SheetItemEditComponent,
     OrderByPipe,
-    RealstateSideViewComponent,
     RestateViewContentComponent,
     AgentProfileComponent,
     GeoAddedItemListComponent,

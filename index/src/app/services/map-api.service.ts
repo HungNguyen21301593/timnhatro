@@ -184,7 +184,7 @@ export class MapApiService {
     this.map?.setCenter(this.locationsGroup?.getBoundingBox()?.getCenter());
   }
 
-  zoomToLocations(locations: GeocodeResult[], resolution = 13) {
+  zoomToLocations(locations: GeocodeResult[], resolution = 12) {
     if (!this.map) {
       return;
     }

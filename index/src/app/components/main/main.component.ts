@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -22,7 +22,6 @@ export class MainComponent implements OnInit, OnDestroy {
   constructor(
     private mapstateService: MapStateService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog
   ) {
     this.subs = this.mapstateService.itemSelectedObservable.subscribe(item => {
       if (!item) {
@@ -40,12 +39,6 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (!this.mapstateService.stateObservable.value.agent.phone) {
-      this.dialog.open(LoginDialogComponent, {
-        enterAnimationDuration: '200ms',
-        exitAnimationDuration: '200ms',
-      });
-    }
     this.snackBar.open("Trải nghiệm tốt hơn bằng cách mở trong trình duyệt!", "OK", { duration: 2000 });
   }
 }

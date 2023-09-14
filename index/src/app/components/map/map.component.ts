@@ -5,6 +5,8 @@ import { SettingResult } from 'src/app/interfaces/setting-result';
 import { ActivatedRoute } from '@angular/router';
 import { MapStateService } from 'src/app/services/map-state.service';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
+import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-map',
@@ -20,7 +22,8 @@ export class MapComponent implements OnInit {
 
   constructor(private mapApiService: MapApiService,
     private mapStateService: MapStateService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    public dialog: MatDialog
   ) {
 
   }
@@ -37,6 +40,12 @@ export class MapComponent implements OnInit {
           return;
         }
         await this.mapStateService.reloadStateFromUrlParams(param['phone']);
+        if (!this.mapStateService.stateObservable.value.agent.phone) {
+          this.dialog.open(LoginDialogComponent, {
+            enterAnimationDuration: '200ms',
+            exitAnimationDuration: '200ms',
+          });
+        }
       })
     }
   }
