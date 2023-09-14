@@ -2,50 +2,31 @@
   <div fxLayout="column">
     <mat-form-field>
       <mat-label>Link bài viết</mat-label>
-      <textarea matInput #html formControlName="html" placeholder="Iframe Code" required rows="2" (change)="fetchContentFromUrl(html.value)"></textarea>
+      <textarea matInput #html formControlName="html" placeholder="Iframe Code" required rows="2"
+        (change)="fetchContentFromUrl(html.value)"></textarea>
     </mat-form-field>
-    <mat-form-field hidden disabled>
+
+    <mat-form-field hidden>
       <mat-label>ID</mat-label>
       <input matInput formControlName="id" placeholder="Id" required>
     </mat-form-field>
-    <mat-form-field >
+    <mat-form-field hidden>
       <mat-label>Tiêu đề</mat-label>
       <input matInput formControlName="title" placeholder="Tựa đề" required>
     </mat-form-field>
-    <mat-form-field disabled>
-      <mat-label>Địa chỉ</mat-label>
-      <input matInput formControlName="address" placeholder="Địa chỉ" required >
-    </mat-form-field>
     <mat-form-field>
-      <mat-label>Mô tả</mat-label>
-      <textarea matInput formControlName="description" placeholder="Mô tả" required rows="10"></textarea>
+      <mat-label>Địa chỉ</mat-label>
+      <input matInput formControlName="address" placeholder="Địa chỉ" required>
     </mat-form-field>
+    <mat-form-field hidden>
+      <mat-label>Mô tả</mat-label>
+      <textarea matInput formControlName="description" placeholder="Mô tả" required rows="10"
+        [disabled]="true"></textarea>
+    </mat-form-field>
+    <app-image-viewer *ngIf="selectedImages.length >0" [images]="selectedImages" [height]="'150'" hidden></app-image-viewer>
     <div>
       <button class="button-front" mat-raised-button color="primary" (click)="update()" mat-button>Cập nhật thay
         đổi</button>
     </div>
   </div>
 </form>
-
-
-
-
-
-<!-- 
-<mat-form-field hidden disabled>
-  <mat-label>ID</mat-label>
-  <input matInput formControlName="id" placeholder="Id" required>
-</mat-form-field>
-<mat-form-field >
-  <mat-label>Tiêu đề</mat-label>
-  <input matInput formControlName="title" placeholder="Tựa đề" required [disabled]="true">
-</mat-form-field>
-<mat-form-field disabled>
-  <mat-label>Địa chỉ</mat-label>
-  <input matInput formControlName="address" placeholder="Địa chỉ" required >
-</mat-form-field>
-<mat-form-field>
-  <mat-label>Mô tả</mat-label>
-  <textarea matInput formControlName="description" placeholder="Mô tả" required rows="10" [disabled]="true"></textarea>
-</mat-form-field>
-<app-image-uploader [inputImages]="RealstateData?.images" (imagesChanged)="imagesUpdated($event)"></app-image-uploader> -->

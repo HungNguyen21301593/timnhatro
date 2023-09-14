@@ -37,7 +37,7 @@ export class WebApiService {
 
   async getMedataDataFromUrl(url: string): Promise<UrlMetaResponse> {
     try {
-      const res = await lastValueFrom(this.httpClient.get(`/api/images/metadata-from-url/url?=${url}`));
+      const res = await lastValueFrom(this.httpClient.get(`/api/images/metadata-from-url?url=${url}`));
       return res as UrlMetaResponse;
     } catch (error) {
       console.error('getMedataDataFromUrl failed', error);

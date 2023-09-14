@@ -35,13 +35,18 @@ export class SheetItemEditComponent implements OnInit {
       return;
     }
     this.sheetItemEditForm.patchValue(this.RealstateData);
-    this.sheetItemEditForm.disable();
-    this.sheetItemEditForm.get('html')?.enable();
+    this.selectedImages = this.RealstateData.images;
   }
 
   async fetchContentFromUrl(url: string)
   {
+    if(!url)
+    {
+      return;
+    }
     var response = await this.webApiService.getMedataDataFromUrl(url);
+    this.sheetItemEditForm.patchValue(response);
+    this.selectedImages = [response.image];
   }
 
   update() {
@@ -52,7 +57,7 @@ export class SheetItemEditComponent implements OnInit {
       title: formValue.title ?? '',
       address: formValue.address ?? '',
       description: formValue.description ?? '',
-      images: this.selectedImages,
+      images: this.selectedImages ?? [],
       html: formValue.html ?? ''
     }
     this.updated.emit(value)

@@ -6,13 +6,12 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <br>
-    <!-- <app-image-viewer *ngIf="realstateData.images?.length??0 >0" [images]="realstateData.images"
+    <app-image-viewer *ngIf="realstateData.images?.length??0 >0" [images]="realstateData.images"
       [height]="'200'"></app-image-viewer>
     <span><u>Địa chỉ:</u> {{realstateData.address}}</span>
     <br>
     <span><u>Mô tả:</u> {{realstateData.description}}</span>
-    <br> -->
-    <div class="iframe-container" [innerHTML]="generateIframe(realstateData.html) | safeHtml"></div>
+    <br>
     <div fxLayout="row" fxLayout="start center">
       <button mat-mini-fab color="primary" (click)="back()">
         <mat-icon>arrow_back</mat-icon>
