@@ -90,15 +90,18 @@ namespace YourApiNamespace.Controllers
         public async Task TryLogin(IWebDriver webDriver, string email, string password)
         {
             webDriver.Navigate().GoToUrl("https://mbasic.facebook.com/");
-           
+
             var emails = webDriver.FindElements(By.XPath("//input[@id='m_login_email']"));
             if (emails.Any()) { emails.First().SendKeys(email); };
 
             var passwords = webDriver.FindElements(By.XPath("//section[@id='password_input_with_placeholder']/input"));
-            if (passwords.Any()) { passwords.First().SendKeys(password); };
+            if (passwords.Any())
+            {
+                passwords.First().SendKeys(password);
+                passwords.First().SendKeys(Keys.Enter);
+            };
             await Task.Delay(500);
             var submits = webDriver.FindElements(By.XPath("//input[@value='Log In']/parent::li"));
-
             if (submits.Any()) { submits.First().Click(); };
         }
     }
