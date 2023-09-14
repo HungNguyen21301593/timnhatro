@@ -1,7 +1,7 @@
 [
   "--disable-extensions",
   "--headless",
-  //"--headless=chrome",
+  "--headless=chrome",
   "--incognito",
   "--disable-notifications",
   "--start-maximized",
