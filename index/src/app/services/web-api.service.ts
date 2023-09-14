@@ -5,6 +5,7 @@ import { MapState } from '../interfaces/map-state';
 import { ImageUploadResponse } from '../interfaces/image-upload-response';
 import { lastValueFrom } from 'rxjs';
 import { forEach } from 'lodash';
+import { UrlMetaResponse } from '../interfaces/url-meta-response';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,16 @@ export class WebApiService {
     } catch (error) {
       console.log(error);
     };
+  }
+
+  async getMedataDataFromUrl(url: string): Promise<UrlMetaResponse> {
+    try {
+      const res = await lastValueFrom(this.httpClient.get(`/api/images/metadata-from-url/url?=${url}`));
+      return res as UrlMetaResponse;
+    } catch (error) {
+      console.error('getMedataDataFromUrl failed', error);
+      throw error;
+    }
   }
 
   async saveImage(file: File): Promise<string> {

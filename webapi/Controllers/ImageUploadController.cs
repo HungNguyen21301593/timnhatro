@@ -38,7 +38,7 @@ namespace YourApiNamespace.Controllers
         }
 
 
-        [HttpPost("metadata-from-url")]
+        [HttpGet("metadata-from-url")]
         public IActionResult ReadUrlMetaData(string url)
         {
             url ??= "https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/";

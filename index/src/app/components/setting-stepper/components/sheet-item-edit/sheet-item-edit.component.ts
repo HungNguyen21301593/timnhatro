@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
+import { WebApiService } from 'src/app/services/web-api.service';
 
 @Component({
   selector: 'app-sheet-item-edit',
@@ -27,13 +28,20 @@ export class SheetItemEditComponent implements OnInit {
 
   imageIndex = 0;
   selectedImages: string[] = [];
-  constructor(private _formBuilder: FormBuilder) { }
+  constructor(private _formBuilder: FormBuilder, private webApiService: WebApiService) { }
 
   ngOnInit() {
     if (!this.RealstateData) {
       return;
     }
     this.sheetItemEditForm.patchValue(this.RealstateData);
+    this.sheetItemEditForm.disable();
+    this.sheetItemEditForm.get('html')?.enable();
+  }
+
+  async fetchContentFromUrl(url: string)
+  {
+    var response = await this.webApiService.getMedataDataFromUrl(url);
   }
 
   update() {
