@@ -5,6 +5,7 @@
       <textarea matInput #html formControlName="html" placeholder="Iframe Code" required rows="2"
         (change)="fetchContentFromUrl(html.value)"></textarea>
     </mat-form-field>
+    <mat-spinner [diameter]="40" [hidden]="!linkloading"></mat-spinner>
 
     <mat-form-field hidden>
       <mat-label>ID</mat-label>
@@ -23,7 +24,7 @@
       <textarea matInput formControlName="description" placeholder="Mô tả" required rows="10"
         [disabled]="true"></textarea>
     </mat-form-field>
-    <app-image-uploader [inputImages]="RealstateData?.images" (imagesChanged)="imagesUpdated($event)"></app-image-uploader>
+    <app-image-uploader [inputImages]="selectedImages" (imagesChanged)="imagesUpdated($event)"></app-image-uploader>
     <div>
       <button class="button-front" mat-raised-button color="primary" (click)="update()" mat-button>Cập nhật thay
         đổi</button>

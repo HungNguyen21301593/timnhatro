@@ -26,6 +26,7 @@ export class SheetItemEditComponent implements OnInit {
     html: ['', Validators.required],
   });
 
+  public linkloading = false;
   imageIndex = 0;
   selectedImages: string[] = [];
   constructor(private _formBuilder: FormBuilder, private webApiService: WebApiService) { }
@@ -44,9 +45,11 @@ export class SheetItemEditComponent implements OnInit {
     {
       return;
     }
+    this.linkloading = true;
     var response = await this.webApiService.getMedataDataFromUrl(url);
     this.sheetItemEditForm.patchValue(response);
     this.selectedImages = [response.image];
+    this.linkloading = false;
   }
 
   update() {
