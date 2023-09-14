@@ -38,19 +38,24 @@ namespace YourApiNamespace.Controllers
         }
 
 
-        [HttpPost("upload-from-url")]
-        public async Task<IActionResult> UploadImage(string url)
+        [HttpPost("metadata-from-url")]
+        public IActionResult ReadUrlMetaData(string url)
         {
-            url ??= "https://www.facebook.com/permalink.php?story_fbid=pfbid02DcAMQiRLFsVYMnu3W1DChxeF8DU5t66QniBfPLAUpeX8KYSewxXbgtNiYyYxQjjJl&id=100007145808912";
+            url ??= "https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/";
             var driver = webDriverManagerService.GetDriver();
-            await TryLogin(driver, "hung.nuyen.abc123@gmail.com", "Hung991995");
-            //driver.Navigate().GoToUrl(url);
-            driver.Manage().Window.Size = new System.Drawing.Size(600, 1200);
-            var jsDriver = (IJavaScriptExecutor)driver;
-            jsDriver.ExecuteScript("document.body.style.zoom='60%'");
-            var ss = ((ITakesScreenshot)driver).GetScreenshot();
-            Stream stream = new MemoryStream(ss.AsByteArray);
-            return await UploadToCloudFare("image.png", stream);
+            driver.Navigate().GoToUrl(url);
+            var metaTags = driver.FindElements(By.TagName("meta"));
+
+            var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();
+            var description = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:description").FirstOrDefault();
+            var image = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:image").FirstOrDefault();
+            var urlMeta = new UrlMetaResponse
+            {
+                Title = title?.GetAttribute("content") ?? "",
+                Description = description?.GetAttribute("content") ?? "",
+                Image = image?.GetAttribute("content") ?? ""
+            };
+            return new OkObjectResult(urlMeta);
         }
 
         private async Task<IActionResult> UploadToCloudFare(string Filename, Stream stream)
