@@ -3,6 +3,7 @@ import { MapApiService } from '../../services/map-api.service';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { MapStateService } from 'src/app/services/map-state.service';
 import { Subscription } from 'rxjs';
+import { Constant } from 'src/app/interfaces/constant.enum';
 
 @Component({
   selector: 'app-address-autocomplete',
@@ -26,6 +27,18 @@ export class AddressAutocompleteComponent implements OnInit {
       return [];
     }
     this.filteredOptions = await this.mapApiService.geocode(filterValue);
+    this.filteredOptions.forEach(option => option.realstateData =
+      [
+        {
+          html: "",
+          id: "0",
+          address: option.address.label,
+          description: "",
+          images: [],
+          title: Constant.newPostTitle
+        }
+      ]
+    )
     return this.filteredOptions;
   }
 
@@ -40,6 +53,7 @@ export class AddressAutocompleteComponent implements OnInit {
     }
     this.mapStateService.addNewItem(result);
     this.mapStateService.process();
+    this.mapStateService.itemSelectedObservable.next(result);
     this.clear();
   }
 

@@ -1,7 +1,11 @@
-<mat-card mat-button (click)="AddItem(result, 'Office')">
+<mat-card mat-button>
+  <mat-card-content class="search-item"> {{result?.address?.label}}</mat-card-content>
   <mat-card-actions>
-    <button mat-button >
-      <mat-card-content class="search-item"> {{result?.address?.label}}</mat-card-content>
-  </button>
+    <button mat-button (click)="AddItem(result, 'Home')">
+      Add Home
+    </button>
+    <button mat-button (click)="AddItem(result, 'Office')">
+      Add Office
+    </button>
   </mat-card-actions>
-  </mat-card>
+</mat-card>

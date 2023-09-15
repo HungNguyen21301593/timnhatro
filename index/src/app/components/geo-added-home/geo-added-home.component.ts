@@ -1,10 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { forEach } from 'lodash';
 import { AgentProfile } from 'src/app/interfaces/agent-profile';
+import { Constant } from 'src/app/interfaces/constant.enum';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
+import { RealstateData } from 'src/app/interfaces/realstate-item';
 import { MapApiService } from 'src/app/services/map-api.service';
 import { MapStateService } from 'src/app/services/map-state.service';
+import { WebApiService } from 'src/app/services/web-api.service';
 // import { useLinkPreview } from "get-link-preview"; 
 declare const useLinkPreview: Function;
 @Component({
@@ -27,18 +31,28 @@ export class GeoAddedHomeComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion: MatAccordion | undefined;
 
-
+  public isLoadingLink = false;
   public iframeElement: string = '';
 
-  constructor(private mapApiService: MapApiService, private snackBar: MatSnackBar) { }
+  constructor(private mapApiService: MapApiService, private snackBar: MatSnackBar, private webApiService: WebApiService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    if (!this.item) {
+      return;
+    }
   }
 
-  generateIframe(link: string)
-  {
-    var encodedLink = encodeURIComponent(link);
-    return `<iframe src="https://www.facebook.com/plugins/post.php?href=${encodedLink}&show_text=true&width=400&autoplay=0" autoplay=0 width="400" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>`
+  async loadReadStateData(realstateData: RealstateData, link: string) {
+    if (realstateData.title !== Constant.newPostTitle || link === '') {
+      return;
+    }
+    this.isLoadingLink = true;
+    var metadata = await this.webApiService.getMedataDataFromUrl(link);
+    realstateData.html = link;
+      realstateData.description = metadata.description;
+      realstateData.title = metadata.title;
+      realstateData.images = [metadata.image];
+      this.isLoadingLink = false;
   }
 
   target() {
@@ -53,8 +67,10 @@ export class GeoAddedHomeComponent implements OnInit {
     this.closed.emit();
   }
 
-  share(link:string) {
+  share(link: string) {
+    if (!link) {
+      return;
+    }
     window.open(link, '_blank');
-    // window.location.href = link;
   }
 }
