@@ -25,16 +25,13 @@ export class AppComponent implements OnInit {
   susciption!: Subscription;
 
   ngOnInit(): void {
-  }
-  ngOnDestroy(): void {
-  }
-
-  async ngAfterViewInit(): Promise<void> {
     this.router.params.subscribe(async param => {
       if (!param['phone']) {
         return;
       }
       await this.mapStateService.reloadStateFromUrlParams(param['phone']);
     })
+  }
+  ngOnDestroy(): void {
   }
 }
