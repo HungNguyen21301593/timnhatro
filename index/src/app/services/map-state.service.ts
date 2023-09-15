@@ -10,6 +10,7 @@ import { AgentProfile } from '../interfaces/agent-profile';
 import { Params } from '@angular/router';
 import { Dictionary } from 'lodash';
 import { WebApiService } from './web-api.service';
+import { Meta } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class MapStateService {
 
   public itemSelectedObservable: ReplaySubject<GeocodeResult | null> = new ReplaySubject(undefined);
 
-  constructor(private mapApiService: MapApiService, private webApiService: WebApiService) {
+  constructor(private mapApiService: MapApiService, private webApiService: WebApiService, private meta: Meta) {
     this.stateObservable.subscribe(() => {
       this.onMapStateChanges();
     })
@@ -45,8 +46,11 @@ export class MapStateService {
 
   private updateMetaAndTitle(agent: AgentProfile) {
     document.title = `Thông tin nhà trọ của ${agent.name}`;
-    document.querySelector('meta[property="og:description"]')?.setAttribute("content", `Thông tin nhà trọ của ${agent.name}`);
-    document.querySelector('meta[property="og:image"]')?.setAttribute("content", `${agent.image}`);
+    this.meta.addTag({ property: "og:title", content: `Thông tin nhà trọ của ${agent.name}` })
+    this.meta.addTag({ property: "og:description", content: agent.description })
+    this.meta.addTag({ property: "og:image", content: `${agent.image}` })
+    // document.querySelector('meta[property="og:description"]')?.setAttribute("content", `Thông tin nhà trọ của ${agent.name}`);
+    // document.querySelector('meta[property="og:image"]')?.setAttribute("content", `${agent.image}`);
   }
 
   onMapStateChanges() {
