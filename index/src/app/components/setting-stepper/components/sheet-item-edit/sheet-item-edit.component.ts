@@ -29,6 +29,7 @@ export class SheetItemEditComponent implements OnInit {
   public linkloading = false;
   imageIndex = 0;
   selectedImages: string[] = [];
+  
   constructor(private _formBuilder: FormBuilder, private webApiService: WebApiService) { }
 
   ngOnInit() {
