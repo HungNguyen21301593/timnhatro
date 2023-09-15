@@ -13,14 +13,14 @@ mat-drawer-container {
 }
 
 .map-sidenav-search-bar {
-    width: 90%;
-    top: 20px;
-    position: fixed;
-    z-index: 3;
-    height: fit-content;
-    background-color: transparent;
+    width: 90% !important;
+    top: 20px !important;
+    position: fixed !important;
+    z-index: 10 !important;
+    height: fit-content !important;
+    background-color: transparent !important;
     box-shadow: none !important;
-    border: 20px;
+    border: 20px !important;
 }
 
 .map-sidenav-homeList {
