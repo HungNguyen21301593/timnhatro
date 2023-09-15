@@ -49,8 +49,7 @@ export class MapStateService {
     this.meta.addTag({ property: "og:title", content: `Thông tin nhà trọ của ${agent.name}` })
     this.meta.addTag({ property: "og:description", content: agent.description })
     this.meta.addTag({ property: "og:image", content: `${agent.image}` })
-    // document.querySelector('meta[property="og:description"]')?.setAttribute("content", `Thông tin nhà trọ của ${agent.name}`);
-    // document.querySelector('meta[property="og:image"]')?.setAttribute("content", `${agent.image}`);
+    this.meta.addTag({ property: "og:url", content: `	http://146.190.84.59:8000/main/${agent.phone}` })
   }
 
   onMapStateChanges() {
