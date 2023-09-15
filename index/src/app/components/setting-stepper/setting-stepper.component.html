@@ -10,11 +10,11 @@
           <div fxFlex="60">
             <mat-form-field>
               <mat-label>Tên</mat-label>
-              <input matInput formControlName="name" placeholder="Hùng Nguyễn" required>
+              <input matInput formControlName="name" placeholder="Tuấn Phạm" required>
             </mat-form-field>
             <mat-form-field>
               <mat-label>Số điện thoại</mat-label>
-              <input matInput formControlName="phone" placeholder="0858008266" type="number">
+              <input matInput formControlName="phone" placeholder="08xxxxxxxx" type="number">
             </mat-form-field>
             <mat-form-field>
               <mat-label>Mô tả</mat-label>
@@ -26,7 +26,7 @@
               <button type="button" mat-raised-button (click)="fileInput.click()">Thêm ảnh đại diện</button>
               <mat-spinner [diameter]="40" [hidden]="!imagesUploadInProgress"></mat-spinner>
             </div>
-            <input hidden #fileInput (change)="onAvatarFileSelected(fileInput.files)" placeholder="Mô tả" required
+            <input hidden #fileInput (change)="onAvatarFileSelected(fileInput.files)" required
               type="file" accept="image/png, image/gif, image/jpeg">
             <img [src]="uploadedImageUrl" [height]="'300'" loading="lazy">
           </div>
