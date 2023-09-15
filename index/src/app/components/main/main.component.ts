@@ -24,7 +24,7 @@ export class MainComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
   ) {
     this.subs = this.mapstateService.itemSelectedObservable.subscribe(item => {
-      if (!item) {
+      if (!item || item.type === 'Office') {
         return;
       }
       this.item = item;

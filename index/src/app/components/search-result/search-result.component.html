@@ -1,11 +1,13 @@
 <mat-card mat-button>
-  <mat-card-content class="search-item"> {{result?.address?.label}}</mat-card-content>
-  <mat-card-actions>
-    <button mat-button (click)="AddItem(result, 'Home')">
-      Add Home
+  <div fxlayout="row" fxLayoutAlign="start center">
+    <mat-card-content class="search-item" fxFlex="80">
+      {{result?.address?.label}}
+    </mat-card-content>
+    <button mat-icon-button (click)="AddItem(result, 'Home')">
+      <img src="/assets/image/home.png">
     </button>
-    <button mat-button (click)="AddItem(result, 'Office')">
-      Add Office
+    <button mat-icon-button (click)="AddItem(result, 'Office')">
+      <img src="/assets/image/office.png">
     </button>
-  </mat-card-actions>
+  </div>
 </mat-card>
