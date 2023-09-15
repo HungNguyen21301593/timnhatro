@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SettingResult } from './interfaces/setting-result';
 import { MapStateService } from './services/map-state.service';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'timnhatro';
 
   constructor(
@@ -21,10 +21,6 @@ export class AppComponent implements OnInit {
     public dialog: MatDialog
   ) {
 
-  }
-  susciption!: Subscription;
-
-  ngOnInit(): void {
     this.router.params.subscribe(async param => {
       if (!param['phone']) {
         return;
@@ -32,6 +28,11 @@ export class AppComponent implements OnInit {
       await this.mapStateService.reloadStateFromUrlParams(param['phone']);
     })
   }
+  susciption!: Subscription;
+
+  async ngOnInit(): Promise<void> {
+  }
   ngOnDestroy(): void {
+    this.susciption.unsubscribe();
   }
 }
