@@ -1,13 +1,15 @@
-<mat-drawer-container class="map-container" autosize [hasBackdrop]="false" fxLayoutAlign="center center">
+<!-- <mat-drawer-container class="map-container" autosize [hasBackdrop]="false" fxLayoutAlign="center center">
   <mat-drawer fxFlex="100" #drawerAutoSearch class="map-sidenav-search-bar" mode="side" [opened]="true">
     <app-address-autocomplete></app-address-autocomplete>
   </mat-drawer>
-</mat-drawer-container>
+</mat-drawer-container> -->
 
-<mat-drawer-container class="map-container" autosize [hasBackdrop]="true" fxLayout="column" fxLayoutAlign="center center">
+<!-- <mat-drawer-container class="map-container" autosize [hasBackdrop]="true" fxLayout="column" fxLayoutAlign="center center">
   <mat-drawer #drawerHomeAddedItems class="map-sidenav-homeList"  mode="push" [opened]="false">
     <app-geo-added-home *ngIf="item" [item]="item" [expanded]="true" (closed)="drawerHomeAddedItems.close()">
     </app-geo-added-home>
   </mat-drawer>
-</mat-drawer-container>
+</mat-drawer-container> -->
+<app-address-autocomplete></app-address-autocomplete>
 <app-map></app-map>
+

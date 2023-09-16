@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { MapStateService } from 'src/app/services/map-state.service';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
+import { GeoAddedHomeComponent } from '../geo-added-home/geo-added-home.component';
 
 @Component({
   selector: 'ngx-main',
@@ -22,16 +23,23 @@ export class MainComponent implements OnInit, OnDestroy {
   constructor(
     private mapstateService: MapStateService,
     private snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {
     this.subs = this.mapstateService.itemSelectedObservable.subscribe(item => {
       if (!item || item.type === 'Office') {
         return;
       }
+      
       this.item = item;
-      this.drawerHomeAddedItems?.open();
+      let dialogRef = this.dialog.open(GeoAddedHomeComponent,{
+        enterAnimationDuration: '200ms',
+        exitAnimationDuration: '200ms',
+      });
+      let instance = dialogRef.componentInstance;
+      instance.item = item;
+      instance.expanded = true;
+      // this.drawerHomeAddedItems?.open();
     })
-
-
   }
 
   ngOnDestroy(): void {
