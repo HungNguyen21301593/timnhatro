@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { forEach } from 'lodash';
@@ -34,7 +35,10 @@ export class GeoAddedHomeComponent implements OnInit {
   public isLoadingLink = false;
   public iframeElement: string = '';
 
-  constructor(private mapApiService: MapApiService, private snackBar: MatSnackBar, private webApiService: WebApiService) { }
+  constructor(private mapApiService: MapApiService, 
+    private snackBar: MatSnackBar, 
+    private webApiService: WebApiService,
+    private dialogRef: MatDialogRef<GeoAddedHomeComponent>) { }
 
   async ngOnInit() {
     if (!this.item) {
@@ -60,11 +64,13 @@ export class GeoAddedHomeComponent implements OnInit {
       return
     }
     this.closed.emit();
+    this.dialogRef.close();
     this.mapApiService.zoomToLocations([this.item], 16);
   }
 
   back() {
     this.closed.emit();
+    this.dialogRef.close();
   }
 
   share(link: string) {
