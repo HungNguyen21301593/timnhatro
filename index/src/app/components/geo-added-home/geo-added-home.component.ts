@@ -68,6 +68,14 @@ export class GeoAddedHomeComponent implements OnInit {
     this.mapApiService.zoomToLocations([this.item], 16);
   }
 
+  direction()
+  {
+    if (!this.item.address) {
+      return;
+    }
+    window.open(`https://www.google.com/maps/search/?api=1&query=${this.item.address.label}`, '_blank');
+  }
+
   back() {
     this.closed.emit();
     this.dialogRef.close();
