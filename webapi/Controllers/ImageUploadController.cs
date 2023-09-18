@@ -38,26 +38,12 @@ namespace YourApiNamespace.Controllers
             return await UploadToCloudFare(file.Name, file.OpenReadStream());
         }
 
-        [HttpGet("metadata-from-url-chotot")]
+        [HttpGet("readimage")]
         public IActionResult ReadUrlMetaDataChoTot(string url)
         {
-            var driver = webDriverManagerService.GetDriver(isFreshInstance: true);
-            driver.Navigate().GoToUrl(url);
-            var metaTags = driver.FindElements(By.TagName("meta"));
-
-            var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();
-            var description = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:description").FirstOrDefault();
-            var image = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:image").FirstOrDefault();
-            var urlMeta = new UrlMetaResponse
-            {
-                Title = title?.GetAttribute("content") ?? "",
-                Description = description?.GetAttribute("content") ?? "",
-                Image = image?.GetAttribute("content") ?? ""
-            };
-            Console.WriteLine($"Meta: {JsonConvert.SerializeObject(urlMeta)}");
+            var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
             var ss = ((ITakesScreenshot)driver).GetScreenshot();
             return File(ss.AsByteArray, "image/png");
-            return new OkObjectResult(urlMeta);
         }
 
         [HttpGet("metadata-from-url")]
