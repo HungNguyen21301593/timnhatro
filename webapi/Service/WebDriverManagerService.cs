@@ -16,9 +16,17 @@ namespace core.Service
     {
         private IWebDriver? WebDriver { get; set; }
 
-        public IWebDriver GetDriver()
+        public IWebDriver GetDriver(bool isFreshInstance = false)
         {
-            WebDriver ??= SetupDriverInstance();
+            if (isFreshInstance)
+            {
+                WebDriver?.Quit();
+                WebDriver = SetupDriverInstance();
+            }
+            else
+            {
+                WebDriver ??= SetupDriverInstance();
+            }
             return WebDriver;
         }
 

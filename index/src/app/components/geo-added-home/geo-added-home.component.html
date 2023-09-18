@@ -8,7 +8,7 @@
     <br>
     <mat-form-field *ngIf="realstateData.html ===''">
       <mat-label>Link: </mat-label>
-      <input *ngIf="realstateData.html ===''" matInput type="text" #html
+      <input matInput type="text" #html
         (change)="loadReadStateData(realstateData, html.value)">
       <mat-spinner [diameter]="30" [hidden]="!isLoadingLink"></mat-spinner>
     </mat-form-field>
@@ -20,21 +20,22 @@
       <br>
       <span><u>Mô tả:</u> {{realstateData.description}}</span>
       <br>
+      <div fxLayout="row" fxLayout="start center">
+        <button mat-mini-fab color="primary" (click)="back()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" (click)="target()">
+          <mat-icon> location_on</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" (click)="direction()">
+          <mat-icon> directions</mat-icon>
+        </button>
+      </div>
+      <button mat-flat-button color="primary" (click)="share(realstateData.html)">
+        <span>Xem toàn bộ bài đăng</span>
+        <mat-icon>share</mat-icon>
+      </button>
     </div>
-    <div fxLayout="row" fxLayout="start center">
-      <button mat-mini-fab color="primary" (click)="back()">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-      <button mat-mini-fab color="primary" (click)="target()">
-        <mat-icon> location_on</mat-icon>
-      </button>
-      <button mat-mini-fab color="primary" (click)="direction()">
-        <mat-icon> directions</mat-icon>
-      </button>
-    </div>
-    <button mat-flat-button color="primary" (click)="share(realstateData.html)">
-      <span>Xem toàn bộ bài đăng</span>
-      <mat-icon>share</mat-icon>
-    </button>
+    
   </mat-expansion-panel>
 </mat-accordion>

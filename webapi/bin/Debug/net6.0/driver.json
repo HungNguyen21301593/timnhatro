@@ -1,6 +1,7 @@
 [
   "--disable-extensions",
   "--headless=chrome",
+  "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
   "--incognito",
   "--disable-notifications",
   "--start-maximized",
@@ -14,5 +15,5 @@
   "--disable-dev-shm-usage",
   "--log-level=3",
   "enable-features=NetworkServiceInProcess",
-  "--disable-features=NetworkService",
+  "--disable-features=NetworkService"
 ]

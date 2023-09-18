@@ -35,8 +35,8 @@ export class GeoAddedHomeComponent implements OnInit {
   public isLoadingLink = false;
   public iframeElement: string = '';
 
-  constructor(private mapApiService: MapApiService, 
-    private snackBar: MatSnackBar, 
+  constructor(private mapApiService: MapApiService,
+    private snackBar: MatSnackBar,
     private webApiService: WebApiService,
     private dialogRef: MatDialogRef<GeoAddedHomeComponent>) { }
 
@@ -53,10 +53,10 @@ export class GeoAddedHomeComponent implements OnInit {
     this.isLoadingLink = true;
     var metadata = await this.webApiService.getMedataDataFromUrl(link);
     realstateData.html = link;
-      realstateData.description = metadata.description;
-      realstateData.title = metadata.title;
-      realstateData.images = [metadata.image];
-      this.isLoadingLink = false;
+    realstateData.description = metadata.description;
+    realstateData.title = metadata.title;
+    realstateData.images = [metadata.image];
+    this.isLoadingLink = false;
   }
 
   target() {
@@ -68,8 +68,7 @@ export class GeoAddedHomeComponent implements OnInit {
     this.mapApiService.zoomToLocations([this.item], 16);
   }
 
-  direction()
-  {
+  direction() {
     if (!this.item.address) {
       return;
     }

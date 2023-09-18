@@ -56,5 +56,4 @@ export class AddressAutocompleteComponent implements OnInit {
     this.mapStateService.itemSelectedObservable.next(result);
     this.clear();
   }
-
 }

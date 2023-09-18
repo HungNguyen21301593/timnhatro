@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using WebDriverManager.DriverConfigs.Impl;
 using WebDriverManager;
 using core.Service;
+using Telegram.Bot.Types;
 
 namespace YourApiNamespace.Controllers
 {
@@ -37,12 +38,34 @@ namespace YourApiNamespace.Controllers
             return await UploadToCloudFare(file.Name, file.OpenReadStream());
         }
 
+        [HttpGet("metadata-from-url-chotot")]
+        public IActionResult ReadUrlMetaDataChoTot(string url)
+        {
+            var driver = webDriverManagerService.GetDriver(isFreshInstance: true);
+            driver.Navigate().GoToUrl(url);
+            var metaTags = driver.FindElements(By.TagName("meta"));
+
+            var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();
+            var description = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:description").FirstOrDefault();
+            var image = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:image").FirstOrDefault();
+            var urlMeta = new UrlMetaResponse
+            {
+                Title = title?.GetAttribute("content") ?? "",
+                Description = description?.GetAttribute("content") ?? "",
+                Image = image?.GetAttribute("content") ?? ""
+            };
+            Console.WriteLine($"Meta: {JsonConvert.SerializeObject(urlMeta)}");
+            var ss = ((ITakesScreenshot)driver).GetScreenshot();
+            return File(ss.AsByteArray, "image/png");
+            return new OkObjectResult(urlMeta);
+        }
 
         [HttpGet("metadata-from-url")]
         public IActionResult ReadUrlMetaData(string url)
         {
             url ??= "https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/";
-            var driver = webDriverManagerService.GetDriver();
+            var shouldCreateFreshInstance = url.Contains("nhatot");
+            var driver = webDriverManagerService.GetDriver(isFreshInstance: shouldCreateFreshInstance);
             driver.Navigate().GoToUrl(url);
             var metaTags = driver.FindElements(By.TagName("meta"));
 
