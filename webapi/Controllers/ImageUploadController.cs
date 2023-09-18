@@ -53,6 +53,12 @@ namespace YourApiNamespace.Controllers
             var shouldCreateFreshInstance = url.Contains("nhatot");
             var driver = webDriverManagerService.GetDriver(isFreshInstance: shouldCreateFreshInstance);
             driver.Navigate().GoToUrl(url);
+            var checkboxes = driver.FindElements(By.XPath("//*[contains(text(),'Verify you are human')]"));
+            Console.WriteLine($"Found: {checkboxes.Count}");
+            if (checkboxes.Any())
+            {
+                checkboxes.First().Click();
+            }
             var metaTags = driver.FindElements(By.TagName("meta"));
 
             var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();
