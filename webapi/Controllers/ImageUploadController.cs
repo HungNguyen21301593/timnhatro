@@ -42,7 +42,7 @@ namespace YourApiNamespace.Controllers
         {
             url ??= "https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/";
             var shouldCreateFreshInstance = url.Contains("nhatot");
-            var driver = webDriverManagerService.GetDriver(isFreshInstance: shouldCreateFreshInstance);
+            var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
             driver.Navigate().GoToUrl(url);
             var metaTags = driver.FindElements(By.TagName("meta"));
 
