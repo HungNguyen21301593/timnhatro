@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { GeocodeResult } from '../interfaces/geocode-result';
 import { RouteResult, Section, TravelSummary } from '../interfaces/route-result';
 import { InteractToItem } from '../interfaces/interact-to-item.enum';
+import { Isoline, IsolineRessult } from '../interfaces/isoline-result';
+import { data } from '@here/maps-api-for-javascript';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,7 @@ export class MapApiService {
   locationsGroup?: H.map.Group;
   routesGroup?: H.map.Group;
   notesGroup?: H.map.Group;
+  isolineRoutesGroup?: H.map.Group;
   ui?: H.ui.UI;
 
   constructor() {
@@ -31,6 +34,7 @@ export class MapApiService {
     this.locationsGroup = new H.map.Group();
     this.routesGroup = new H.map.Group();
     this.notesGroup = new H.map.Group();
+    this.isolineRoutesGroup = new H.map.Group();
     window.addEventListener('resize', () => this.map?.getViewPort().resize());
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
     this.ui = H.ui.UI.createDefault(this.map, defaultLayers);
@@ -105,6 +109,69 @@ export class MapApiService {
     })
   }
 
+  calculateIsolineRoute(geocodeResult: GeocodeResult, distance: number): Promise<IsolineRessult> {
+    var router = this.platform?.getRoutingService(undefined, 8),
+      routeRequestParams = {
+        'origin': `${geocodeResult.position.lat},${geocodeResult.position.lng}`,
+        'range[type]': 'distance',
+        'range[values]': distance,
+        'transportMode': 'car',
+        'routingMode': 'short',
+        
+      };
+    return new Promise((resolve, reject) => {
+      router?.calculateIsoline(
+        routeRequestParams,
+        (result: any) => {
+          var route = result;
+          resolve(route);
+        },
+        reject
+      );
+    })
+  }
+  
+  removeAllIsolateRoutes()
+  {
+    if (!this.map) {
+      return;
+    }
+    this.isolineRoutesGroup?.removeAll()
+  }
+
+  renderIsolineToMap(isolineRessult: IsolineRessult, color: string) {
+    if (!this.map) {
+      return;
+    }
+    isolineRessult.isolines[0].polygons.forEach((section) => {
+      // decode LineString from the flexible polyline
+      let linestring = H.geo.LineString.fromFlexiblePolyline(section.outer);
+  
+      // Create a polygon to display the area
+      let polygon = new H.map.Polygon(linestring, {
+        style: {
+          lineWidth: 4,
+          strokeColor: color,
+          fillColor: 'rgba(100, 149, 237 , 0.3)'
+        },
+        data:{}
+      });
+  
+      // Add the polygon to the map
+      this.isolineRoutesGroup?.addObject(polygon);
+      if (!this.isolineRoutesGroup) {
+        return;
+      }
+      this.map?.addObject(this.isolineRoutesGroup)
+      // And zoom to its bounding rectangle
+      var point = polygon?.getBoundingBox()?.getCenter();
+      if (!point) {
+        return;
+      }
+      this.map?.setCenter(point);
+    });
+  }
+
   renderRouteShapesToMap(routes: RouteResult[]) {
     if (!this.map) {
       return;
@@ -141,7 +208,7 @@ export class MapApiService {
 
   renderRouteNoteMarker(line: H.geo.LineString, travelSummary: TravelSummary) {
     var count = line.getPointCount();
-    var point = line.extractPoint(Math.round(count * 2 / 3));
+    var point = line.extractPoint(count-1);
     this.openBubble(point, `${Math.round(travelSummary.length / 100)/10} Km <br> ${Math.round(travelSummary.duration / 60)} Phút`);
   }
 

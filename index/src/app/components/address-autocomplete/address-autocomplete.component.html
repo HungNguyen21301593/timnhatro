@@ -4,6 +4,14 @@
     <span class="fa fa-search form-control-feedback"></span>
     <input type="text" class="form-control" placeholder="Nhập địa chỉ (vd: 26 Đinh Bộ Lĩnh)" [(ngModel)]="searchValue"
       (ngModelChange)="search(searchValue)">
+
+    <mat-button-toggle-group (change)="distanceChanged(selectedRadius)" #group="matButtonToggleGroup"
+      [(ngModel)]="selectedRadius" [value]="selectedRadius">
+      <mat-button-toggle value="1000">1 Km</mat-button-toggle>
+      <mat-button-toggle value="2000">2 Km</mat-button-toggle>
+      <mat-button-toggle value="5000">5 Km</mat-button-toggle>
+      <mat-button-toggle value="10000">10 Km</mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
 
   <div class="search-results-container">

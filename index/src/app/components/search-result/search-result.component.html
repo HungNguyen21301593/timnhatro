@@ -1,13 +1,13 @@
 <mat-card mat-button>
-  <div fxlayout="row" fxLayoutAlign="start center">
+  <div fxlayout="row" fxLayoutAlign="start center" (click)="AddItem(result, 'Office')">
     <mat-card-content class="search-item" fxFlex="80">
       {{result?.address?.label}}
     </mat-card-content>
-    <button mat-icon-button (click)="AddItem(result, 'Home')">
+    <!-- <button mat-icon-button (click)="AddItem(result, 'Home')">
       <img src="/assets/image/home.png">
     </button>
     <button mat-icon-button (click)="AddItem(result, 'Office')">
       <img src="/assets/image/office.png">
-    </button>
+    </button> -->
   </div>
 </mat-card>

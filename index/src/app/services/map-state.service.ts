@@ -11,6 +11,10 @@ import { Params } from '@angular/router';
 import { Dictionary } from 'lodash';
 import { WebApiService } from './web-api.service';
 import { Meta } from '@angular/platform-browser';
+import { util } from '@here/maps-api-for-javascript';
+import { GeneralHelper } from './Util/general-helper';
+import { IsolineRessult } from '../interfaces/isoline-result';
+import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +26,7 @@ export class MapStateService {
     {
       geoItems: [] as GeocodeResult[],
       geoRoutePairs: [] as RoutePair[],
+      distance: 1000,
       agent: {} as AgentProfile,
     }
   )
@@ -55,7 +60,7 @@ export class MapStateService {
   onMapStateChanges() {
     this.mapApiService.renderLocationsToMap(this.stateObservable.value.geoItems, this.interactionCallBack);
     this.mapApiService.zoomToLocations(this.stateObservable.value.geoItems);
-    this.process();
+    this.processIsolines(this.stateObservable.value.geoItems.filter(item => item.type == 'Office'), this.stateObservable.value.distance);
   }
 
   checkItemExisting(item: GeocodeResult): boolean {
@@ -78,7 +83,7 @@ export class MapStateService {
       }
       return apiResults;
     } catch (error) {
-      throw new Error('could not find the address');
+      throw new Error('could not find the adress');
     }
   }
 
@@ -102,7 +107,12 @@ export class MapStateService {
     if (this.checkItemExisting(item)) {
       return
     }
-    this.stateObservable.value.geoItems.push(item);
+    var newItem = _.cloneDeep(item);
+    if (newItem.color === undefined) {
+      var newRandomcolor = GeneralHelper.getRandomRGB(0.5);
+      newItem.color == newRandomcolor;
+    }
+    this.stateObservable.value.geoItems.push(newItem);
     this.stateObservable.next(this.stateObservable.value);
   }
 
@@ -122,6 +132,24 @@ export class MapStateService {
         break;
       default:
         break;
+    }
+  }
+
+  async processIsolines(geocodeResults: GeocodeResult[], distance: number = 1000) {
+    this.mapApiService.removeAllIsolateRoutes()
+    for (const geocodeResult of geocodeResults) {
+      var color = geocodeResult.color;
+      if (!color) {
+        throw new Error("missing color");
+      }
+      if (!geocodeResult.isolateResults) {
+        geocodeResult.isolateResults = {};
+      }
+      if (!geocodeResult.isolateResults[distance]) {
+        geocodeResult.isolateResults[distance] = await this.mapApiService.calculateIsolineRoute(geocodeResult, distance);
+      }
+
+      this.mapApiService.renderIsolineToMap(geocodeResult.isolateResults[distance], color);
     }
   }
 

@@ -7,9 +7,17 @@ import { WebApiService } from 'src/app/services/web-api.service';
   styleUrls: ['./image-uploader.component.scss']
 })
 export class ImageUploaderComponent implements OnInit {
-  @Input()
-  inputImages: string[] | undefined;
 
+  private _inputImages: string[] | undefined;
+  public get inputImages(): string[] | undefined {
+    return this._inputImages;
+  }
+
+  @Input()
+  public set inputImages(v: string[] | undefined) {
+    this.uploadedImages = v ?? [];
+    this._inputImages = v;
+  }
 
   @Output()
   imagesChanged = new EventEmitter<string[]>();

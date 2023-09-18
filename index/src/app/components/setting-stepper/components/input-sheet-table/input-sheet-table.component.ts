@@ -5,6 +5,7 @@ import { AbstractControlDirective, ControlValueAccessor, NG_VALUE_ACCESSOR, NgCo
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { Observable, Subject } from 'rxjs';
 import { Constant } from 'src/app/interfaces/constant.enum';
+import _ from 'lodash';
 
 
 
@@ -22,13 +23,13 @@ import { Constant } from 'src/app/interfaces/constant.enum';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      multi:true,
+      multi: true,
       useExisting: InputSheetTableComponent
     }
   ]
 })
-export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValueAccessor  {
-  stateChanges= new Subject<void>();
+export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValueAccessor {
+  stateChanges = new Subject<void>();
   id: string = "test id";
   placeholder: string = "";
   focused: boolean = false;
@@ -44,31 +45,28 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
   onContainerClick(event: MouseEvent): void {
   }
   disabled = false;
+
   writeValue(obj: any): void {
-   this.value = obj;
+    this.value = _.cloneDeep( _.orderBy(obj, ['id'],['desc']));
     this.dataSource = this.value ?? [];
   }
-  onChange = (value: RealstateData[]) => {};
+  onChange = (value: RealstateData[]) => { };
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
-  onTouched = (value: RealstateData[]) => {};
+  onTouched = (value: RealstateData[]) => { };
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
-  
-  
-  value: RealstateData[] | null = [];
 
-  /**
-   *
-   */
+
+  value: RealstateData[] | null = [];
   constructor() {
-    
+
   }
 
   ngOnDestroy(): void {
@@ -82,8 +80,7 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement!: RealstateData | null;
 
-  selectEdit(element: RealstateData)
-  {
+  selectEdit(element: RealstateData) {
     this.expandedElement = (this.expandedElement === element) ? null : element;
     var newData = this.moveElementToLast(element);
     this.dataSource = newData;
@@ -99,7 +96,7 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
       description: "",
       images: [],
       title: Constant.newPostTitle,
-      html:""
+      html: ""
     }
 
     this.value?.push(
@@ -108,8 +105,7 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
     this.selectEdit(newElement);
   }
 
-  deletedItem(element: RealstateData)
-  {
+  deletedItem(element: RealstateData) {
     this.value = this.value?.filter(item => item.title !== element.title) ?? [];
     this.dataSource = this.value;
 
@@ -130,7 +126,7 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
     this.onTouched(this.value);
   }
 
-  moveElementToLast(element: RealstateData):RealstateData[] {
+  moveElementToLast(element: RealstateData): RealstateData[] {
     if (!this.value) {
       return [];
     }

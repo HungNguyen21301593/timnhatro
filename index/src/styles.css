@@ -53,3 +53,7 @@ button{
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.mat-expansion-panel-header{
+  font-size: 16px !important;
+}

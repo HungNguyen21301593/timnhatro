@@ -1,8 +1,8 @@
 <form [formGroup]="sheetItemEditForm">
   <div fxLayout="column">
     <mat-form-field>
-      <mat-label>Nhập link bài viết facebook để tự động nhập nội dung :</mat-label>
-      <textarea matInput #html formControlName="html" placeholder="Chọn chia sẻ -> Sao chép liên kết" required rows="2"
+      <mat-label>Nhập link bài viết:</mat-label>
+      <textarea matInput #html formControlName="html" placeholder="Tự động nhập nội dung bằng link bài viết" required rows="2"
         (change)="fetchContentFromUrl(html.value)"></textarea>
     </mat-form-field>
     
@@ -28,8 +28,7 @@
     </mat-form-field>
     <app-image-uploader [inputImages]="selectedImages" (imagesChanged)="imagesUpdated($event)"></app-image-uploader>
     <div>
-      <button class="button-front" mat-raised-button color="primary" (click)="update()" mat-button>Cập nhật thay
-        đổi</button>
+      <button class="button-front" mat-raised-button color="accent" (click)="update()" mat-button>{{isNew?'Đăng tin': 'Cập nhật thay đổi'}}</button>
     </div>
   </div>
 </form>

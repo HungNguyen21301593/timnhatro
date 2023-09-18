@@ -1,3 +1,8 @@
+
+:root {
+  --mat-expansion-header-text-size: 16;
+}
+
 table {
   width: 100%;
 }

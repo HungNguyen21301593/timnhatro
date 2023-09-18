@@ -10,6 +10,7 @@ import { MapState } from 'src/app/interfaces/map-state';
 import { groupBy } from 'underscore';
 import { WebApiService } from 'src/app/services/web-api.service';
 import _ from 'lodash';
+import { Constant } from 'src/app/interfaces/constant.enum';
 @Component({
   selector: 'app-setting-stepper',
   templateUrl: './setting-stepper.component.html',
@@ -20,15 +21,14 @@ export class SettingStepperComponent implements OnInit {
   @ViewChild('mapIframe') mapIframe?: HTMLIFrameElement;
 
   realstateDatasInit: RealstateData[] = [];
-  RealstateDatasFormGroup = this._formBuilder.group({
-    RealstateDatas: [this.realstateDatasInit, Validators.required],
-  });
-  agentFormGroup = this._formBuilder.group({
+  settingFormGroup = this._formBuilder.group({
     name: ['', Validators.required],
     phone: ['', Validators.required],
     description: ['', null],
     image: ['', Validators.required],
+    RealstateDatas: [this.realstateDatasInit, Validators.required],
   });
+
   public mapUrl: null | SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('main');
   public imagesUploadInProgress = false;
   public uploadedImageUrl = '';
@@ -57,7 +57,8 @@ export class SettingStepperComponent implements OnInit {
             description: ""
           },
           geoItems: [],
-          geoRoutePairs: []
+          geoRoutePairs: [],
+          distance: 1000
         });
 
       }
@@ -66,53 +67,34 @@ export class SettingStepperComponent implements OnInit {
   }
 
   realoadUser(state: MapState) {
-    this.agentFormGroup.patchValue({
+    var realstate = this.filteroutPostedItems(state.geoItems.map(item => item.realstateData).flat());
+    this.settingFormGroup.patchValue({
       name: state.agent.name,
       phone: state.agent.phone,
       description: state.agent.description,
-      image: state.agent.image
-    });
-    if (state.agent.image) {
-      this.uploadedImageUrl = state.agent.image;
-    }
-
-    if (!state.geoItems) {
-      state.geoItems = [];
-    }
-    var realstate = state.geoItems.map(item => item.realstateData).flat();
-    this.RealstateDatasFormGroup.patchValue({
+      image: state.agent.image,
       RealstateDatas: realstate
     });
-
   }
 
-  async onAvatarFileSelected(files: FileList | null) {
-    this.imagesUploadInProgress = true;
-    var file = files?.item(0);
-    if (!file) {
+  public itemposted(item: RealstateData) {
+    var currentRealstateDatas = this.settingFormGroup.value.RealstateDatas ?? [];
+    var nextId = Math.max(...currentRealstateDatas.map(r => Number(r.id))) + 1;
+    item.id = nextId.toString();
+    currentRealstateDatas?.push(item);
+    if (!currentRealstateDatas) {
       return;
     }
-    this.uploadedImageUrl = await this.webApiService.saveImage(file);
-    this.agentFormGroup.get('image')?.setValue(this.uploadedImageUrl);
-    this.imagesUploadInProgress = false;
+    this.settingFormGroup.get('RealstateDatas')?.setValue(this.filteroutPostedItems(currentRealstateDatas));
   }
 
 
-
-  async done() {
-    var items = this.RealstateDatasFormGroup.value.RealstateDatas;
-    if (!items) {
-      return;
-    }
-    var agent = this.agentFormGroup.value;
-    if (!agent.name || !agent.description || !agent.image || !agent.phone) {
-      return;
-    }
-    await this.save();
+  private filteroutPostedItems(items: RealstateData[]): RealstateData[] {
+    return items.filter(r => !r.title.includes(Constant.newPostTitle));
   }
 
   async save() {
-    var phone = this.agentFormGroup.value.phone;
+    var phone = this.settingFormGroup.value.phone;
     if (!phone) {
       return;
     }
@@ -128,11 +110,11 @@ export class SettingStepperComponent implements OnInit {
   }
 
   private async extractMapState(state: MapState): Promise<MapState> {
-    var items = this.RealstateDatasFormGroup.value.RealstateDatas;
+    var items = this.settingFormGroup.value.RealstateDatas;
     if (!items) {
       return state;
     }
-    var agent = this.agentFormGroup.value;
+    var agent = this.settingFormGroup.value;
     if (!agent.name || !agent.description || !agent.image || !agent.phone) {
       return state;
     }
@@ -160,13 +142,14 @@ export class SettingStepperComponent implements OnInit {
         const element = value[index];
         element.id = index.toString();
       }
-      
+
       var geocodeResults = await this.mapStateService.getGeoCodeResult(key, true);
       var geoItem: GeocodeResult = {
         address: { label: key },
         position: geocodeResults[0].position,
         type: 'Home',
-        realstateData: value
+        realstateData: value,
+        color:""
       }
       results.push(geoItem);
     }
@@ -174,6 +157,84 @@ export class SettingStepperComponent implements OnInit {
   }
 
   publish() {
-    this.router.navigate(['main', this.agentFormGroup.value.phone ?? '']);
+    this.router.navigate(['main', this.settingFormGroup.value.phone ?? '']);
   }
+
+  // async done() {
+  //   var items = this.RealstateDatasFormGroup.value.RealstateDatas;
+  //   if (!items) {
+  //     return;
+  //   }
+  //   var agent = this.agentFormGroup.value;
+  //   if (!agent.name || !agent.description || !agent.image || !agent.phone) {
+  //     return;
+  //   }
+  //   await this.save();
+  // }
+
+  // async save() {
+  //   var phone = this.agentFormGroup.value.phone;
+  //   if (!phone) {
+  //     return;
+  //   }
+  //   await this.extractAndSave(phone);
+  //   this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(UrlUtil.getMapUrlForUser(phone));
+  // }
+
+  // private async extractAndSave(phone: string) {
+  //   var state = this.mapStateService.stateObservable.value;
+  //   var newState = await this.extractMapState(state);
+  //   this.mapStateService.stateObservable.next(newState);
+  //   await this.webApiService.saveUserStateByPhone(phone, newState);
+  // }
+
+  // private async extractMapState(state: MapState): Promise<MapState> {
+  //   var items = this.RealstateDatasFormGroup.value.RealstateDatas;
+  //   if (!items) {
+  //     return state;
+  //   }
+  //   var agent = this.agentFormGroup.value;
+  //   if (!agent.name || !agent.description || !agent.image || !agent.phone) {
+  //     return state;
+  //   }
+  //   var newState = _.cloneDeep(state);
+  //   newState.agent = {
+  //     name: agent.name,
+  //     phone: agent.phone,
+  //     description: agent.description,
+  //     image: agent.image
+  //   };
+  //   newState.geoItems = await this.mapToGeoItems(items);
+  //   return newState;
+  // }
+
+  // private async mapToGeoItems(realstateData: RealstateData[]): Promise<GeocodeResult[]> {
+  //   var dictionary = groupBy(realstateData, 'address');
+  //   console.log(dictionary);
+
+  //   var results: GeocodeResult[] = [];
+  //   for (const [key, value] of Object.entries(dictionary)) {
+  //     if (!key) {
+  //       continue;
+  //     }
+  //     for (let index = 0; index < value.length; index++) {
+  //       const element = value[index];
+  //       element.id = index.toString();
+  //     }
+
+  //     var geocodeResults = await this.mapStateService.getGeoCodeResult(key, true);
+  //     var geoItem: GeocodeResult = {
+  //       address: { label: key },
+  //       position: geocodeResults[0].position,
+  //       type: 'Home',
+  //       realstateData: value
+  //     }
+  //     results.push(geoItem);
+  //   }
+  //   return results;
+  // }
+
+  // publish() {
+  //   this.router.navigate(['main', this.agentFormGroup.value.phone ?? '']);
+  // }
 }

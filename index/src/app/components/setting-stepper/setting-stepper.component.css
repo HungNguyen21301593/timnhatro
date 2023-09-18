@@ -7,14 +7,11 @@
 }
 
 
-mat-form-field {
-  width: 100%;
-  color: white;
-}
-
-.step-container {
-  width: 100%;
-  height: 80%;
+.step-content-container {
+  width: 80%;
+  padding: 20px;
+  margin: 10px;
+  /* height: 80%; */
 }
 
 .map-preview-iframe{

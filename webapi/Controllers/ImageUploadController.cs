@@ -1,16 +1,7 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
-using System;
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
-using WebDriverManager.DriverConfigs.Impl;
-using WebDriverManager;
 using core.Service;
-using Telegram.Bot.Types;
 
 namespace YourApiNamespace.Controllers
 {
@@ -53,12 +44,6 @@ namespace YourApiNamespace.Controllers
             var shouldCreateFreshInstance = url.Contains("nhatot");
             var driver = webDriverManagerService.GetDriver(isFreshInstance: shouldCreateFreshInstance);
             driver.Navigate().GoToUrl(url);
-            var checkboxes = driver.FindElements(By.XPath("//*[contains(text(),'Verify you are human')]"));
-            Console.WriteLine($"Found: {checkboxes.Count}");
-            if (checkboxes.Any())
-            {
-                checkboxes.First().Click();
-            }
             var metaTags = driver.FindElements(By.TagName("meta"));
 
             var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();

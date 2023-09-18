@@ -25,7 +25,7 @@ export class GeoAddedItemListComponent implements OnInit {
 
   deleteItem(result: GeocodeResult) {
     this.mapStateService.removeItem(result);
-    this.mapStateService.process();
+    // this.mapStateService.process();
   }
 
   target(item: GeocodeResult | undefined) {

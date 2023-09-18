@@ -41,6 +41,8 @@ import {MatSnackBar, MatSnackBarRef, MatSnackBarModule} from '@angular/material/
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
+import { NewItemComponent } from './components/setting-stepper/components/new-item/new-item.component';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,8 @@ import { LoginDialogComponent } from './components/login-dialog/login-dialog.com
     GeoAddedHomeComponent,
     GeoAddedHomeListComponent,
     SafeHtmlPipe,
-    LoginDialogComponent
+    LoginDialogComponent,
+    NewItemComponent
     ],
   imports: [
     NgFor,
@@ -89,7 +92,8 @@ import { LoginDialogComponent } from './components/login-dialog/login-dialog.com
     MatIconModule,
     MatExpansionModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
