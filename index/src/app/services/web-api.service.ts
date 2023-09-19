@@ -5,6 +5,8 @@ import { MapState, ToolMode } from '../interfaces/map-state';
 import { ImageUploadResponse } from '../interfaces/image-upload-response';
 import { lastValueFrom } from 'rxjs';
 import { UrlMetaResponse } from '../interfaces/url-meta-response';
+import { GeocodeResult } from '../interfaces/geocode-result';
+import { RealstateData } from '../interfaces/realstate-item';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +25,7 @@ export class WebApiService {
     var dburl = UrlUtil.getDbUrlForUser(phone);
     var res = (await this.httpClient.get(dburl).toPromise()) as any;
     var state: MapState = {
-      geoItems: res?.state?.geoItems ?? [],
+      geoItems: this.populateGeoId(res?.state?.geoItems) ?? [],
       geoCalculatingItems: res?.state?.geoCalculatingItems ?? [],
       geoRoutePairs: res?.state?.geoRoutePairs ?? [],
       distance: res?.state?.distance ?? 1000,
@@ -31,6 +33,31 @@ export class WebApiService {
       agent: res?.state?.agent ?? {},
     };
     return state;
+  }
+
+  private populateGeoId(resGeoItems: any): GeocodeResult[]
+  {
+    var geoItems = resGeoItems as GeocodeResult[];
+    if (!geoItems) {
+      return []
+    }
+     for (let index = 0; index < geoItems.length; index++) {
+      geoItems[index].id= index;
+      geoItems[index].realstateData = this.populateRealstateId(geoItems[index].realstateData);
+     }
+     return geoItems;
+  }
+
+  private populateRealstateId(resRealstateItems: any): RealstateData[]
+  {
+    var items = resRealstateItems as RealstateData[];
+    if (!items) {
+      return [];
+    }
+     for (let index = 0; index < items.length; index++) {
+      items[index].id= index.toString();
+     }
+     return items;
   }
 
   async saveUserStateByPhone(phone: string, state: MapState) {

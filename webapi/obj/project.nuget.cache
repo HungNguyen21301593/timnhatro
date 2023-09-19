@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "V7iqp5k++nFFcruslAEPewLTgZLwep04mNZ/jBtYpushSsc6eP3v2tnpyD8uCRjgOvlL6J928VwKTihgbhm4oA==",
+  "dgSpecHash": "zoX+xnXsRA/31Kri/Y6+1fQmvLHiiceGfH5wEUX14fBVArUwIcrD8X71v3kSawFLTjqW7UwY3D7BirNUmdYOiA==",
   "success": true,
   "projectFilePath": "C:\\Personal\\Projects\\rs-agent-helper\\timnhatro\\webapi\\webapi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\nmh\\.nuget\\packages\\anglesharp\\1.0.4\\anglesharp.1.0.4.nupkg.sha512",
     "C:\\Users\\nmh\\.nuget\\packages\\dotnetseleniumextras.waithelpers\\3.11.0\\dotnetseleniumextras.waithelpers.3.11.0.nupkg.sha512",
+    "C:\\Users\\nmh\\.nuget\\packages\\htmlagilitypack\\1.11.53\\htmlagilitypack.1.11.53.nupkg.sha512",
     "C:\\Users\\nmh\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.5\\microsoft.entityframeworkcore.7.0.5.nupkg.sha512",
     "C:\\Users\\nmh\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.5\\microsoft.entityframeworkcore.abstractions.7.0.5.nupkg.sha512",
     "C:\\Users\\nmh\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.5\\microsoft.entityframeworkcore.analyzers.7.0.5.nupkg.sha512",

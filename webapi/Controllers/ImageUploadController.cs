@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using core.Service;
+using HtmlAgilityPack;
 
 namespace YourApiNamespace.Controllers
 {
@@ -35,6 +36,21 @@ namespace YourApiNamespace.Controllers
             var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
             var ss = ((ITakesScreenshot)driver).GetScreenshot();
             return File(ss.AsByteArray, "image/png");
+        }
+
+        [HttpGet("scan-from-url")]
+        public IActionResult ScanData(string url)
+        {
+            var web = new HtmlWeb();
+            var doc = web.Load(url);
+            var metatags = doc.DocumentNode.SelectNodes("//meta/@content");
+            var urlMeta = new UrlMetaResponse
+            {
+                Title = metatags.First().InnerText,
+                Description = "",
+                Image = ""
+            };
+            return new OkObjectResult(urlMeta);
         }
 
         [HttpGet("metadata-from-url")]

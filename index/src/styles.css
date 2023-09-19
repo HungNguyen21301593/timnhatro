@@ -38,6 +38,9 @@ body {
     z-index: 0;
   }
 
+  button{
+    margin: 5px 5px 0 5px;
+  }
 
   
 .mdc-button__label{

@@ -1,5 +1,5 @@
 <mat-stepper>
-  <mat-step [stepControl]="settingFormGroup">
+  <mat-step>
     <ng-template matStepLabel>Cài đặt</ng-template>
     <form [formGroup]="settingFormGroup">
       <mat-accordion>
@@ -34,7 +34,7 @@
               Những bài đã đăng
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <app-input-sheet-table formControlName="RealstateDatas"></app-input-sheet-table>
+          <app-input-sheet-table formControlName="realstateDatas"></app-input-sheet-table>
         </mat-expansion-panel>
       </mat-accordion>
     </form>

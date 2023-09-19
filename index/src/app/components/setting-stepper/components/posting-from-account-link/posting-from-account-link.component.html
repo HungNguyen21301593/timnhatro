@@ -1,5 +1,5 @@
 <mat-form-field>
   <mat-label>Nhập link tài khoản:</mat-label>
-  <textarea matInput #html formControlName="html" placeholder="Tự động nhập nội dung bằng link tài khoản" required rows="2"
+  <textarea matInput #html placeholder="Tự động nhập nội dung bằng link tài khoản" required rows="2"
     (change)="fetchListingsFromUrl(html.value)"></textarea>
 </mat-form-field>

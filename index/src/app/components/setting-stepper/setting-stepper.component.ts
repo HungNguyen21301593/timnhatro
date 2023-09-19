@@ -27,7 +27,7 @@ export class SettingStepperComponent implements OnInit {
     phone: ['', Validators.required],
     description: ['', null],
     image: ['', Validators.required],
-    RealstateDatas: [this.realstateDatasInit, Validators.required],
+    realstateDatas: [this.realstateDatasInit, Validators.required],
   });
 
   public mapUrl: null | SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('main');
@@ -77,19 +77,19 @@ export class SettingStepperComponent implements OnInit {
       phone: state.agent.phone,
       description: state.agent.description,
       image: state.agent.image,
-      RealstateDatas: realstate
+      realstateDatas: realstate
     });
   }
 
   public itemposted(item: RealstateData) {
-    var currentRealstateDatas = this.settingFormGroup.value.RealstateDatas ?? [];
+    var currentRealstateDatas = this.settingFormGroup.value.realstateDatas ?? [];
     var nextId = Math.max(...currentRealstateDatas.map(r => Number(r.id))) + 1;
     item.id = nextId.toString();
     currentRealstateDatas?.push(item);
     if (!currentRealstateDatas) {
       return;
     }
-    this.settingFormGroup.get('RealstateDatas')?.setValue(this.filteroutPostedItems(currentRealstateDatas));
+    this.settingFormGroup.get('realstateDatas')?.setValue(this.filteroutPostedItems(currentRealstateDatas));
   }
 
 
@@ -102,8 +102,9 @@ export class SettingStepperComponent implements OnInit {
     if (!phone) {
       return;
     }
-    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(UrlUtil.getMapUrlForUser(phone));
+    
     await this.extractAndSave(phone);
+    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(UrlUtil.getMapUrlForUser(phone));
   }
 
   private async extractAndSave(phone: string) {
@@ -114,7 +115,7 @@ export class SettingStepperComponent implements OnInit {
   }
 
   private async extractMapState(state: MapState): Promise<MapState> {
-    var items = this.settingFormGroup.value.RealstateDatas;
+    var items = this.settingFormGroup.value.realstateDatas;
     if (!items) {
       return state;
     }

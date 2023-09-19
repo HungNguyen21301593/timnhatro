@@ -1,11 +1,6 @@
 <mat-accordion multi>
   <mat-expansion-panel *ngFor="let realstateData of item.realstateData" [expanded]="expanded" #mep="matExpansionPanel">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <b>{{realstateData.title}}</b>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <br>
+
     <mat-form-field *ngIf="realstateData.html ===''">
       <mat-label>Link: </mat-label>
       <input matInput type="text" #html
@@ -14,6 +9,9 @@
     </mat-form-field>
     <br>
     <div *ngIf="realstateData.html !==''">
+      <mat-panel-title>
+        <b>{{realstateData.title}}</b>
+      </mat-panel-title>
       <app-image-viewer *ngIf="realstateData.images?.length??0 >0" [images]="realstateData.images"
         [height]="'200'"></app-image-viewer>
       <span><u>Địa chỉ:</u> {{realstateData.address}}</span>

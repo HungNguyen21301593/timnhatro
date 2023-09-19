@@ -82,7 +82,7 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
 
   selectEdit(element: RealstateData) {
     this.expandedElement = (this.expandedElement === element) ? null : element;
-    var newData = this.moveElementToLast(element);
+    var newData = this.updateElement(element);
     this.dataSource = newData;
   }
 
@@ -106,7 +106,7 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
   }
 
   deletedItem(element: RealstateData) {
-    this.value = this.value?.filter(item => item.title !== element.title) ?? [];
+    this.value = this.value?.filter(item => item.id !== element.id) ?? [];
     this.dataSource = this.value;
 
     this.onChange(this.value);
@@ -118,7 +118,7 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
     if (!this.value) {
       return;
     }
-    var newData = this.moveElementToLast(element);
+    var newData = this.updateElement(element);
     this.value = newData;
     this.dataSource = newData;
     this.onChange(this.value);
@@ -126,13 +126,13 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
     this.onTouched(this.value);
   }
 
-  moveElementToLast(element: RealstateData): RealstateData[] {
+  updateElement(element: RealstateData): RealstateData[] {
     if (!this.value) {
       return [];
     }
-    var index = this.value?.findIndex(RealstateData => RealstateData.title == element.title);
+    var index = this.value?.findIndex(RealstateData => RealstateData.id == element.id);
     if (index == -1) {
-      var index = this.value?.findIndex(RealstateData => RealstateData.title == Constant.newPostTitle);
+      return this.value;
     }
     this.value[index] = element;
     var newData: RealstateData[] = [];
