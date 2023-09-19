@@ -23,16 +23,19 @@ export class GeoAddedItemListComponent implements OnInit {
       geoItems?.filter(a => this.types?.includes(a.type ?? ''));
   }
 
+  diplayText(result: GeocodeResult)
+  {
+    return `Địa chỉ ${result.id}: ${result?.address?.label?.split(',')![0]}`;
+  }
+
   deleteItem(result: GeocodeResult) {
     this.mapStateService.removeItem(result);
-    // this.mapStateService.process();
   }
 
   target(item: GeocodeResult | undefined) {
     if (!item) {
       return
     }
-    this.mapStateService.itemSelectedObservable.next(item);
     this.mapApiService.zoomToLocations([item], 16);
   }
 }

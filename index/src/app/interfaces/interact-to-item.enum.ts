@@ -1,4 +1,4 @@
 export enum InteractToItem {
     Remove,
-    Open,
+    Select,
 }

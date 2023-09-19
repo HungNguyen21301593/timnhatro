@@ -1,17 +1,7 @@
-.mat-stepper-horizontal {
-  margin-top: 8px;
-}
-
-.mat-mdc-form-field {
-  margin-top: 16px;
-}
-
-
 .step-content-container {
-  width: 80%;
+  width: 100%;
   padding: 20px;
   margin: 10px;
-  /* height: 80%; */
 }
 
 .map-preview-iframe{

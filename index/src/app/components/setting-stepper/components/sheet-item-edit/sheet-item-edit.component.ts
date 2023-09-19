@@ -87,7 +87,13 @@ export class SheetItemEditComponent implements OnInit {
       html: formValue.html ?? ''
     }
     this.updatedOrPosted.emit(value);
-    this.snackBar.open("Đăng bài thành công!", "", { duration: 2000 });
+    if (this.isNew) {
+      this.snackBar.open("Đăng bài thành công!", "", { duration: 2000 });  
+    }
+    else{
+      this.snackBar.open("Cập nhật thành công!", "", { duration: 2000 });  
+    }
+    
   }
 
   deleteItem() {

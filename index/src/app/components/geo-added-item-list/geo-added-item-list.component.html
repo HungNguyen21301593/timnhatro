@@ -2,11 +2,10 @@
   <span *ngFor="let geocodeAddedItem of getList()" fxLayout="row" fxLayoutAlign="start center" >
     <button class="button-text" mat-raised-button color="primary" (click)="target(geocodeAddedItem)" fxFlex="80"
       fxLayoutAlign="start center">
-      <span>{{geocodeAddedItem?.address?.label?.split(',')![0]}}</span>
+      <span>{{diplayText(geocodeAddedItem)}}</span>
     </button>
     <div>
       <button mat-mini-fab color="warn" (click)="deleteItem(geocodeAddedItem)"><mat-icon>delete</mat-icon></button>
     </div>
-
   </span>
 </div>

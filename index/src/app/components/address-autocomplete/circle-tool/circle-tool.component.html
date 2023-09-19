@@ -1,0 +1,6 @@
+<mat-button-toggle-group (change)="distanceChanged(selectedRadius)" #group="matButtonToggleGroup"
+  [(ngModel)]="selectedRadius" [value]="selectedRadius">
+  <mat-button-toggle value="1000">1 Km</mat-button-toggle>
+  <mat-button-toggle value="2000">2 Km</mat-button-toggle>
+  <mat-button-toggle value="5000">5 Km</mat-button-toggle>
+</mat-button-toggle-group>

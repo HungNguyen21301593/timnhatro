@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { RestateViewContentComponent } from './restate-view-content.component';
+import { PostingFromAccountLinkComponent } from './posting-from-account-link.component';
 
-describe('RestateViewContentComponent', () => {
-  let component: RestateViewContentComponent;
-  let fixture: ComponentFixture<RestateViewContentComponent>;
+describe('PostingFromAccountLinkComponent', () => {
+  let component: PostingFromAccountLinkComponent;
+  let fixture: ComponentFixture<PostingFromAccountLinkComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RestateViewContentComponent ]
+      declarations: [ PostingFromAccountLinkComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RestateViewContentComponent);
+    fixture = TestBed.createComponent(PostingFromAccountLinkComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

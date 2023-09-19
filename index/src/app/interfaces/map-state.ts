@@ -4,8 +4,16 @@ import { IsolineRessult } from "./isoline-result";
 import { RoutePair } from "./pair-route";
 
 export interface MapState {
-    geoItems: GeocodeResult[]
-    geoRoutePairs: RoutePair[]
-    distance: number
+    geoItems: GeocodeResult[];
+    geoCalculatingItems: GeocodeResult[];
+    geoRoutePairs: RoutePair[];
+    distance: number;
+    toolMode: ToolMode
     agent: AgentProfile;
+}
+
+export enum ToolMode
+{
+    normal,
+    mesure
 }

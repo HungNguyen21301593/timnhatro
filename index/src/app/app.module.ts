@@ -24,7 +24,6 @@ import { SheetItemEditComponent } from './components/setting-stepper/components/
 import { MatListModule } from '@angular/material/list';
 import { OrderByPipe } from './pipes/sort.pipe';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { RestateViewContentComponent } from './components/restate-view-content/restate-view-content.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { AgentProfileComponent } from './components/agent-profile/agent-profile.component';
 import { GeoAddedItemListComponent } from './components/geo-added-item-list/geo-added-item-list.component';
@@ -43,6 +42,10 @@ import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
 import { NewItemComponent } from './components/setting-stepper/components/new-item/new-item.component';
 import {MatSelectModule} from '@angular/material/select';
+import {MatRadioModule} from '@angular/material/radio';
+import { PostingFromAccountLinkComponent } from './components/setting-stepper/components/posting-from-account-link/posting-from-account-link.component';
+import { CircleToolComponent } from './components/address-autocomplete/circle-tool/circle-tool.component';
+import { MesureToolComponent } from './components/address-autocomplete/mesure-tool/mesure-tool.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +58,6 @@ import {MatSelectModule} from '@angular/material/select';
     InputSheetTableComponent,
     SheetItemEditComponent,
     OrderByPipe,
-    RestateViewContentComponent,
     AgentProfileComponent,
     GeoAddedItemListComponent,
     ImageViewerComponent,
@@ -65,7 +67,10 @@ import {MatSelectModule} from '@angular/material/select';
     GeoAddedHomeListComponent,
     SafeHtmlPipe,
     LoginDialogComponent,
-    NewItemComponent
+    NewItemComponent,
+    PostingFromAccountLinkComponent,
+    CircleToolComponent,
+    MesureToolComponent
     ],
   imports: [
     NgFor,
@@ -93,7 +98,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatExpansionModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]

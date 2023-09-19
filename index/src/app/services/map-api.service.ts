@@ -4,6 +4,8 @@ import { RouteResult, Section, TravelSummary } from '../interfaces/route-result'
 import { InteractToItem } from '../interfaces/interact-to-item.enum';
 import { Isoline, IsolineRessult } from '../interfaces/isoline-result';
 import { data } from '@here/maps-api-for-javascript';
+import { GeneralHelper } from './Util/general-helper';
+import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +13,9 @@ import { data } from '@here/maps-api-for-javascript';
 export class MapApiService {
   platform: H.service.Platform | undefined;
   private map?: H.Map;
-  locationsGroup?: H.map.Group;
-  routesGroup?: H.map.Group;
-  notesGroup?: H.map.Group;
-  isolineRoutesGroup?: H.map.Group;
+  defaultLayers: any;
+  public normalGroup?: H.map.Group;
+  public measureGroup?: H.map.Group = new H.map.Group();
   ui?: H.ui.UI;
 
   constructor() {
@@ -24,20 +25,17 @@ export class MapApiService {
   }
   initMap(mapContainer: HTMLElement): H.Map {
 
-    var defaultLayers = this.platform?.createDefaultLayers({ lg: "vn" }) as any;
-    console.log(defaultLayers);
-    this.map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
+    this.defaultLayers = this.platform?.createDefaultLayers({ lg: "vn" }) as any;
+    this.map = new H.Map(mapContainer, this.defaultLayers.vector.normal.map, {
       center: { lat: 10.80814, lng: 106.70736 },
       zoom: 9,
       pixelRatio: window.devicePixelRatio || 1
     });
-    this.locationsGroup = new H.map.Group();
-    this.routesGroup = new H.map.Group();
-    this.notesGroup = new H.map.Group();
-    this.isolineRoutesGroup = new H.map.Group();
+
+    this.normalGroup = new H.map.Group();
     window.addEventListener('resize', () => this.map?.getViewPort().resize());
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
-    this.ui = H.ui.UI.createDefault(this.map, defaultLayers);
+    this.ui = H.ui.UI.createDefault(this.map, this.defaultLayers);
     this.setStyle();
     return this.map;
   }
@@ -68,7 +66,7 @@ export class MapApiService {
       });
   }
 
-  calculateRouteFromAtoB(origin: string, destimation: string): Promise<RouteResult> {
+  calculateRouteFromAtoB(origin: GeocodeResult, destimation: GeocodeResult): Promise<RouteResult> {
     if (!this.platform) {
       throw new Error("");
     }
@@ -76,8 +74,8 @@ export class MapApiService {
       routeRequestParams = {
         routingMode: 'short',
         transportMode: 'car',
-        origin: origin, // Brandenburg Gate
-        destination: destimation, // Friedrichstraße Railway Station
+        origin: `${origin.position.lat},${origin.position.lng}`,
+        destination: `${destimation.position.lat},${destimation.position.lng}`,
         return: 'polyline,travelSummary'
       };
     return new Promise((resolve, reject) => {
@@ -117,7 +115,7 @@ export class MapApiService {
         'range[values]': distance,
         'transportMode': 'car',
         'routingMode': 'short',
-        
+
       };
     return new Promise((resolve, reject) => {
       router?.calculateIsoline(
@@ -130,62 +128,20 @@ export class MapApiService {
       );
     })
   }
-  
-  removeAllIsolateRoutes()
-  {
-    if (!this.map) {
-      return;
-    }
-    this.isolineRoutesGroup?.removeAll()
-  }
 
-  renderIsolineToMap(isolineRessult: IsolineRessult, color: string) {
-    if (!this.map) {
-      return;
-    }
-    isolineRessult.isolines[0].polygons.forEach((section) => {
-      // decode LineString from the flexible polyline
-      let linestring = H.geo.LineString.fromFlexiblePolyline(section.outer);
   
-      // Create a polygon to display the area
-      let polygon = new H.map.Polygon(linestring, {
-        style: {
-          lineWidth: 4,
-          strokeColor: color,
-          fillColor: 'rgba(100, 149, 237 , 0.3)'
-        },
-        data:{}
-      });
-  
-      // Add the polygon to the map
-      this.isolineRoutesGroup?.addObject(polygon);
-      if (!this.isolineRoutesGroup) {
-        return;
-      }
-      this.map?.addObject(this.isolineRoutesGroup)
-      // And zoom to its bounding rectangle
-      var point = polygon?.getBoundingBox()?.getCenter();
-      if (!point) {
-        return;
-      }
-      this.map?.setCenter(point);
-    });
-  }
 
-  renderRouteShapesToMap(routes: RouteResult[]) {
+  renderRouteShapesToMap(group: H.map.Group | undefined,routes: RouteResult[]) {
     if (!this.map) {
       return;
     }
     this.clearAllBubble();
-    this.routesGroup?.removeAll();
     var polylines: H.map.Polyline[] = [];
     routes.forEach((route: RouteResult) => {
       route.sections.forEach((section: Section) => {
-        // decode LineString from the flexible polyline
         let linestring = H.geo.LineString.fromFlexiblePolyline(section.polyline);
         console.log(section);
 
-        // Create a polyline to display the route:
         let polyline = new H.map.Polyline(linestring,
           {
             style: {
@@ -195,21 +151,21 @@ export class MapApiService {
             data: {}
           });
         polylines.push(polyline);
-        this.renderRouteNoteMarker(linestring, section.travelSummary);
+        // this.renderRouteNoteMarker(linestring, section.travelSummary);
       });
-      this.routesGroup?.addObjects(polylines);
+      group?.addObjects(polylines);
 
-      if (!this.routesGroup) {
+      if (!group) {
         return;
       }
-      this.map?.addObject(this.routesGroup);
+      this.map?.addObject(group);
     });
   }
 
   renderRouteNoteMarker(line: H.geo.LineString, travelSummary: TravelSummary) {
     var count = line.getPointCount();
-    var point = line.extractPoint(count-1);
-    this.openBubble(point, `${Math.round(travelSummary.length / 100)/10} Km <br> ${Math.round(travelSummary.duration / 60)} Phút`);
+    var point = line.extractPoint(Math.round(count / 2));
+    this.openBubble(point, `${Math.round(travelSummary.length / 100) / 10} Km`);
   }
 
   openBubble(position: H.geo.Point, text: string) {
@@ -223,32 +179,79 @@ export class MapApiService {
 
   clearAllBubble() {
     this.ui?.getBubbles().forEach(bu => this.ui?.removeBubble(bu));
-  }
-
-  renderLocationsToMap(locations: GeocodeResult[], interactionCallBack: (type: InteractToItem, item: GeocodeResult) => void) {
     if (!this.map) {
       return;
     }
-    if (!this.locationsGroup) {
-      this.locationsGroup = new H.map.Group();
+    this.ui = H.ui.UI.createDefault(this.map, this.defaultLayers);
+  }
+
+  renderLocationsToMap(group: H.map.Group | undefined, geocodeResults: GeocodeResult[], interactionCallBack: (type: InteractToItem, item: GeocodeResult) => void) {
+    if (!this.map) {
+      return;
     }
-    this.locationsGroup.removeAll();
+    if (!group) {
+      return;
+    }
+    group = new H.map.Group();
     // Add a marker for each location found
-    for (var i = 0; i < locations.length; i += 1) {
-      let location = locations[i];
+    for (var i = 0; i < geocodeResults.length; i += 1) {
+      let location = geocodeResults[i];
       var marker = new H.map.Marker(location.position);
 
-      marker.addEventListener('tap', function (evt:any) {
-        interactionCallBack(InteractToItem.Open, location);
+      marker.addEventListener('tap', function (evt: any) {
+        interactionCallBack(InteractToItem.Select, location);
       }, false);
-      location.type == 'Home' ? marker.setIcon(new H.map.Icon('/assets/image/home.png')) : marker.setIcon(new H.map.Icon('/assets/image/office.png'));
+      if (location.type == 'Home') {
+        marker.setIcon(new H.map.Icon('/assets/image/home.png'));
+      } else {
+        var id = location.id;
+        marker.setIcon(new H.map.Icon(`/assets/image/${id}.png`));
+      }
 
-      this.locationsGroup?.addObject(marker);
+      group?.addObject(marker);
     }
 
     // Add the locations group to the map
-    this.map?.addObject(this.locationsGroup);
-    this.map?.setCenter(this.locationsGroup?.getBoundingBox()?.getCenter());
+    this.map?.addObject(group);
+    this.map?.setCenter(group?.getBoundingBox()?.getCenter());
+  }
+
+  renderCirclesToMap(group: H.map.Group | undefined, geocodeResults: GeocodeResult[], distance: number = 1000) {
+    if (!this.map) {
+      return;
+    }
+    if (!group) {
+      return;
+    }
+    geocodeResults.forEach(geocodeResult => {
+      if (!geocodeResult.color) {
+        geocodeResult.color = GeneralHelper.getRandomRGB();
+      }
+      var colorborder = _.cloneDeep(geocodeResult.color);
+      colorborder.a = 0.8;
+      var colorFill = _.cloneDeep(geocodeResult.color);
+      colorFill.a = 0.1;
+      var styleOption: H.map.SpatialStyle.Options = {
+        lineWidth: 4,
+        strokeColor: GeneralHelper.toString(colorborder),
+        fillColor: GeneralHelper.toString(colorFill)
+      }
+      var style = new H.map.SpatialStyle(styleOption);
+      group?.addObject(
+        new H.map.Circle(
+          { lat: geocodeResult.position.lat, lng: geocodeResult.position.lng },
+          distance,
+          {
+            data: {},
+            style: style
+          }
+        )
+      )
+    });
+    if (!group) {
+      return;
+    }
+    this.map?.addObject(group);
   }
 
   zoomToLocations(locations: GeocodeResult[], resolution = 12) {

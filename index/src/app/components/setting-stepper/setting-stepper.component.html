@@ -1,46 +1,3 @@
-<!-- <mat-stepper linear #stepper [animationDuration]="'0'">
-  <mat-step [stepControl]="agentFormGroup">
-    <form [formGroup]="agentFormGroup" fxLayout="column" fxLayoutAlign="center center" class="step-container">
-      <ng-template matStepLabel>Cài đặt</ng-template>
-      <mat-card class="step-content-container">
-        <mat-card-header>Thông tin cá nhân:</mat-card-header>
-        <mat-form-field>
-          <mat-label>Tên</mat-label>
-          <input matInput formControlName="name" placeholder="Tuấn Phạm" required>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Số điện thoại</mat-label>
-          <input matInput formControlName="phone" placeholder="08xxxxxxxx" type="number">
-        </mat-form-field>
-      </mat-card>
-
-      <mat-card class="step-content-container">
-        <mat-card-header>Đăng tin mới:</mat-card-header>
-        <app-new-item></app-new-item>
-      </mat-card>
-
-      <mat-card class="step-content-container">
-        <mat-card-header>Bài đã đăng:</mat-card-header>
-        <app-input-sheet-table formControlName="RealstateDatas"></app-input-sheet-table>
-      </mat-card>
-      <div>
-        <button mat-raised-button color="primary" matStepperNext (click)="save()">Sao Lưu & Tiếp Theo</button>
-      </div>
-    </form>
-  </mat-step>
-
-
-  <mat-step>
-    <div fxLayoutAlign="center center" class="step-container">
-      <ng-template matStepLabel>Xem trước bản đồ của bạn</ng-template>
-      <iframe #mapIframe class="map-preview-iframe" [src]="mapUrl"></iframe>
-    </div>
-    <div>
-      <button mat-raised-button color="primary" matStepperPrevious>Trở lại</button>
-      <button mat-raised-button color="primary" (click)="publish()">Hoàn tất</button>
-    </div>
-  </mat-step>
-</mat-stepper> -->
 <mat-stepper>
   <mat-step [stepControl]="settingFormGroup">
     <ng-template matStepLabel>Cài đặt</ng-template>
@@ -51,10 +8,6 @@
             <mat-panel-title>
               Thông tin cá nhân
             </mat-panel-title>
-            <mat-panel-description>
-              
-              <mat-icon color="primary">account_circle</mat-icon>
-            </mat-panel-description>
           </mat-expansion-panel-header>
       
           <mat-form-field>
@@ -71,10 +24,6 @@
             <mat-panel-title>
               Đăng bài mới
             </mat-panel-title>
-            <mat-panel-description>
-              
-              <mat-icon color="primary">note_add</mat-icon>
-            </mat-panel-description>
           </mat-expansion-panel-header>
           <app-new-item (itemposted)="itemposted($event)"></app-new-item>
         </mat-expansion-panel>
@@ -84,17 +33,13 @@
             <mat-panel-title>
               Những bài đã đăng
             </mat-panel-title>
-            <mat-panel-description>
-              
-              <mat-icon color="primary">folder_special</mat-icon>
-            </mat-panel-description>
           </mat-expansion-panel-header>
           <app-input-sheet-table formControlName="RealstateDatas"></app-input-sheet-table>
         </mat-expansion-panel>
       </mat-accordion>
     </form>
     
-    <button mat-raised-button color="primary" matStepperNext (click)="save()">Xem bản đồ của bạn</button>
+    <button mat-raised-button color="primary" matStepperNext (click)="save()">Lưu thay đổi</button>
   </mat-step>
   <mat-step>
     <div fxLayoutAlign="center center" class="step-container">

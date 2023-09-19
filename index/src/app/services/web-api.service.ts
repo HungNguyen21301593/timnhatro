@@ -1,10 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UrlUtil } from 'src/environment';
-import { MapState } from '../interfaces/map-state';
+import { MapState, ToolMode } from '../interfaces/map-state';
 import { ImageUploadResponse } from '../interfaces/image-upload-response';
 import { lastValueFrom } from 'rxjs';
-import { forEach } from 'lodash';
 import { UrlMetaResponse } from '../interfaces/url-meta-response';
 
 @Injectable({
@@ -23,7 +22,15 @@ export class WebApiService {
   async getUserStateByPhone(phone: string): Promise<MapState> {
     var dburl = UrlUtil.getDbUrlForUser(phone);
     var res = (await this.httpClient.get(dburl).toPromise()) as any;
-    return res?.state;
+    var state: MapState = {
+      geoItems: res?.state?.geoItems ?? [],
+      geoCalculatingItems: res?.state?.geoCalculatingItems ?? [],
+      geoRoutePairs: res?.state?.geoRoutePairs ?? [],
+      distance: res?.state?.distance ?? 1000,
+      toolMode: res?.toolMode ?? ToolMode.normal,
+      agent: res?.state?.agent ?? {},
+    };
+    return state;
   }
 
   async saveUserStateByPhone(phone: string, state: MapState) {

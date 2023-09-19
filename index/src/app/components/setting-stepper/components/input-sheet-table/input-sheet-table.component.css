@@ -6,6 +6,10 @@
 table {
   width: 100%;
 }
+tr
+{
+  padding-bottom: 10px;
+}
 
 tr.example-detail-row {
   height: 0;

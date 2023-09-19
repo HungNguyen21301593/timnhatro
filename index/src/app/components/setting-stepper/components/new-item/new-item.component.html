@@ -1,1 +1,16 @@
-<app-sheet-item-edit [realstateData]="element" [isNew]="true" (updatedOrPosted)="itemPosted($event)"></app-sheet-item-edit>
+<section class="example-section">
+    <label class="example-margin">Đăng bài từ:</label>
+    <mat-radio-group [(ngModel)]="type">
+        <mat-radio-button value="AccountLink">
+            link tài khoản
+        </mat-radio-button>
+        <mat-radio-button value='ListingLink'>
+            link bài viết
+        </mat-radio-button>
+    </mat-radio-group>
+</section>
+
+<app-posting-from-account-link *ngIf="type=='AccountLink'"></app-posting-from-account-link>
+
+<app-sheet-item-edit *ngIf="type=='ListingLink'" [realstateData]="element" [isNew]="true"
+    (updatedOrPosted)="itemPosted($event)"></app-sheet-item-edit>

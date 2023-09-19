@@ -16,21 +16,18 @@ export class AddressAutocompleteComponent implements OnInit {
 
   }
 
-  selectedRadius:string = '';
+
   searchValue = '';
   filteredOptions!: GeocodeResult[];
   subscriptionState?: Subscription;
 
   async ngOnInit() {
-    this.selectedRadius = this.mapStateService.stateObservable.value.distance.toString();
+
   }
 
   async search(value: string): Promise<GeocodeResult[]> {
     const filterValue = value.toLowerCase();
-    if (filterValue.length < 10) {
-      return [];
-    }
-    var searchtext = `${value}, thanh pho ho chi minh`;
+    var searchtext = `${filterValue}, thanh pho ho chi minh`;
     this.filteredOptions = await this.mapApiService.geocode(searchtext);
     this.filteredOptions.forEach(option => {
       option.realstateData =
@@ -60,13 +57,6 @@ export class AddressAutocompleteComponent implements OnInit {
       return;
     }
     this.mapStateService.addNewItem(result);
-    this.mapStateService.itemSelectedObservable.next(result);
     this.clear();
-  }
-
-  distanceChanged(value:string)
-  {
-    this.mapStateService.stateObservable.value.distance = Number(value);
-    this.mapStateService.stateObservable.next(this.mapStateService.stateObservable.value);
   }
 }

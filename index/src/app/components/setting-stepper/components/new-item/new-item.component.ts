@@ -22,6 +22,8 @@ export class NewItemComponent implements OnInit {
     title: Constant.newPostTitle
   };
   public element!: RealstateData;
+  type: 'ListingLink' | 'AccountLink' = 'AccountLink';
+
   constructor() { }
 
   ngOnInit() {

@@ -18,7 +18,6 @@ export class MainComponent implements OnInit, OnDestroy {
 
   @ViewChild('drawerAutoSearch') drawerAutoSearch?: MatDrawer;
 
-  public item!: GeocodeResult;
   subs: Subscription;
   constructor(
     private mapstateService: MapStateService,
@@ -26,19 +25,18 @@ export class MainComponent implements OnInit, OnDestroy {
     public dialog: MatDialog
   ) {
     this.subs = this.mapstateService.itemSelectedObservable.subscribe(item => {
-      if (!item || item.type === 'Office') {
-        return;
-      }
+      // if (!item || item.type === 'Office') {
+      //   return;
+      // }
       
-      this.item = item;
-      let dialogRef = this.dialog.open(GeoAddedHomeComponent,{
-        enterAnimationDuration: '200ms',
-        exitAnimationDuration: '200ms',
-      });
-      let instance = dialogRef.componentInstance;
-      instance.item = item;
-      instance.expanded = true;
-      // this.drawerHomeAddedItems?.open();
+      // this.item = item;
+      // let dialogRef = this.dialog.open(GeoAddedHomeComponent,{
+      //   enterAnimationDuration: '200ms',
+      //   exitAnimationDuration: '200ms',
+      // });
+      // let instance = dialogRef.componentInstance;
+      // instance.item = item;
+      // instance.expanded = true;
     })
   }
 
