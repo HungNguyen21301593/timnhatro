@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WebApiService } from 'src/app/services/web-api.service';
 
 @Component({
   selector: 'app-posting-from-account-link',
@@ -7,12 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PostingFromAccountLinkComponent implements OnInit {
 
-  constructor() { }
+  listings: string[] = [];
+  constructor(private webApiService:WebApiService) { }
 
   ngOnInit() {
   }
 
   fetchListingsFromUrl(link: string) {
-
+    
   }
 }

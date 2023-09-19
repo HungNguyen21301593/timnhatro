@@ -60,6 +60,8 @@ namespace YourApiNamespace.Controllers
             var shouldCreateFreshInstance = url.Contains("nhatot");
             var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
             driver.Navigate().GoToUrl(url);
+            
+
             var metaTags = driver.FindElements(By.TagName("meta"));
 
             var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();

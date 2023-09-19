@@ -46,6 +46,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import { PostingFromAccountLinkComponent } from './components/setting-stepper/components/posting-from-account-link/posting-from-account-link.component';
 import { CircleToolComponent } from './components/address-autocomplete/circle-tool/circle-tool.component';
 import { MesureToolComponent } from './components/address-autocomplete/mesure-tool/mesure-tool.component';
+import {ProgressBarMode, MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { MesureToolComponent } from './components/address-autocomplete/mesure-to
     MatSnackBarModule,
     MatDialogModule,
     MatSelectModule,
-    MatRadioModule
+    MatRadioModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

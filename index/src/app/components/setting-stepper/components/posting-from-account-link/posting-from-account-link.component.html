@@ -1,5 +1,21 @@
-<mat-form-field>
-  <mat-label>Nhập link tài khoản:</mat-label>
-  <textarea matInput #html placeholder="Tự động nhập nội dung bằng link tài khoản" required rows="2"
-    (change)="fetchListingsFromUrl(html.value)"></textarea>
-</mat-form-field>
+
+
+<mat-card>
+  <mat-form-field>
+    <mat-label>Nhập link tài khoản:</mat-label>
+    <textarea matInput #html placeholder="Tự động nhập nội dung bằng link tài khoản" required rows="2"
+      (change)="fetchListingsFromUrl(html.value)"></textarea>
+  </mat-form-field>
+  <mat-label>Kết quả:</mat-label>
+    <span *ngFor="let listing in listings">
+      {{listing}}
+    </span>
+    <section>
+      <mat-progress-bar
+          color="primary"
+          mode="determinate"
+          [value]="0"
+          [bufferValue]="5">
+      </mat-progress-bar>
+    </section>
+</mat-card>

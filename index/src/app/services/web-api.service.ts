@@ -79,6 +79,16 @@ export class WebApiService {
     }
   }
 
+  async getListingsFromAccountUrl(url: string): Promise<string[]> {
+    try {
+      const res = await lastValueFrom(this.httpClient.get(`/api/url-scanner/listing-from-account?url=${url}`));
+      return res as string[];
+    } catch (error) {
+      console.error('getListingsFromAccountUrl failed', error);
+      throw error;
+    }
+  }
+
   async saveImage(file: File): Promise<string> {
     try {
       var res = await this.uploadImage(file);
