@@ -87,7 +87,15 @@ export class SettingStepperComponent implements OnInit {
     items.forEach(item => {
       var nextId = Math.max(...currentRealstateDatas.map(r => Number(r.id))) + 1;
       item.id = nextId.toString();
-      currentRealstateDatas?.push(item);
+
+      var index = currentRealstateDatas.findIndex(currentRealstateData => currentRealstateData.title == item.title);
+      if (index == -1) {
+        currentRealstateDatas?.push(item);
+      }
+      else {
+        currentRealstateDatas[index] = item;
+      }
+
     });
     if (!currentRealstateDatas) {
       return;

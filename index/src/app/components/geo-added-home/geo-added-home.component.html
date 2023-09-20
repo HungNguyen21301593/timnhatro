@@ -1,12 +1,10 @@
-<div>
+<mat-dialog-content>
   <mat-accordion multi>
     <mat-expansion-panel *ngFor="let realstateData of item.realstateData" [expanded]="expanded"
       #mep="matExpansionPanel">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <b>{{realstateData.title}}</b>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
+      <mat-panel-title>
+        <b>{{realstateData.title}}</b>
+      </mat-panel-title>
       <mat-form-field *ngIf="realstateData.html ===''">
         <mat-label>Link: </mat-label>
         <input matInput type="text" #html (change)="loadReadStateData(realstateData, html.value)">
@@ -38,4 +36,4 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
-</div>
+</mat-dialog-content>

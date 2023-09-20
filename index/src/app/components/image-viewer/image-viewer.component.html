@@ -7,6 +7,6 @@
     </mat-button-toggle-group>
   </div>
   <div class="image-container" fxLayout="row" fxLayoutAlign="center center">
-    <img class="image" [height]="height" [src]="selectedImage" loading="lazy">
+    <img class="image" [height]="height" [src]="selectedImage" loading="lazy" onerror="this.style.display='none'">
   </div>
 </div>
