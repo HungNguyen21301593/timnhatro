@@ -25,7 +25,7 @@ export class GeoAddedItemListComponent implements OnInit {
 
   diplayText(result: GeocodeResult)
   {
-    return `Địa chỉ ${result.id}: ${result?.address?.label?.split(',')![0]}`;
+    return `Địa chỉ ${result.textId}: ${result?.address?.label?.split(',')![0]}`;
   }
 
   deleteItem(result: GeocodeResult) {

@@ -207,12 +207,13 @@ export class MapApiService {
     })
     var offices = geocodeResults.filter(geocodeResult => geocodeResult.type == 'Office');
     for (let index = 0; index < offices.length; index++) {
-      const element = offices[index];
-      var marker = new H.map.Marker(element.position);
+      const geocodeResult = offices[index];
+      var marker = new H.map.Marker(geocodeResult.position);
       marker.addEventListener('tap', function (evt: any) {
-        interactionCallBack(InteractToItem.Select, element);
+        interactionCallBack(InteractToItem.Select, geocodeResult);
       }, false);
       var alphabetCharacter = this.alphabetDictionary[index];
+      geocodeResult.textId = alphabetCharacter;
       marker.setIcon(new H.map.Icon(`/assets/image/${alphabetCharacter}.png`));
       group?.addObject(marker);
     };

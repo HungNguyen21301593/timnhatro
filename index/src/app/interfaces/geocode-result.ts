@@ -8,6 +8,7 @@ import { Color } from "./color";
 
 export interface GeocodeResult {
     id: number;
+    textId?: string;
     address: Address;
     position: Position;
     type: 'Home' | 'Office' | undefined;
