@@ -66,8 +66,16 @@ export class SheetItemEditComponent implements OnInit {
     }
     this.linkloading = true;
     var response = await this.webApiService.getMedataDataFromUrl(url);
-    this.sheetItemEditForm.patchValue(response);
-    this.selectedImages = [response.image];
+    var data: RealstateData = {
+      id: response.id,
+      address: response.address,
+      description: response.description,
+      images: response.images,
+      title: response.title,
+      html: url
+    }
+    this.sheetItemEditForm.patchValue(data);
+    this.selectedImages = response.images;
     this.linkloading = false;
   }
 

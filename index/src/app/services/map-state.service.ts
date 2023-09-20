@@ -21,7 +21,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class MapStateService {
   private routeDatabase: RoutePair[] = [];
-  private geoCodeDatabase: Dictionary<GeocodeResult[]> = {};
   private initState: MapState = {
     geoItems: [] as GeocodeResult[],
     geoCalculatingItems: [] as GeocodeResult[],
@@ -29,6 +28,7 @@ export class MapStateService {
     distance: 1000,
     toolMode: ToolMode.normal,
     agent: {} as AgentProfile,
+    geoCodeDatabase:{}
   };
   public stateObservable: BehaviorSubject<MapState> = new BehaviorSubject(this.initState);
 
@@ -81,9 +81,11 @@ export class MapStateService {
       }
       this.stateObservable.value.geoCalculatingItems.push(item);
       var calculatingItems = this.stateObservable.value.geoCalculatingItems;
-      this.mapApiService.renderCirclesToMap(groupToRender, calculatingItems, 100);
-      if (calculatingItems.length == 2) {
+      if (calculatingItems.length == 1) {
         groupToRender?.removeAll();
+      }
+      this.mapApiService.renderCirclesToMap(groupToRender, calculatingItems, 300, { r: 17, g: 120, b: 100, a: 0.8 });
+      if (calculatingItems.length == 2) {
         var route = await this.getRoute(calculatingItems[0], calculatingItems[1]);
         this.mapApiService.renderRouteShapesToMap(groupToRender, [route]);
         var route = await this.getRoute(calculatingItems[0], calculatingItems[1]);
@@ -93,7 +95,7 @@ export class MapStateService {
       }
     });
 
-    this.mapApiService.zoomToLocations(this.stateObservable.value.geoItems, 14);
+    this.mapApiService.zoomToLocations(this.stateObservable.value.geoItems.filter(i => i.type == 'Office'), 14);
   }
 
   async reloadStateFromUrlParams(phone: string): Promise<MapState | null> {
@@ -120,17 +122,19 @@ export class MapStateService {
   }
 
   async getGeoCodeResult(address: string, dosave: boolean): Promise<GeocodeResult[]> {
-    if (this.geoCodeDatabase[address]) {
-      return this.geoCodeDatabase[address];
+    if (this.stateObservable.value.geoCodeDatabase[address]) {
+      return this.stateObservable.value.geoCodeDatabase[address];
     }
     try {
       var apiResults = await this.mapApiService.geocode(address);
       if (dosave) {
-        this.geoCodeDatabase[address] = apiResults;
+        this.stateObservable.value.geoCodeDatabase[address] = apiResults;
+        this.stateObservable.next(this.stateObservable.value);
       }
       return apiResults;
     } catch (error) {
-      throw new Error('could not find the adress');
+      console.error('could not find the adress');
+      return [];
     }
   }
 

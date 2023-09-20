@@ -1,3 +1,4 @@
+import { Dictionary } from "lodash";
 import { AgentProfile } from "./agent-profile";
 import { GeocodeResult } from "./geocode-result";
 import { IsolineRessult } from "./isoline-result";
@@ -10,6 +11,7 @@ export interface MapState {
     distance: number;
     toolMode: ToolMode
     agent: AgentProfile;
+    geoCodeDatabase: Dictionary<GeocodeResult[]>;
 }
 
 export enum ToolMode

@@ -38,44 +38,6 @@ namespace YourApiNamespace.Controllers
             return File(ss.AsByteArray, "image/png");
         }
 
-        [HttpGet("scan-from-url")]
-        public IActionResult ScanData(string url)
-        {
-            var web = new HtmlWeb();
-            var doc = web.Load(url);
-            var metatags = doc.DocumentNode.SelectNodes("//meta/@content");
-            var urlMeta = new UrlMetaResponse
-            {
-                Title = metatags.First().InnerText,
-                Description = "",
-                Image = ""
-            };
-            return new OkObjectResult(urlMeta);
-        }
-
-        [HttpGet("metadata-from-url")]
-        public IActionResult ReadUrlMetaData(string url)
-        {
-            url ??= "https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/";
-            var shouldCreateFreshInstance = url.Contains("nhatot");
-            var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
-            driver.Navigate().GoToUrl(url);
-            
-
-            var metaTags = driver.FindElements(By.TagName("meta"));
-
-            var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();
-            var description = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:description").FirstOrDefault();
-            var image = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:image").FirstOrDefault();
-            var urlMeta = new UrlMetaResponse
-            {
-                Title = title?.GetAttribute("content") ?? "",
-                Description = description?.GetAttribute("content") ?? "",
-                Image = image?.GetAttribute("content") ?? ""
-            };
-            driver.Manage().Cookies.DeleteAllCookies();
-            return new OkObjectResult(urlMeta);
-        }
 
         private async Task<IActionResult> UploadToCloudFare(string Filename, Stream stream)
         {
@@ -109,24 +71,6 @@ namespace YourApiNamespace.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-        }
-
-        public async Task TryLogin(IWebDriver webDriver, string email, string password)
-        {
-            webDriver.Navigate().GoToUrl("https://mbasic.facebook.com/");
-
-            var emails = webDriver.FindElements(By.XPath("//input[@id='m_login_email']"));
-            if (emails.Any()) { emails.First().SendKeys(email); };
-
-            var passwords = webDriver.FindElements(By.XPath("//section[@id='password_input_with_placeholder']/input"));
-            if (passwords.Any())
-            {
-                passwords.First().SendKeys(password);
-                passwords.First().SendKeys(Keys.Enter);
-            };
-            await Task.Delay(500);
-            var submits = webDriver.FindElements(By.XPath("//input[@value='Log In']/parent::li"));
-            if (submits.Any()) { submits.First().Click(); };
         }
     }
 }

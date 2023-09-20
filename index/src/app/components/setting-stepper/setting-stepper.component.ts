@@ -9,7 +9,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MapState, ToolMode } from 'src/app/interfaces/map-state';
 import { groupBy } from 'underscore';
 import { WebApiService } from 'src/app/services/web-api.service';
-import _ from 'lodash';
+import _, { forEach } from 'lodash';
 import { Constant } from 'src/app/interfaces/constant.enum';
 import { GeneralHelper } from 'src/app/services/Util/general-helper';
 @Component({
@@ -61,7 +61,8 @@ export class SettingStepperComponent implements OnInit {
           geoCalculatingItems: [],
           geoRoutePairs: [],
           toolMode: ToolMode.normal,
-          distance: 1000
+          distance: 1000,
+          geoCodeDatabase: {}
         });
 
       }
@@ -81,11 +82,13 @@ export class SettingStepperComponent implements OnInit {
     });
   }
 
-  public itemposted(item: RealstateData) {
+  public itemposted(items: RealstateData[]) {
     var currentRealstateDatas = this.settingFormGroup.value.realstateDatas ?? [];
-    var nextId = Math.max(...currentRealstateDatas.map(r => Number(r.id))) + 1;
-    item.id = nextId.toString();
-    currentRealstateDatas?.push(item);
+    items.forEach(item => {
+      var nextId = Math.max(...currentRealstateDatas.map(r => Number(r.id))) + 1;
+      item.id = nextId.toString();
+      currentRealstateDatas?.push(item);
+    });
     if (!currentRealstateDatas) {
       return;
     }
@@ -102,7 +105,7 @@ export class SettingStepperComponent implements OnInit {
     if (!phone) {
       return;
     }
-    
+
     await this.extractAndSave(phone);
     this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(UrlUtil.getMapUrlForUser(phone));
   }
@@ -110,6 +113,7 @@ export class SettingStepperComponent implements OnInit {
   private async extractAndSave(phone: string) {
     var state = this.mapStateService.stateObservable.value;
     var newState = await this.extractMapState(state);
+    newState.geoCodeDatabase = this.mapStateService.stateObservable.getValue().geoCodeDatabase;
     this.mapStateService.stateObservable.next(newState);
     await this.webApiService.saveUserStateByPhone(phone, newState);
   }
@@ -149,6 +153,9 @@ export class SettingStepperComponent implements OnInit {
       }
 
       var geocodeResults = await this.mapStateService.getGeoCodeResult(key, true);
+      if (geocodeResults.length == 0) {
+        continue;
+      }
       var geoItem: GeocodeResult = {
         id: 0,
         address: { label: key },

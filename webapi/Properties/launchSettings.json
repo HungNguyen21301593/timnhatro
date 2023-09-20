@@ -2,7 +2,6 @@
   "profiles": {
     "webapi": {
       "commandName": "Project",
-      "launchBrowser": false,
       "launchUrl": "api/weatherforecast",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -24,6 +23,15 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/api/weatherforecast",
       "publishAllPorts": true,
       "useSSL": true
+    },
+    "Profile 1": {
+      "commandName": "Project",
+      "launchUrl": "api/weatherforecast",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5173"
     }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json",

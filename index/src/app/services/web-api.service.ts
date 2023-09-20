@@ -7,11 +7,18 @@ import { lastValueFrom } from 'rxjs';
 import { UrlMetaResponse } from '../interfaces/url-meta-response';
 import { GeocodeResult } from '../interfaces/geocode-result';
 import { RealstateData } from '../interfaces/realstate-item';
+import { AccountUrlResponse } from '../interfaces/account-url-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebApiService {
+  get id(): number {
+    var currentValue = this._id;
+    this._id = currentValue + 1;
+    return currentValue;
+  }
+  _id = 0;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -31,33 +38,33 @@ export class WebApiService {
       distance: res?.state?.distance ?? 1000,
       toolMode: res?.toolMode ?? ToolMode.normal,
       agent: res?.state?.agent ?? {},
+      geoCodeDatabase: res?.state?.geoCodeDatabase ?? {}
     };
+    console.log(state);
     return state;
   }
 
-  private populateGeoId(resGeoItems: any): GeocodeResult[]
-  {
+  private populateGeoId(resGeoItems: any): GeocodeResult[] {
     var geoItems = resGeoItems as GeocodeResult[];
     if (!geoItems) {
       return []
     }
-     for (let index = 0; index < geoItems.length; index++) {
-      geoItems[index].id= index;
+    for (let index = 0; index < geoItems.length; index++) {
+      geoItems[index].id = index;
       geoItems[index].realstateData = this.populateRealstateId(geoItems[index].realstateData);
-     }
-     return geoItems;
+    }
+    return geoItems;
   }
 
-  private populateRealstateId(resRealstateItems: any): RealstateData[]
-  {
+  private populateRealstateId(resRealstateItems: any): RealstateData[] {
     var items = resRealstateItems as RealstateData[];
     if (!items) {
       return [];
     }
-     for (let index = 0; index < items.length; index++) {
-      items[index].id= index.toString();
-     }
-     return items;
+    for (let index = 0; index < items.length; index++) {
+      items[index].id = this.id.toString();
+    }
+    return items;
   }
 
   async saveUserStateByPhone(phone: string, state: MapState) {
@@ -69,20 +76,30 @@ export class WebApiService {
     };
   }
 
-  async getMedataDataFromUrl(url: string): Promise<UrlMetaResponse> {
+  async getMedataDataFromUrl(url: string): Promise<RealstateData> {
     try {
-      const res = await lastValueFrom(this.httpClient.get(`/api/images/metadata-from-url?url=${url}`));
-      return res as UrlMetaResponse;
+      const res = await lastValueFrom(this.httpClient.get(`/api/url-scanner/metadata-from-url?url=${url}`));
+      var casted = res as UrlMetaResponse;
+      var formatedAddress = casted.address.replace(/(\r\n|\n|\r)/gm, "");
+      var data: RealstateData = {
+        id: this.id.toString(),
+        address: formatedAddress,
+        description: casted.description,
+        images: casted.images,
+        title: casted.title,
+        html: url
+      }
+      return data;
     } catch (error) {
       console.error('getMedataDataFromUrl failed', error);
       throw error;
     }
   }
 
-  async getListingsFromAccountUrl(url: string): Promise<string[]> {
+  async getListingsFromAccountUrl(url: string): Promise<AccountUrlResponse[]> {
     try {
       const res = await lastValueFrom(this.httpClient.get(`/api/url-scanner/listing-from-account?url=${url}`));
-      return res as string[];
+      return res as AccountUrlResponse[];
     } catch (error) {
       console.error('getListingsFromAccountUrl failed', error);
       throw error;

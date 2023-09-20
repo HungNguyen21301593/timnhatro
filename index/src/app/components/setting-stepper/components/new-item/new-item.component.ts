@@ -11,7 +11,7 @@ import _ from 'lodash';
 export class NewItemComponent implements OnInit {
 
   @Output()
-  itemposted = new EventEmitter<RealstateData>();
+  itemposted = new EventEmitter<RealstateData[]>();
 
   emptyElement: RealstateData = {
     id: "0",
@@ -35,8 +35,14 @@ export class NewItemComponent implements OnInit {
     this.element = _.cloneDeep(this.emptyElement);
   }
 
-  itemPosted(element: RealstateData) {
-    this.itemposted.emit(element);
+  multipleItemsPosted(elements: RealstateData[])
+  {
+    this.itemposted.emit(elements);
+    this.reset();
+  }
+
+  singleItemPosted(element: RealstateData) {
+    this.itemposted.emit([element]);
     this.reset();
   }
 }

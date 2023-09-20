@@ -1,16 +1,20 @@
-<section class="example-section">
-    <label class="example-margin">Đăng bài từ:</label>
-    <mat-radio-group [(ngModel)]="type">
+<section fxLayout="row" fxLayoutAlign="start center">
+    <mat-radio-group [(ngModel)]="type" [value]="'AccountLink'">
+        <span>Đăng bài từ:</span>
         <mat-radio-button value="AccountLink">
-            link tài khoản
         </mat-radio-button>
+        <span>link tài khoản</span>
         <mat-radio-button value='ListingLink'>
-            link bài viết
         </mat-radio-button>
+        <span>link bài viết</span>
     </mat-radio-group>
 </section>
 
-<app-posting-from-account-link *ngIf="type=='AccountLink'"></app-posting-from-account-link>
+<div *ngIf="type=='AccountLink'">
+    <app-posting-from-account-link (itemsPosted)="multipleItemsPosted($event)"></app-posting-from-account-link>
+</div>
 
-<app-sheet-item-edit *ngIf="type=='ListingLink'" [realstateData]="element" [isNew]="true"
-    (updatedOrPosted)="itemPosted($event)"></app-sheet-item-edit>
+<div *ngIf="type=='ListingLink'">
+    <app-sheet-item-edit [realstateData]="element" [isNew]="true"
+        (updatedOrPosted)="singleItemPosted($event)"></app-sheet-item-edit>
+</div>

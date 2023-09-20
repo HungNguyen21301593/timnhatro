@@ -5,7 +5,8 @@ import { InteractToItem } from '../interfaces/interact-to-item.enum';
 import { Isoline, IsolineRessult } from '../interfaces/isoline-result';
 import { data } from '@here/maps-api-for-javascript';
 import { GeneralHelper } from './Util/general-helper';
-import _ from 'lodash';
+import _, { Dictionary } from 'lodash';
+import { Color } from '../interfaces/color';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,8 @@ export class MapApiService {
   public normalGroup?: H.map.Group;
   public measureGroup?: H.map.Group = new H.map.Group();
   ui?: H.ui.UI;
+
+  alphabetDictionary: string[] = ["A", "B", "C", "D", "E", "F"];
 
   constructor() {
     this.platform = new H.service.Platform({
@@ -129,9 +132,9 @@ export class MapApiService {
     })
   }
 
-  
 
-  renderRouteShapesToMap(group: H.map.Group | undefined,routes: RouteResult[]) {
+
+  renderRouteShapesToMap(group: H.map.Group | undefined, routes: RouteResult[]) {
     if (!this.map) {
       return;
     }
@@ -193,30 +196,33 @@ export class MapApiService {
       return;
     }
     group = new H.map.Group();
-    // Add a marker for each location found
-    for (var i = 0; i < geocodeResults.length; i += 1) {
-      let location = geocodeResults[i];
-      var marker = new H.map.Marker(location.position);
 
+    geocodeResults.filter(geocodeResult => geocodeResult.type == 'Home').forEach(geocodeResult => {
+      var marker = new H.map.Marker(geocodeResult.position);
       marker.addEventListener('tap', function (evt: any) {
-        interactionCallBack(InteractToItem.Select, location);
+        interactionCallBack(InteractToItem.Select, geocodeResult);
       }, false);
-      if (location.type == 'Home') {
-        marker.setIcon(new H.map.Icon('/assets/image/home.png'));
-      } else {
-        var id = location.id;
-        marker.setIcon(new H.map.Icon(`/assets/image/${id}.png`));
-      }
-
+      marker.setIcon(new H.map.Icon('/assets/image/home.png'));
       group?.addObject(marker);
-    }
+    })
+    var offices = geocodeResults.filter(geocodeResult => geocodeResult.type == 'Office');
+    for (let index = 0; index < offices.length; index++) {
+      const element = offices[index];
+      var marker = new H.map.Marker(element.position);
+      marker.addEventListener('tap', function (evt: any) {
+        interactionCallBack(InteractToItem.Select, element);
+      }, false);
+      var alphabetCharacter = this.alphabetDictionary[index];
+      marker.setIcon(new H.map.Icon(`/assets/image/${alphabetCharacter}.png`));
+      group?.addObject(marker);
+    };
 
     // Add the locations group to the map
     this.map?.addObject(group);
     this.map?.setCenter(group?.getBoundingBox()?.getCenter());
   }
 
-  renderCirclesToMap(group: H.map.Group | undefined, geocodeResults: GeocodeResult[], distance: number = 1000) {
+  renderCirclesToMap(group: H.map.Group | undefined, geocodeResults: GeocodeResult[], distance: number = 100, color: null | Color = null) {
     if (!this.map) {
       return;
     }
@@ -227,9 +233,9 @@ export class MapApiService {
       if (!geocodeResult.color) {
         geocodeResult.color = GeneralHelper.getRandomRGB();
       }
-      var colorborder = _.cloneDeep(geocodeResult.color);
+      var colorborder = _.cloneDeep(color !== null ? color : geocodeResult.color);
       colorborder.a = 0.8;
-      var colorFill = _.cloneDeep(geocodeResult.color);
+      var colorFill = _.cloneDeep(color !== null ? color : geocodeResult.color);
       colorFill.a = 0.1;
       var styleOption: H.map.SpatialStyle.Options = {
         lineWidth: 4,
@@ -256,6 +262,9 @@ export class MapApiService {
 
   zoomToLocations(locations: GeocodeResult[], resolution = 12) {
     if (!this.map) {
+      return;
+    }
+    if (locations.length == 0) {
       return;
     }
     var dummyGroup = new H.map.Group();

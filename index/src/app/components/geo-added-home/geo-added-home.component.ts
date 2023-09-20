@@ -55,7 +55,8 @@ export class GeoAddedHomeComponent implements OnInit {
     realstateData.html = link;
     realstateData.description = metadata.description;
     realstateData.title = metadata.title;
-    realstateData.images = [metadata.image];
+    realstateData.images = metadata.images;
+    realstateData.id = metadata.id;
     this.isLoadingLink = false;
   }
 
