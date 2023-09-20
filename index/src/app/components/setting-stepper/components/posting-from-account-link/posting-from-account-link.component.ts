@@ -46,12 +46,25 @@ export class PostingFromAccountLinkComponent implements OnInit {
     var results: RealstateData[] = [];
     for (let index = 0; index < this.listings.length; index++) {
       const listing = this.listings[index];
+      var newRealStateData = await this.scanForSingleListing(listing);
+      if (!newRealStateData) {
+        continue;
+      }
+      results.push(newRealStateData);
+      this.value = Math.round(index / (this.listings.length - 1) * 100);
+    }
+    this.scanSpinner = false;
+    this.massPostingFormGroup.patchValue({ realstateDatas: results })
+  }
+
+  async scanForSingleListing(listing: AccountUrlResponse): Promise<RealstateData | null> {
+    try {
       var listingMetada = await this.webApiService.getMedataDataFromUrl(listing.url);
 
       var georesults = await this.mapStateService.getGeoCodeResult(listingMetada.address, true);
       if (georesults.length == 0) {
         console.error(`Failed scanning ${listing.url}`);
-        continue;
+        return null;
       }
       listingMetada.address = georesults[0].address.label;
       listingMetada.images = listing.images;
@@ -63,11 +76,11 @@ export class PostingFromAccountLinkComponent implements OnInit {
         images: listing.images,
         title: listing.title,
       }
-      results.push(newRealStateData);
-      this.value = Math.round(index / (this.listings.length - 1) * 100);
+      return newRealStateData;
+    } catch (error) {
+      console.error(`Failed scanning ${listing.url}`);
+      return null;
     }
-    this.scanSpinner = false;
-    this.massPostingFormGroup.patchValue({ realstateDatas: results })
   }
 
   postall() {
@@ -76,12 +89,11 @@ export class PostingFromAccountLinkComponent implements OnInit {
       return;
     }
     this.itemsPosted.emit(items);
-    this.snackBar.open(`Đăng ${items.length} bài thành công!`, "", { duration: 2000 });  
+    this.snackBar.open(`Đăng ${items.length} bài thành công!`, "", { duration: 2000 });
     this.reset();
   }
 
-  reset()
-  {
+  reset() {
     this.massPostingFormGroup.patchValue({ realstateDatas: [] });
     this.listings = [];
   }

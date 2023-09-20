@@ -1,39 +1,41 @@
-<mat-accordion multi>
-  <mat-expansion-panel *ngFor="let realstateData of item.realstateData" [expanded]="expanded" #mep="matExpansionPanel">
-
-    <mat-form-field *ngIf="realstateData.html ===''">
-      <mat-label>Link: </mat-label>
-      <input matInput type="text" #html
-        (change)="loadReadStateData(realstateData, html.value)">
-      <mat-spinner [diameter]="30" [hidden]="!isLoadingLink"></mat-spinner>
-    </mat-form-field>
-    <br>
-    <div *ngIf="realstateData.html !==''">
-      <mat-panel-title>
-        <b>{{realstateData.title}}</b>
-      </mat-panel-title>
-      <app-image-viewer *ngIf="realstateData.images?.length??0 >0" [images]="realstateData.images"
-        [height]="'200'"></app-image-viewer>
-      <span><u>Địa chỉ:</u> {{realstateData.address}}</span>
+<div>
+  <mat-accordion multi>
+    <mat-expansion-panel *ngFor="let realstateData of item.realstateData" [expanded]="expanded"
+      #mep="matExpansionPanel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <b>{{realstateData.title}}</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-form-field *ngIf="realstateData.html ===''">
+        <mat-label>Link: </mat-label>
+        <input matInput type="text" #html (change)="loadReadStateData(realstateData, html.value)">
+        <mat-spinner [diameter]="30" [hidden]="!isLoadingLink"></mat-spinner>
+      </mat-form-field>
       <br>
-      <span><u>Mô tả:</u> {{realstateData.description}}</span>
-      <br>
-      <div fxLayout="row" fxLayout="start center">
-        <button mat-mini-fab color="primary" (click)="back()">
-          <mat-icon>arrow_back</mat-icon>
-        </button>
-        <button mat-mini-fab color="primary" (click)="target()">
-          <mat-icon> location_on</mat-icon>
-        </button>
-        <button mat-mini-fab color="primary" (click)="direction()">
-          <mat-icon> directions</mat-icon>
+      <div *ngIf="realstateData.html !==''">
+        <app-image-viewer *ngIf="realstateData.images?.length??0 >0" [images]="realstateData.images"
+          [height]="'200'"></app-image-viewer>
+        <span><u>Địa chỉ:</u> {{realstateData.address}}</span>
+        <br>
+        <span><u>Mô tả:</u> {{realstateData.description}}</span>
+        <br>
+        <div fxLayout="row" fxLayout="start center">
+          <button mat-mini-fab color="primary" (click)="back()">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <button mat-mini-fab color="primary" (click)="target()">
+            <mat-icon> location_on</mat-icon>
+          </button>
+          <button mat-mini-fab color="primary" (click)="direction()">
+            <mat-icon> directions</mat-icon>
+          </button>
+        </div>
+        <button mat-flat-button color="primary" (click)="share(realstateData.html)">
+          <span>Xem toàn bộ bài đăng</span>
+          <mat-icon>share</mat-icon>
         </button>
       </div>
-      <button mat-flat-button color="primary" (click)="share(realstateData.html)">
-        <span>Xem toàn bộ bài đăng</span>
-        <mat-icon>share</mat-icon>
-      </button>
-    </div>
-    
-  </mat-expansion-panel>
-</mat-accordion>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

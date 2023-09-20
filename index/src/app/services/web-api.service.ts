@@ -80,7 +80,7 @@ export class WebApiService {
     try {
       const res = await lastValueFrom(this.httpClient.get(`/api/url-scanner/metadata-from-url?url=${url}`));
       var casted = res as UrlMetaResponse;
-      var formatedAddress = casted.address.replace(/(\r\n|\n|\r)/gm, "");
+      var formatedAddress = casted.address.replace(/(\r\n|\n|\r)/gm, "").replace("/"," ");
       var data: RealstateData = {
         id: this.id.toString(),
         address: formatedAddress,

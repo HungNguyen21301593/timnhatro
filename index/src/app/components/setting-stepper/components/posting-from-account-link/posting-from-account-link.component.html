@@ -8,9 +8,6 @@
 
 <div fxLayout="column" fxLayoutAlign="start start">
   <span>Kết quả: Tổng cộng {{listings.length}} Bài đăng</span>
-  <!-- <a [href]="listing.url" *ngFor="let listing of listings">
-    {{listing.title}}
-  </a> -->
 </div>
 
 <form [formGroup]="massPostingFormGroup" fxLayout="column" fxLayoutAlign="start start">
@@ -21,5 +18,6 @@
   <mat-progress-bar class="example-margin" color="primary" mode="determinate" [value]="value">
   </mat-progress-bar>
   <app-input-sheet-table formControlName="realstateDatas"></app-input-sheet-table>
-  <button mat-raised-button color="accent" (click)="postall()" mat-button [disabled]="listings.length ==0">Đăng tất cả tin</button>
+  <button mat-raised-button color="accent" (click)="postall()" mat-button
+    [disabled]="this.massPostingFormGroup.value.realstateDatas?.length == 0">Đăng tất cả tin</button>
 </form>
