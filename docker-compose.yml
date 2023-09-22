@@ -6,7 +6,7 @@ services:
     restart: always
     privileged: true
     ports:
-      - 8000:80
+      - 80:80
 
   web-api:
     container_name: web-api
