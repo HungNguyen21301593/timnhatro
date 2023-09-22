@@ -5,8 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { MapStateService } from 'src/app/services/map-state.service';
-import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
-import { GeoAddedHomeComponent } from '../geo-added-home/geo-added-home.component';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { GeoAddedHomeComponent } from './geo-added-home-list/geo-added-home/geo-added-home.component';
 
 @Component({
   selector: 'ngx-main',

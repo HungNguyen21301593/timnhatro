@@ -15,8 +15,8 @@ export class MapApiService {
   platform: H.service.Platform | undefined;
   private map?: H.Map;
   defaultLayers: any;
-  public normalGroup?: H.map.Group;
-  public measureGroup?: H.map.Group = new H.map.Group();
+  public normalGroup?: H.map.Group = new H.map.Group({ zIndex: 0, data: {} });
+  public measureGroup?: H.map.Group = new H.map.Group({ zIndex: 1, data: {} });
   ui?: H.ui.UI;
 
   alphabetDictionary: string[] = ["A", "B", "C", "D", "E", "F"];
@@ -31,11 +31,10 @@ export class MapApiService {
     this.defaultLayers = this.platform?.createDefaultLayers({ lg: "vn" }) as any;
     this.map = new H.Map(mapContainer, this.defaultLayers.vector.normal.map, {
       center: { lat: 10.80814, lng: 106.70736 },
-      zoom: 9,
+      zoom: 11,
       pixelRatio: window.devicePixelRatio || 1
     });
 
-    this.normalGroup = new H.map.Group();
     window.addEventListener('resize', () => this.map?.getViewPort().resize());
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
     this.ui = H.ui.UI.createDefault(this.map, this.defaultLayers);
@@ -220,7 +219,6 @@ export class MapApiService {
 
     // Add the locations group to the map
     this.map?.addObject(group);
-    this.map?.setCenter(group?.getBoundingBox()?.getCenter());
   }
 
   renderCirclesToMap(group: H.map.Group | undefined, geocodeResults: GeocodeResult[], distance: number = 100, color: null | Color = null) {
@@ -261,7 +259,7 @@ export class MapApiService {
     this.map?.addObject(group);
   }
 
-  zoomToLocations(locations: GeocodeResult[], resolution = 12) {
+  zoomToLocations(locations: GeocodeResult[], resolution = 11) {
     if (!this.map) {
       return;
     }

@@ -18,7 +18,7 @@ export class LoginDialogComponent implements OnInit {
     if (!this.phone) {
       return;
     }
-    this.router.navigate(['main', this.phone]);
+    this.router.navigate(['setting', this.phone]);
     this.dialogRef.close();
   }
 }

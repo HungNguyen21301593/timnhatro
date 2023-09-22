@@ -1,12 +1,10 @@
 <form [formGroup]="sheetItemEditForm">
   <div fxLayout="column">
     <mat-form-field>
-      <mat-label>Nhập link bài viết:</mat-label>
+      <mat-label>Link bài viết:</mat-label>
       <textarea matInput #html formControlName="html" placeholder="Tự động nhập nội dung bằng link bài viết" required rows="2"
         (change)="fetchContentFromUrl(html.value)"></textarea>
     </mat-form-field>
-    
-
     <mat-form-field hidden>
       <mat-label>ID</mat-label>
       <input matInput formControlName="id" placeholder="Id" required>
@@ -29,7 +27,6 @@
     <app-image-uploader [inputImages]="selectedImages" (imagesChanged)="imagesUpdated($event)"></app-image-uploader>
     <div>
       <button class="button-front" mat-raised-button color="accent" (click)="update()" mat-button>{{isNew?'Đăng tin': 'Cập nhật thay đổi'}}</button>
-      <button *ngIf="!isNew" class="button-front" mat-raised-button color="warn" (click)="deleteItem()" mat-button>Xóa</button>
     </div>
   </div>
 </form>

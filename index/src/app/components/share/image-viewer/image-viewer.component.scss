@@ -1,0 +1,51 @@
+.container {
+    width: 100%;
+    height: 600px;
+    border: 5px solid gold;
+    background-color: burlywood !important;
+}
+
+.image-container{
+// height: 400px;
+}
+
+img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.image-icon-container {
+    max-width: 200px;
+    overflow: scroll;
+}
+
+.image-icon {
+    width: 40px;
+}
+
+
+image-icon-container {
+    overflow: scroll;
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+image-icon-container::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}
+
+mat-button-toggle-group {
+    overflow: scroll;
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+mat-button-toggle-group::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}

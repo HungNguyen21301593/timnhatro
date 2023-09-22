@@ -11,7 +11,7 @@ export interface MapState {
     distance: number;
     toolMode: ToolMode
     agent: AgentProfile;
-    geoCodeDatabase: Dictionary<GeocodeResult[]>;
+geoCodeDatabase: Dictionary<GeocodeResult[]>;
 }
 
 export enum ToolMode

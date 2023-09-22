@@ -24,6 +24,7 @@ export class WebApiService {
 
   async createNewUserStateByPhone(phone: string, state: MapState): Promise<MapState> {
     var dburl = UrlUtil.getDbUrlForUser(phone);
+    state.agent.phone = phone;
     var res = (await this.httpClient.put(dburl, { state: state }).toPromise()) as any;
     return res?.state;
   }
@@ -70,6 +71,7 @@ export class WebApiService {
   async saveUserStateByPhone(phone: string, state: MapState) {
     try {
       var url = UrlUtil.getDbUrlForUser(phone);
+      state.geoCodeDatabase = {};
       await this.httpClient.put(url, { state: state }).toPromise();
     } catch (error) {
       console.log(error);
@@ -80,7 +82,7 @@ export class WebApiService {
     try {
       const res = await lastValueFrom(this.httpClient.get(`/api/url-scanner/metadata-from-url?url=${url}`));
       var casted = res as UrlMetaResponse;
-      var formatedAddress = casted.address.replace(/(\r\n|\n|\r)/gm, "").replace("/"," ");
+      var formatedAddress = casted.address.replace(/(\r\n|\n|\r)/gm, "").replaceAll("/"," ");
       var data: RealstateData = {
         id: this.id.toString(),
         address: formatedAddress,

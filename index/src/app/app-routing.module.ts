@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MapComponent } from './components/map/map.component';
+import { MapComponent } from './components/main/map/map.component';
 import { SettingStepperComponent } from './components/setting-stepper/setting-stepper.component';
 import { MainComponent } from './components/main/main.component';
 

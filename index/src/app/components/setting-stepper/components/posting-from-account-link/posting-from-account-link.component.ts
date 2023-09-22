@@ -1,5 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AccountUrlResponse } from 'src/app/interfaces/account-url-response';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
@@ -17,41 +18,48 @@ export class PostingFromAccountLinkComponent implements OnInit {
   itemsPosted = new EventEmitter<RealstateData[]>;
 
   public listings: AccountUrlResponse[] = [];
+  public newListings: AccountUrlResponse[] = [];
   public value = 0;
   public fetchListingsFromUrlSpinner = false;
   public scanSpinner = false;
   public link = '';
+  public title = ''
 
   massPostingFormGroup = this._formBuilder.group({
     realstateDatas: [[] as RealstateData[], Validators.required],
   });
-  constructor(private webApiService: WebApiService, private _formBuilder: FormBuilder, private snackBar: MatSnackBar, private mapStateService: MapStateService) { }
+  constructor(private webApiService: WebApiService,
+    private _formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
+    private mapStateService: MapStateService,
+    @Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<PostingFromAccountLinkComponent>) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.link = this.data.link;
+    this.title = this.data.title;
+    this.listings = this.data.listings;
+    var currentreastates = this.mapStateService.stateObservable.value.geoItems.map(item => item.realstateData).flat();
+    this.newListings = this.filterNewListing(this.listings, currentreastates);
   }
 
-  async fetchListingsFromUrl(link: string) {
-    if (!link) {
-      return;
-    }
-    this.fetchListingsFromUrlSpinner = true;
-    this.listings = await this.webApiService.getListingsFromAccountUrl(link);
-    this.fetchListingsFromUrlSpinner = false;
+  filterNewListing(input: AccountUrlResponse[], allCurrent: RealstateData[]) {
+    var allCurrentTitles = allCurrent.map(e => e.title);
+    return input.filter(item => !allCurrentTitles.includes(item.title));
   }
 
-  async scan() {
+  async scan(listings: AccountUrlResponse[]) {
     this.scanSpinner = true;
     this.value = 0;
     this.massPostingFormGroup.patchValue({ realstateDatas: [] })
     var results: RealstateData[] = [];
-    for (let index = 0; index < this.listings.length; index++) {
-      const listing = this.listings[index];
+    for (let index = 0; index < listings.length; index++) {
+      const listing = listings[index];
       var newRealStateData = await this.scanForSingleListing(listing);
       if (!newRealStateData) {
         continue;
       }
       results.push(newRealStateData);
-      this.value = Math.round(index / (this.listings.length - 1) * 100);
+      this.value = Math.round(index / (listings.length - 1) * 100);
     }
     this.scanSpinner = false;
     this.massPostingFormGroup.patchValue({ realstateDatas: results })
@@ -66,15 +74,13 @@ export class PostingFromAccountLinkComponent implements OnInit {
         console.error(`Failed scanning ${listing.url}`);
         return null;
       }
-      listingMetada.address = georesults[0].address.label;
-      listingMetada.images = listing.images;
       var newRealStateData: RealstateData = {
         id: listingMetada.id,
-        address: listingMetada.address,
+        address: georesults[0].address.label,
         description: listingMetada.description,
         html: listing.url,
-        images: listing.images,
-        title: listing.title,
+        images: listing.images.length != 0 ? listing.images : listingMetada.images,
+        title: listing.title !== '' ? listing.title : listingMetada.title,
       }
       return newRealStateData;
     } catch (error) {
@@ -90,6 +96,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
     }
     this.itemsPosted.emit(items);
     this.snackBar.open(`Đăng ${items.length} bài thành công!`, "", { duration: 2000 });
+    this.dialogRef.close({ items: items })
     this.reset();
   }
 

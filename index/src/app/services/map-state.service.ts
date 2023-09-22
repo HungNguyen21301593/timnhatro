@@ -12,7 +12,7 @@ import { WebApiService } from './web-api.service';
 import { Meta } from '@angular/platform-browser';
 import { GeneralHelper } from './Util/general-helper';
 import _ from 'lodash';
-import { GeoAddedHomeComponent } from '../components/geo-added-home/geo-added-home.component';
+import { GeoAddedHomeComponent } from '../components/main/geo-added-home-list/geo-added-home/geo-added-home.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -43,9 +43,11 @@ export class MapStateService {
   rerenderMap() {
     switch (this.stateObservable.value.toolMode) {
       case ToolMode.normal:
+        
         this.onRerenderMapNormal();
         break;
       case ToolMode.mesure:
+        this.onRerenderMapNormal();
         this.onRerenderMesureTool();
         break;
       default:
@@ -65,16 +67,17 @@ export class MapStateService {
       (type: InteractToItem, item: GeocodeResult) => {
         this.openItemDialog(item);
       });
-    this.mapApiService.zoomToLocations(this.stateObservable.value.geoItems);
     var officeLists = this.stateObservable.value.geoItems.filter(item => item.type == 'Office');
     this.mapApiService.renderCirclesToMap(groupToRender, officeLists, this.stateObservable.value.distance);
+    
   }
 
   onRerenderMesureTool() {
     this.mapApiService.measureGroup?.setVisibility(true);
-    this.mapApiService.normalGroup?.setVisibility(false);
+    this.mapApiService.normalGroup?.setVisibility(true);
     var groupToRender = this.mapApiService.measureGroup;
     groupToRender?.removeAll();
+ 
     this.mapApiService.renderLocationsToMap(groupToRender, this.stateObservable.value.geoItems, async (type: InteractToItem, item: GeocodeResult) => {
       if (this.stateObservable.value.geoCalculatingItems.some(i => this.compareLocation(i, item))) {
         return;
@@ -84,7 +87,7 @@ export class MapStateService {
       if (calculatingItems.length == 1) {
         groupToRender?.removeAll();
       }
-      this.mapApiService.renderCirclesToMap(groupToRender, calculatingItems, 300, { r: 17, g: 120, b: 100, a: 0.8 });
+      this.mapApiService.renderCirclesToMap(groupToRender, calculatingItems, 100, { r: 17, g: 120, b: 100, a: 0.8 });
       if (calculatingItems.length == 2) {
         var route = await this.getRoute(calculatingItems[0], calculatingItems[1]);
         this.mapApiService.renderRouteShapesToMap(groupToRender, [route]);
@@ -95,7 +98,6 @@ export class MapStateService {
       }
     });
 
-    this.mapApiService.zoomToLocations(this.stateObservable.value.geoItems.filter(i => i.type == 'Office'), 14);
   }
 
   async reloadStateFromUrlParams(phone: string): Promise<MapState | null> {

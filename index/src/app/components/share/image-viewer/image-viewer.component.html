@@ -1,0 +1,12 @@
+<div className="container" fxLayout="column" fxLayoutAlign="end center">
+  <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80" >
+    <img class="image" [height]="height" [src]="selectedImage" loading="lazy" onerror="this.style.display='none'">
+  </div>
+  <div fxFlex="20" class="image-icon-container">
+    <mat-button-toggle-group [dir]="'ltr'" [vertical]="false">
+      <mat-button-toggle *ngFor="let imageUrl of images" (click)="selectedImage = imageUrl">
+        <img [src]="imageUrl" class="image-icon">
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+</div>

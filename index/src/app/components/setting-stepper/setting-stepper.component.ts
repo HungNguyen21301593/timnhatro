@@ -25,6 +25,7 @@ export class SettingStepperComponent implements OnInit {
   settingFormGroup = this._formBuilder.group({
     name: ['', Validators.required],
     phone: ['', Validators.required],
+    link: ['', Validators.required],
     description: ['', null],
     image: ['', Validators.required],
     realstateDatas: [this.realstateDatasInit, Validators.required],
@@ -49,7 +50,7 @@ export class SettingStepperComponent implements OnInit {
         throw new Error('there is no phone in url param')
       }
       var state = await this.mapStateService.reloadStateFromUrlParams(phone);
-      if (state == null) {
+      if (state?.agent.phone == null) {
         state = await this.webApiService.createNewUserStateByPhone(phone, {
           agent: {
             phone: phone,
@@ -76,6 +77,7 @@ export class SettingStepperComponent implements OnInit {
     this.settingFormGroup.patchValue({
       name: state.agent.name,
       phone: state.agent.phone,
+      link: state.agent.link,
       description: state.agent.description,
       image: state.agent.image,
       realstateDatas: realstate
@@ -132,15 +134,16 @@ export class SettingStepperComponent implements OnInit {
       return state;
     }
     var agent = this.settingFormGroup.value;
-    if (!agent.name || !agent.description || !agent.image || !agent.phone) {
+    if (!agent.name || !agent.phone) {
       return state;
     }
     var newState = _.cloneDeep(state);
     newState.agent = {
       name: agent.name,
       phone: agent.phone,
-      description: agent.description,
-      image: agent.image
+      description: "",
+      image: "",
+      link: agent.link ?? ""
     };
     newState.geoItems = await this.mapToGeoItems(items);
     return newState;

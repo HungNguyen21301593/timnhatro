@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MapApiService } from '../../services/map-api.service';
+import { MapApiService } from '../../../services/map-api.service';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { MapStateService } from 'src/app/services/map-state.service';
 import { Subscription } from 'rxjs';

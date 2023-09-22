@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit, Input } from '@angular/core';
 import H from '@here/maps-api-for-javascript';
-import { MapApiService } from '../../services/map-api.service';
+import { MapApiService } from '../../../services/map-api.service';
 import { SettingResult } from 'src/app/interfaces/setting-result';
 import { ActivatedRoute } from '@angular/router';
 import { MapStateService } from 'src/app/services/map-state.service';

@@ -18,6 +18,10 @@
             <mat-label>Số điện thoại</mat-label>
             <input matInput formControlName="phone" placeholder="08xxxxxxxx" type="number">
           </mat-form-field>
+          <mat-form-field>
+            <mat-label>Link tài khoản</mat-label>
+            <input #link matInput formControlName="link" placeholder="https://www.chotot.com/user..." type="text">
+          </mat-form-field>
         </mat-expansion-panel>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -25,7 +29,7 @@
               Đăng bài mới
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <app-new-item (itemposted)="itemposted($event)"></app-new-item>
+          <app-new-item [link]="link.value" (itemposted)="itemposted($event)"></app-new-item>
         </mat-expansion-panel>
       
         <mat-expansion-panel>
