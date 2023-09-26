@@ -18,30 +18,14 @@ export class MainComponent implements OnInit, OnDestroy {
 
   @ViewChild('drawerAutoSearch') drawerAutoSearch?: MatDrawer;
 
-  subs: Subscription;
   constructor(
     private mapstateService: MapStateService,
     private snackBar: MatSnackBar,
     public dialog: MatDialog
   ) {
-    this.subs = this.mapstateService.itemSelectedObservable.subscribe(item => {
-      // if (!item || item.type === 'Office') {
-      //   return;
-      // }
-      
-      // this.item = item;
-      // let dialogRef = this.dialog.open(GeoAddedHomeComponent,{
-      //   enterAnimationDuration: '200ms',
-      //   exitAnimationDuration: '200ms',
-      // });
-      // let instance = dialogRef.componentInstance;
-      // instance.item = item;
-      // instance.expanded = true;
-    })
   }
 
   ngOnDestroy(): void {
-    this.subs.unsubscribe();
   }
 
   ngOnInit() {

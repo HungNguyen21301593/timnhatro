@@ -69,7 +69,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     NewItemComponent,
     PostingFromAccountLinkComponent,
     CircleToolComponent,
-    MesureToolComponent
+    MesureToolComponent,
     ],
   imports: [
     NgFor,
@@ -99,7 +99,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatDialogModule,
     MatSelectModule,
     MatRadioModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

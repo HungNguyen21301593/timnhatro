@@ -8,10 +8,7 @@ import { Constant } from 'src/app/interfaces/constant.enum';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
 import { MapApiService } from 'src/app/services/map-api.service';
-import { MapStateService } from 'src/app/services/map-state.service';
 import { WebApiService } from 'src/app/services/web-api.service';
-// import { useLinkPreview } from "get-link-preview"; 
-declare const useLinkPreview: Function;
 @Component({
   selector: 'app-geo-added-home',
   templateUrl: './geo-added-home.component.html',
@@ -33,7 +30,9 @@ export class GeoAddedHomeComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion | undefined;
 
   public isLoadingLink = false;
+  public selectedElementIndex = 0;
   public iframeElement: string = '';
+  public  linkToMsg: string = '';
 
   constructor(private mapApiService: MapApiService,
     private snackBar: MatSnackBar,
@@ -44,6 +43,7 @@ export class GeoAddedHomeComponent implements OnInit {
     if (!this.item) {
       return;
     }
+    this.linkToMsg = `tel:${this.agent.phone}`;
   }
 
   async loadReadStateData(realstateData: RealstateData, link: string) {

@@ -10,7 +10,6 @@ export class ImageViewerComponent implements OnInit {
   public _images: string[] = [];
   @Input() set images(value: string[]) {
     this._images = value;
-    this.selectedImage = this._images[0];
   }
 
   get images(): string[] {
@@ -23,7 +22,7 @@ export class ImageViewerComponent implements OnInit {
   @Input()
   public height: string = '400';
 
-  public selectedImage = this.images[0];
+  public selectedImageIndex = 0;
 
   constructor() { }
 
