@@ -4,6 +4,7 @@ import { RealstateData } from 'src/app/interfaces/realstate-item';
 import { WebApiService } from 'src/app/services/web-api.service';
 import _ from 'lodash';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Guid } from 'guid-ts';
 
 @Component({
   selector: 'app-sheet-item-edit',
@@ -47,7 +48,7 @@ export class SheetItemEditComponent implements OnInit {
   public linkloading = false;
   imageIndex = 0;
   selectedImages: string[] = [];
-  
+
   constructor(private _formBuilder: FormBuilder, private webApiService: WebApiService, private snackBar: MatSnackBar,) { }
 
   ngOnInit() {
@@ -58,10 +59,8 @@ export class SheetItemEditComponent implements OnInit {
     this.selectedImages = this.realstateData.images;
   }
 
-  async fetchContentFromUrl(url: string)
-  {
-    if(!url)
-    {
+  async fetchContentFromUrl(url: string) {
+    if (!url) {
       return;
     }
     this.linkloading = true;
@@ -87,7 +86,7 @@ export class SheetItemEditComponent implements OnInit {
     }
     var value: RealstateData
       = {
-      id: formValue.id ?? "0",
+      id: formValue.id ?? Guid.newGuid().toString(),
       title: formValue.title ?? '',
       address: formValue.address ?? '',
       description: formValue.description ?? '',
@@ -96,19 +95,19 @@ export class SheetItemEditComponent implements OnInit {
     }
     this.updatedOrPosted.emit(value);
     if (this.isNew) {
-      this.snackBar.open("Đăng bài thành công!", "", { duration: 2000 });  
+      this.snackBar.open("Đăng bài thành công!", "", { duration: 2000 });
     }
-    else{
-      this.snackBar.open("Cập nhật thành công!", "", { duration: 2000 });  
+    else {
+      this.snackBar.open("Cập nhật thành công!", "", { duration: 2000 });
     }
-    
+
   }
 
   deleteItem() {
     var formValue = this.sheetItemEditForm.value;
     var value: RealstateData
       = {
-      id: formValue.id ?? "0",
+      id: formValue.id ?? Guid.newGuid().toString(),
       title: formValue.title ?? '',
       address: formValue.address ?? '',
       description: formValue.description ?? '',

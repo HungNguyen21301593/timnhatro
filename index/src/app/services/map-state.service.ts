@@ -15,6 +15,7 @@ import _ from 'lodash';
 import { GeoAddedHomeComponent } from '../components/main/geo-added-home-list/geo-added-home/geo-added-home.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Guid } from 'guid-ts';
 
 @Injectable({
   providedIn: 'root'
@@ -100,8 +101,11 @@ export class MapStateService {
 
   }
 
-  async reloadStateFromUrlParams(phone: string): Promise<MapState | null> {
-    var state = await this.webApiService.getUserStateByPhone(phone);
+  async reloadState(stateId: string): Promise<MapState | null> {
+    if (!stateId) {
+      return null;
+    }
+    var state = await this.webApiService.getStateById(stateId);
     if (!state) {
       return null;
     }
@@ -113,7 +117,7 @@ export class MapStateService {
   private updateMetaAndTitle(agent: AgentProfile) {
     document.title = `Thông tin nhà trọ của ${agent.name}`;
     this.meta.addTag({ property: "og:title", content: `Thông tin nhà trọ của ${agent.name}` })
-    this.meta.addTag({ property: "og:description", content: agent.description })
+    this.meta.addTag({ property: "og:description", content: agent.description ?? "" })
     this.meta.addTag({ property: "og:image", content: `${agent.image}` })
     this.meta.addTag({ property: "og:url", content: `	http://146.190.84.59:8000/main/${agent.phone}` })
   }
@@ -165,8 +169,6 @@ export class MapStateService {
       var newRandomcolor = GeneralHelper.getRandomRGB(0.5);
       newItem.color == newRandomcolor;
     }
-    var nextId = Math.max(...this.stateObservable.value.geoItems.map(i => i.id ?? 0)) + 1;
-    newItem.id = nextId;
     this.stateObservable.value.geoItems.push(newItem);
     this.stateObservable.next(this.stateObservable.value);
   }

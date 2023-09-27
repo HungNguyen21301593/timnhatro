@@ -5,9 +5,10 @@ import { Position } from "./position";
 import { RealstateData } from "./realstate-item";
 import { IsolineRessult } from "./isoline-result";
 import { Color } from "./color";
+import { Guid } from "guid-ts";
 
 export interface GeocodeResult {
-    id: number;
+    id: string;
     textId?: string;
     address: Address;
     position: Position;

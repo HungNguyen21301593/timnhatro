@@ -11,11 +11,20 @@ export interface MapState {
     distance: number;
     toolMode: ToolMode
     agent: AgentProfile;
-geoCodeDatabase: Dictionary<GeocodeResult[]>;
+    geoCodeDatabase: Dictionary<GeocodeResult[]>;
 }
 
-export enum ToolMode
-{
+export enum ToolMode {
     normal,
     mesure
+}
+
+export class EmptyState implements MapState {
+    geoItems: GeocodeResult[] = [];
+    geoCalculatingItems: GeocodeResult[] = [];
+    geoRoutePairs: RoutePair[] = [];
+    distance: number = 1000;
+    toolMode: ToolMode = ToolMode.normal;
+    agent: AgentProfile = {};
+    geoCodeDatabase: Dictionary<GeocodeResult[]> = {};
 }

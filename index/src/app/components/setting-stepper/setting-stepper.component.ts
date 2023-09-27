@@ -12,6 +12,9 @@ import { WebApiService } from 'src/app/services/web-api.service';
 import _, { forEach } from 'lodash';
 import { Constant } from 'src/app/interfaces/constant.enum';
 import { GeneralHelper } from 'src/app/services/Util/general-helper';
+import { MatAccordion } from '@angular/material/expansion';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Guid } from 'guid-ts';
 @Component({
   selector: 'app-setting-stepper',
   templateUrl: './setting-stepper.component.html',
@@ -20,59 +23,48 @@ import { GeneralHelper } from 'src/app/services/Util/general-helper';
 export class SettingStepperComponent implements OnInit {
 
   @ViewChild('mapIframe') mapIframe?: HTMLIFrameElement;
+  @ViewChild(MatAccordion) accordion?: MatAccordion;
 
   realstateDatasInit: RealstateData[] = [];
   settingFormGroup = this._formBuilder.group({
-    name: ['', Validators.required],
-    phone: ['', Validators.required],
-    link: ['', Validators.required],
+    name: ['', null],
+    phone: ['', null],
+    link: ['', null],
     description: ['', null],
-    image: ['', Validators.required],
+    image: ['', null],
     realstateDatas: [this.realstateDatasInit, Validators.required],
   });
 
   public mapUrl: null | SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('main');
   public imagesUploadInProgress = false;
   public uploadedImageUrl = '';
+  stateId?:string;
 
   constructor(private _formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private mapStateService: MapStateService,
     private sanitizer: DomSanitizer,
-    private webApiService: WebApiService) { }
+    private webApiService: WebApiService,
+    private snackBar: MatSnackBar) { }
 
   async ngOnInit() {
-
     this.activatedRoute.params.subscribe(async params => {
-      var phone = params['phone'];
-      if (!phone) {
+      this.stateId = params['stateId'];
+      if (!this.stateId) {
         throw new Error('there is no phone in url param')
       }
-      var state = await this.mapStateService.reloadStateFromUrlParams(phone);
-      if (state?.agent.phone == null) {
-        state = await this.webApiService.createNewUserStateByPhone(phone, {
-          agent: {
-            phone: phone,
-            name: "",
-            image: "",
-            description: ""
-          },
-          geoItems: [],
-          geoCalculatingItems: [],
-          geoRoutePairs: [],
-          toolMode: ToolMode.normal,
-          distance: 1000,
-          geoCodeDatabase: {}
-        });
-
+      var state = await this.mapStateService.reloadState(this.stateId);
+      if (!state) {
+        throw new Error('there is state')
       }
-      this.realoadUser(state);
-      this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(UrlUtil.getMapUrlForUser(phone));
+      this.populatedUser(state);
+          
+      this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(UrlUtil.getMapUrlForUser(this.stateId));
     })
   }
 
-  realoadUser(state: MapState) {
+  populatedUser(state: MapState) {
     var realstate = this.filteroutPostedItems(state.geoItems.map(item => item.realstateData).flat());
     this.settingFormGroup.patchValue({
       name: state.agent.name,
@@ -84,11 +76,9 @@ export class SettingStepperComponent implements OnInit {
     });
   }
 
-  public itemposted(items: RealstateData[]) {
+  public async itemposted(items: RealstateData[]) {
     var currentRealstateDatas = this.settingFormGroup.value.realstateDatas ?? [];
     items.forEach(item => {
-      var nextId = Math.max(...currentRealstateDatas.map(r => Number(r.id))) + 1;
-      item.id = nextId.toString();
 
       var index = currentRealstateDatas.findIndex(currentRealstateData => currentRealstateData.title == item.title);
       if (index == -1) {
@@ -103,6 +93,7 @@ export class SettingStepperComponent implements OnInit {
       return;
     }
     this.settingFormGroup.get('realstateDatas')?.setValue(this.filteroutPostedItems(currentRealstateDatas));
+    await this.save();
   }
 
 
@@ -111,36 +102,29 @@ export class SettingStepperComponent implements OnInit {
   }
 
   async save() {
-    var phone = this.settingFormGroup.value.phone;
-    if (!phone) {
-      return;
+    if (!this.stateId) {
+      throw new Error("No state Id");
     }
-
-    await this.extractAndSave(phone);
-    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(UrlUtil.getMapUrlForUser(phone));
+    await this.extractAndSave(this.stateId);
+    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(UrlUtil.getMapUrlForUser(this.stateId));
+    this.mapIframe?.contentWindow?.location.reload();
   }
 
-  private async extractAndSave(phone: string) {
+  private async extractAndSave(stateId:string) {
     var state = this.mapStateService.stateObservable.value;
     var newState = await this.extractMapState(state);
     newState.geoCodeDatabase = this.mapStateService.stateObservable.getValue().geoCodeDatabase;
     this.mapStateService.stateObservable.next(newState);
-    await this.webApiService.saveUserStateByPhone(phone, newState);
+    await this.webApiService.saveUserStateById(stateId, newState);
   }
 
   private async extractMapState(state: MapState): Promise<MapState> {
-    var items = this.settingFormGroup.value.realstateDatas;
-    if (!items) {
-      return state;
-    }
+    var items = this.settingFormGroup.value.realstateDatas ?? [];
     var agent = this.settingFormGroup.value;
-    if (!agent.name || !agent.phone) {
-      return state;
-    }
     var newState = _.cloneDeep(state);
     newState.agent = {
-      name: agent.name,
-      phone: agent.phone,
+      name: agent.name ?? "",
+      phone: agent.phone ?? "",
       description: "",
       image: "",
       link: agent.link ?? ""
@@ -158,18 +142,13 @@ export class SettingStepperComponent implements OnInit {
       if (!key) {
         continue;
       }
-      for (let index = 0; index < value.length; index++) {
-        const element = value[index];
-        element.id = index.toString();
-      }
-
       var geocodeResults = await this.mapStateService.getGeoCodeResult(key, true);
       if (geocodeResults.length == 0) {
         continue;
       }
       var geoItem: GeocodeResult = {
-        id: 0,
-        address: { label: key },
+        id: geocodeResults[0].id,
+        address: { label: geocodeResults[0].address.label },
         position: geocodeResults[0].position,
         type: 'Home',
         realstateData: value,
@@ -181,6 +160,6 @@ export class SettingStepperComponent implements OnInit {
   }
 
   publish() {
-    this.router.navigate(['main', this.settingFormGroup.value.phone ?? '']);
+    this.router.navigate(['main', this.stateId ?? '']);
   }
 }

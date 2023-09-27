@@ -27,6 +27,7 @@
     "@types/heremaps": "^3.1.10",
     "@types/underscore": "^1.11.9",
     "get-link-preview": "^1.0.7",
+    "guid-ts": "^1.1.2",
     "lodash": "^4.17.21",
     "ngx-link-preview": "^1.2.0",
     "rxjs": "~7.8.0",

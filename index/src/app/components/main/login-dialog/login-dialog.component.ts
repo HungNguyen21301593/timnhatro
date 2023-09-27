@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { EmptyState } from 'src/app/interfaces/map-state';
+import { WebApiService } from 'src/app/services/web-api.service';
 
 @Component({
   selector: 'app-login-dialog',
@@ -9,16 +11,14 @@ import { Router } from '@angular/router';
 })
 export class LoginDialogComponent implements OnInit {
   public phone: string = '';
-  constructor(private router: Router, private dialogRef: MatDialogRef<LoginDialogComponent>) { }
+  constructor(private router: Router, private dialogRef: MatDialogRef<LoginDialogComponent>, private webApiService: WebApiService) { }
 
   ngOnInit() {
   }
 
-  goto() {
-    if (!this.phone) {
-      return;
-    }
-    this.router.navigate(['setting', this.phone]);
+  async newState(){
+    var result = await this.webApiService.createNewUserStateByPhone();
+    this.router.navigate(['/main/setting', result.id]);
     this.dialogRef.close();
   }
 }

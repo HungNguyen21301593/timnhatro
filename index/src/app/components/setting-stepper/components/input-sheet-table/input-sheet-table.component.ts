@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Optional, Self } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Optional, Output, Self } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
 import { AbstractControlDirective, ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
@@ -6,6 +6,7 @@ import { MatFormFieldControl } from '@angular/material/form-field';
 import { Observable, Subject } from 'rxjs';
 import { Constant } from 'src/app/interfaces/constant.enum';
 import _ from 'lodash';
+import { Guid } from 'guid-ts';
 
 
 
@@ -30,6 +31,9 @@ import _ from 'lodash';
 })
 export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValueAccessor {
   stateChanges = new Subject<void>();
+  @Output()
+  itemsUpdated = new EventEmitter<RealstateData[]>();
+
   id: string = "test id";
   placeholder: string = "";
   focused: boolean = false;
@@ -91,7 +95,7 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
       return;
     }
     var newElement = {
-      id: "0",
+      id: Guid.newGuid().toString(),
       address: "",
       description: "",
       images: [],
@@ -112,6 +116,7 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
     this.onChange(this.value);
     this.stateChanges.next();
     this.onTouched(this.value);
+    this.itemsUpdated.emit();
   }
 
   itemUpdated(element: RealstateData) {
@@ -124,13 +129,14 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
     this.onChange(this.value);
     this.stateChanges.next();
     this.onTouched(this.value);
+    this.itemsUpdated.emit();
   }
 
   updateElement(element: RealstateData): RealstateData[] {
     if (!this.value) {
       return [];
     }
-    var index = this.value?.findIndex(RealstateData => RealstateData.id == element.id);
+    var index = this.value?.findIndex(RealstateData => RealstateData.id === element.id);
     if (index == -1) {
       return this.value;
     }

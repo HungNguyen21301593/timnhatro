@@ -40,6 +40,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
     this.listings = this.data.listings;
     var currentreastates = this.mapStateService.stateObservable.value.geoItems.map(item => item.realstateData).flat();
     this.newListings = this.filterNewListing(this.listings, currentreastates);
+    await this.scan(this.newListings);
   }
 
   filterNewListing(input: AccountUrlResponse[], allCurrent: RealstateData[]) {

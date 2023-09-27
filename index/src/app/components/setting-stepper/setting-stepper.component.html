@@ -9,7 +9,6 @@
               Thông tin cá nhân
             </mat-panel-title>
           </mat-expansion-panel-header>
-      
           <mat-form-field>
             <mat-label>Tên</mat-label>
             <input matInput formControlName="name" placeholder="Tuấn Phạm" required>
@@ -22,6 +21,7 @@
             <mat-label>Link tài khoản</mat-label>
             <input #link matInput formControlName="link" placeholder="https://www.chotot.com/user..." type="text">
           </mat-form-field>
+          <button mat-raised-button color="accent" (click)="save(); accordion?.closeAll()">Cập nhật thay đổi</button>
         </mat-expansion-panel>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -38,11 +38,11 @@
               Những bài đã đăng
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <app-input-sheet-table formControlName="realstateDatas"></app-input-sheet-table>
+          <app-input-sheet-table (itemsUpdated)="save()" formControlName="realstateDatas"></app-input-sheet-table>
         </mat-expansion-panel>
       </mat-accordion>
     </form>
-    <button mat-raised-button color="primary" matStepperNext (click)="save()">Lưu thay đổi</button>
+    <button mat-raised-button color="primary" matStepperNext>Tiếp theo</button>
   </mat-step>
   <mat-step>
     <div fxLayoutAlign="center center" class="step-container">

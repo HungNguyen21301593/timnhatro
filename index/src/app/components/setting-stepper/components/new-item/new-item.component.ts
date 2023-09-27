@@ -7,6 +7,7 @@ import { PostingFromAccountLinkComponent } from '../posting-from-account-link/po
 import { data } from '@here/maps-api-for-javascript';
 import { WebApiService } from 'src/app/services/web-api.service';
 import { AccountUrlResponse } from 'src/app/interfaces/account-url-response';
+import { Guid } from 'guid-ts';
 
 @Component({
   selector: 'app-new-item',
@@ -22,7 +23,7 @@ export class NewItemComponent implements OnInit {
   itemposted = new EventEmitter<RealstateData[]>();
 
   emptyElement: RealstateData = {
-    id: "0",
+    id: Guid.newGuid().toString(),
     address: "",
     description: "",
     html: "",

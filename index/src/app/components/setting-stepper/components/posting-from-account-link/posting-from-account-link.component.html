@@ -4,12 +4,9 @@
 
   <form [formGroup]="massPostingFormGroup" fxLayout="column" fxLayoutAlign="start start">
     <h3>Kết quả: Tổng cộng {{listings.length}} bài đăng, {{newListings.length}} bài mới:</h3>
-    <ol>
-      <li *ngFor="let listing  of  newListings"> {{listing.title}} <a [href]="listing?.url">Xem thêm</a></li>
-    </ol>
     <div fxLayout="row" fxLayoutAlign="start center">
       <button mat-raised-button color="accent" (click)="scan(newListings)" mat-button [disabled]="listings.length ==0"
-        [disabled]="newListings.length==0">
+        [disabled]="newListings.length==0 || scanSpinner">
         Tải bài mới: {{newListings.length}} bài</button>
       <mat-spinner [diameter]="30" [hidden]="!scanSpinner"></mat-spinner>
     </div>

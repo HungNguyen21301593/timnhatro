@@ -73,7 +73,7 @@ export class GeoAddedHomeComponent implements OnInit {
     if (!this.item.address) {
       return;
     }
-    window.open(`https://www.google.com/maps/search/?api=1&query=${this.item.address.label}`, '_blank');
+    window.open(`https://www.google.com/maps/search/?api=1&query=${this.item.realstateData[this.selectedElementIndex].address}`, '_blank');
   }
 
   back() {

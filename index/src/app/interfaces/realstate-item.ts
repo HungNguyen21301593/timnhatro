@@ -1,3 +1,5 @@
+import { Guid } from "guid-ts";
+
 export interface RealstateData {
     id: string,
     title: string;

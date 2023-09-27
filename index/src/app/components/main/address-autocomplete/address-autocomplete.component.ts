@@ -5,6 +5,7 @@ import { MapStateService } from 'src/app/services/map-state.service';
 import { Subscription } from 'rxjs';
 import { Constant } from 'src/app/interfaces/constant.enum';
 import { GeneralHelper } from 'src/app/services/Util/general-helper';
+import { Guid } from 'guid-ts';
 
 @Component({
   selector: 'app-address-autocomplete',
@@ -34,7 +35,7 @@ export class AddressAutocompleteComponent implements OnInit {
         [
           {
             html: "",
-            id: "0",
+            id: Guid.newGuid().toString(),
             address: option.address.label,
             description: "",
             images: [],

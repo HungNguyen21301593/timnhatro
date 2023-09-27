@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!param['phone']) {
         return;
       }
-      await this.mapStateService.reloadStateFromUrlParams(param['phone']);
+      await this.mapStateService.reloadState(param['stateId']);
     })
   }
   susciption!: Subscription;

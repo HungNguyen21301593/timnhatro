@@ -1,47 +1,54 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UrlUtil } from 'src/environment';
-import { MapState, ToolMode } from '../interfaces/map-state';
+import { EmptyState, MapState, ToolMode } from '../interfaces/map-state';
 import { ImageUploadResponse } from '../interfaces/image-upload-response';
 import { lastValueFrom } from 'rxjs';
 import { UrlMetaResponse } from '../interfaces/url-meta-response';
 import { GeocodeResult } from '../interfaces/geocode-result';
 import { RealstateData } from '../interfaces/realstate-item';
 import { AccountUrlResponse } from '../interfaces/account-url-response';
+import { Guid } from 'guid-ts';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebApiService {
-  get id(): number {
-    var currentValue = this._id;
-    this._id = currentValue + 1;
-    return currentValue;
-  }
-  _id = 0;
-
   constructor(private httpClient: HttpClient) { }
 
-  async createNewUserStateByPhone(phone: string, state: MapState): Promise<MapState> {
-    var dburl = UrlUtil.getDbUrlForUser(phone);
-    state.agent.phone = phone;
-    var res = (await this.httpClient.put(dburl, { state: state }).toPromise()) as any;
-    return res?.state;
+  async createNewUserStateByPhone(state: MapState = new EmptyState()): Promise<{
+    id: string,
+    mapstate: MapState
+  }> {
+    var dburl = `/api/state`
+    var res = (await this.httpClient.post(dburl, { id: "", stateJson: JSON.stringify(state) }).toPromise()) as any;
+    return {
+      id: res.key,
+      mapstate: res.object
+    }
+  }
+  async saveUserStateById(stateId: string, state: MapState) {
+    try {
+      var dburl = `/api/state/${stateId}`
+      state.geoCodeDatabase = {};
+      state.geoItems = this.populateGeoId(state?.geoItems);
+      await this.httpClient.put(dburl, { id: stateId, stateJson: JSON.stringify(state) }).toPromise();
+    } catch (error) {
+      console.log(error);
+    };
   }
 
-  async getUserStateByPhone(phone: string): Promise<MapState> {
-    var dburl = UrlUtil.getDbUrlForUser(phone);
+  async getStateById(stateId: string): Promise<MapState> {
+    var dburl = `/api/state/${stateId}`
     var res = (await this.httpClient.get(dburl).toPromise()) as any;
     var state: MapState = {
-      geoItems: this.populateGeoId(res?.state?.geoItems) ?? [],
-      geoCalculatingItems: res?.state?.geoCalculatingItems ?? [],
-      geoRoutePairs: res?.state?.geoRoutePairs ?? [],
-      distance: res?.state?.distance ?? 1000,
+      geoItems: res?.geoItems?? [],
+      geoCalculatingItems: res?.geoCalculatingItems ?? [],
+      geoRoutePairs: res?.geoRoutePairs ?? [],
+      distance: res?.distance ?? 1000,
       toolMode: res?.toolMode ?? ToolMode.normal,
-      agent: res?.state?.agent ?? {},
-      geoCodeDatabase: res?.state?.geoCodeDatabase ?? {}
+      agent: res?.agent ?? {},
+      geoCodeDatabase: res?.geoCodeDatabase ?? {}
     };
-    console.log(state);
     return state;
   }
 
@@ -51,7 +58,6 @@ export class WebApiService {
       return []
     }
     for (let index = 0; index < geoItems.length; index++) {
-      geoItems[index].id = index;
       geoItems[index].realstateData = this.populateRealstateId(geoItems[index].realstateData);
     }
     return geoItems;
@@ -63,28 +69,20 @@ export class WebApiService {
       return [];
     }
     for (let index = 0; index < items.length; index++) {
-      items[index].id = this.id.toString();
+      items[index].id = items[index].id ?? Guid.newGuid().toString();
     }
     return items;
   }
 
-  async saveUserStateByPhone(phone: string, state: MapState) {
-    try {
-      var url = UrlUtil.getDbUrlForUser(phone);
-      state.geoCodeDatabase = {};
-      await this.httpClient.put(url, { state: state }).toPromise();
-    } catch (error) {
-      console.log(error);
-    };
-  }
+
 
   async getMedataDataFromUrl(url: string): Promise<RealstateData> {
     try {
       const res = await lastValueFrom(this.httpClient.get(`/api/url-scanner/metadata-from-url?url=${url}`));
       var casted = res as UrlMetaResponse;
-      var formatedAddress = casted.address.replace(/(\r\n|\n|\r)/gm, "").replaceAll("/"," ");
+      var formatedAddress = casted.address.replace(/(\r\n|\n|\r)/gm, "").replaceAll("/", " ");
       var data: RealstateData = {
-        id: this.id.toString(),
+        id: Guid.newGuid().toString(),
         address: formatedAddress,
         description: casted.description,
         images: casted.images,
