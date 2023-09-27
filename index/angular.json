@@ -21,7 +21,11 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/assets"
+              "src/assets",
+              "src/css",
+              "src/js",
+              "src/mail",
+              "src/images"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
