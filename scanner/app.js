@@ -41,7 +41,6 @@ const minimal_args = [
     '--single-process',
     '--disable-gpu',
     "--disable-accelerated-2d-canvas",
-    '--start-maximized'
 ];
 process.setMaxListeners(20);
 const app = express();
