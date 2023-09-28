@@ -49,7 +49,7 @@ const port = process.env.PORT || 3000;
 // Middleware to parse JSON requests
 app.use(express.json());
 
-const MAX_PAGES = 5;
+const MAX_PAGES = 2;
 let pagePool = [];
 let dirtyPool = [];
 
