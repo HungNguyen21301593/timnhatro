@@ -38,7 +38,9 @@ const minimal_args = [
     '--password-store=basic',
     '--use-gl=swiftshader',
     '--use-mock-keychain',
-  ];
+    '--single-process',
+    '--disable-gpu'
+];
 
 const app = express();
 const port = process.env.PORT || 3000;
