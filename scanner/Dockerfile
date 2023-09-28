@@ -1,4 +1,4 @@
-FROM node:18
+FROM ghcr.io/puppeteer/puppeteer:latest
 # Create app directory
 WORKDIR /usr/src/app
 # Install app dependencies
