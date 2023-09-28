@@ -39,7 +39,8 @@ const minimal_args = [
     '--use-gl=swiftshader',
     '--use-mock-keychain',
     '--single-process',
-    '--disable-gpu'
+    '--disable-gpu',
+    "--disable-accelerated-2d-canvas"
 ];
 
 const app = express();
