@@ -53,6 +53,7 @@ let dirtyPool = [];
 
 const tryCreatePageAndBrowser = async () => {
     try {
+        console.log("Created a new browser")
         const browser = await puppeteer.launch({ headless: 'new', args: minimal_args });
         // const context = await browser.createIncognitoBrowserContext();
         const page = await browser.newPage();
@@ -79,8 +80,11 @@ const tryCreatePageAndBrowser = async () => {
     }
 })();
 
+console.log("Created Browsers")
+
 // Background job to manage the page pool
 const managePagePool = async () => {
+    console.log("Manage Pools")
     if (pagePool.length < MAX_PAGES) {
         var result = await tryCreatePageAndBrowser();
         if (!result) {
@@ -101,6 +105,7 @@ setInterval(managePagePool, 5000); // Check and add pages every minute
 
 // Route for getting metadata from a URL
 app.get('/metadata-from-url', async (req, res) => {
+    console.log(`received ${req.query.url}`)
     console.time("metadata-from-url");
     const url = req.query.url || 'https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/';
 
