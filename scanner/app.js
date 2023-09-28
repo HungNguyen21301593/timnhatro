@@ -40,7 +40,8 @@ const minimal_args = [
     '--use-mock-keychain',
     '--single-process',
     '--disable-gpu',
-    "--disable-accelerated-2d-canvas"
+    "--disable-accelerated-2d-canvas",
+    '--start-maximized'
 ];
 
 const app = express();
@@ -49,20 +50,19 @@ const port = process.env.PORT || 3000;
 // Middleware to parse JSON requests
 app.use(express.json());
 
-const MAX_PAGES = 5;
+const MAX_PAGES = 4;
 let pagePool = [];
 let dirtyPool = [];
-// var browser;
 
 const tryCreatePageAndBrowser = async () => {
     try {
-        const browser = await puppeteer.launch({ headless: 'new', args: minimal_args });
+        const browser = await puppeteer.launch({ headless: 'new', args: minimal_args ,defaultViewport: null,});
         // const context = await browser.createIncognitoBrowserContext();
         const page = await browser.newPage();
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
         await page.setRequestInterception(true)
         page.on('request', (request) => {
-            if (['stylesheet', 'font', 'image'].includes(request.resourceType())) request.abort()
+            if (['font', 'image'].includes(request.resourceType())) request.abort()
             else request.continue()
         })
         console.log("Created a new browser")
@@ -121,7 +121,8 @@ app.get('/metadata-from-url', async (req, res) => {
     }
     const { page, browser } = pageObject;
     console.time("load url");
-    await page.goto(url, { waitUntil: 'domcontentloaded' })
+    page.goto(url, { waitUntil: 'domcontentloaded' })
+    await page.waitForXPath('//span[contains(@class,"AdParam_address")]/parent::span');
     console.timeEnd("load url");
     console.time("read");
 
@@ -155,6 +156,7 @@ app.get('/metadata-from-url', async (req, res) => {
             XPathResult.FIRST_ORDERED_NODE_TYPE,
             null
         ).singleNodeValue;
+        console.log(addressElement);
         metaInfo.address = addressElement
             ? addressElement.textContent.replace('Xem bản đồ', '').trim()
             : '';
