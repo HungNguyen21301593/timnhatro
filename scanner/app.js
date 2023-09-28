@@ -42,7 +42,7 @@ const minimal_args = [
     // '--disable-gpu',
     // "--disable-accelerated-2d-canvas",
 ];
-process.setMaxListeners(20);
+// process.setMaxListeners(20);
 const app = express();
 const port = process.env.PORT || 3000;
 
