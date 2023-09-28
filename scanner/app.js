@@ -33,7 +33,7 @@ const minimal_args = [
     '--no-default-browser-check',
     '--no-first-run',
     '--no-pings',
-    '--no-sandbox',
+    // '--no-sandbox',
     '--no-zygote',
     '--password-store=basic',
     '--use-gl=swiftshader',
@@ -68,10 +68,9 @@ const tryCreatePageAndBrowser = async () => {
         await page.goto("https://www.nhatot.com/thue-phong-tro-quan-7-tp-ho-chi-minh/110151726.htm#px=SR-stickyad-[PO-5][PL-top]");
         return { page, browser };
     } catch (error) {
-        console.error(`Error creating browser: ${error}`)
+        console.error(`Error creating browser: ${error.message}`);
         return null;
     }
-
 }
 
 async function deleteAllCookies(page) {
