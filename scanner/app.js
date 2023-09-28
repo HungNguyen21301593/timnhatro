@@ -43,35 +43,42 @@ const minimal_args = [
     "--disable-accelerated-2d-canvas",
     '--start-maximized'
 ];
-
+process.setMaxListeners(20);
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware to parse JSON requests
 app.use(express.json());
 
-const MAX_PAGES = 4;
+const MAX_PAGES = 10;
 let pagePool = [];
 let dirtyPool = [];
 
 const tryCreatePageAndBrowser = async () => {
     try {
-        const browser = await puppeteer.launch({ headless: 'new', args: minimal_args ,defaultViewport: null,});
+        const browser = await puppeteer.launch({ headless: 'new', args: minimal_args, defaultViewport: null, });
         // const context = await browser.createIncognitoBrowserContext();
         const page = await browser.newPage();
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
         await page.setRequestInterception(true)
         page.on('request', (request) => {
-            if (['font', 'image'].includes(request.resourceType())) request.abort()
+            if (['font', 'image', 'xhr'].includes(request.resourceType())) request.abort()
             else request.continue()
         })
         console.log("Created a new browser")
+        await page.goto("https://www.nhatot.com/thue-phong-tro-quan-7-tp-ho-chi-minh/110151726.htm#px=SR-stickyad-[PO-5][PL-top]");
         return { page, browser };
     } catch (error) {
         return null;
     }
 
 }
+
+async function deleteAllCookies(page) {
+    const client = await page.target().createCDPSession()
+    await client.send('Network.clearBrowserCookies')
+}
+
 // Create a page pool with 5 pages at startup
 (async () => {
     for (let i = 0; i < MAX_PAGES; i++) {
@@ -79,24 +86,23 @@ const tryCreatePageAndBrowser = async () => {
         if (!result) {
             continue;
         }
-        pagePool.push(result);
+        pagePool.unshift(result);
     }
 })();
 
 // Background job to manage the page pool
 const managePagePool = async () => {
-    console.log(`Manage Pools: ${pagePool.length}`)
+    console.log(`Active Pools: ${pagePool.length} | DirtyPool Pools: ${dirtyPool.length}`)
     if (pagePool.length < MAX_PAGES) {
         var result = await tryCreatePageAndBrowser();
         if (!result) {
             return;
         }
-        pagePool.push(result);
+        pagePool.unshift(result);
     }
-
-    dirtyPool.forEach(element => {
-        element.page.close();
-        element.browser.close();
+    dirtyPool.forEach(async element => {
+        await deleteAllCookies(element.page);
+        pagePool.unshift(element);
     });
     dirtyPool = []
 };
@@ -121,6 +127,7 @@ app.get('/metadata-from-url', async (req, res) => {
     }
     const { page, browser } = pageObject;
     console.time("load url");
+    await deleteAllCookies(page);
     page.goto(url, { waitUntil: 'domcontentloaded' })
     await page.waitForXPath('//span[contains(@class,"AdParam_address")]/parent::span');
     console.timeEnd("load url");
