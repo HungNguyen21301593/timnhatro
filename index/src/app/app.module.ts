@@ -47,6 +47,7 @@ import { CircleToolComponent } from './components/main/circle-tool/circle-tool.c
 import { MesureToolComponent } from './components/main/mesure-tool/mesure-tool.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { IndexComponent } from './components/index/index/index.component';
+import { FrontpageTrialComponent } from './components/index/frontpage-trial/frontpage-trial.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { IndexComponent } from './components/index/index/index.component';
     PostingFromAccountLinkComponent,
     CircleToolComponent,
     MesureToolComponent,
-    IndexComponent
+    IndexComponent,
+    FrontpageTrialComponent
     ],
   imports: [
     NgFor,
