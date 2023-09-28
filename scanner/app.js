@@ -69,6 +69,7 @@ const tryCreatePageAndBrowser = async () => {
         await page.goto("https://www.nhatot.com/thue-phong-tro-quan-7-tp-ho-chi-minh/110151726.htm#px=SR-stickyad-[PO-5][PL-top]");
         return { page, browser };
     } catch (error) {
+        console.error(`Error creating browser: ${error}`)
         return null;
     }
 
