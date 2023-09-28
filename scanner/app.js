@@ -34,7 +34,7 @@ const minimal_args = [
     '--no-first-run',
     '--no-pings',
     // '--no-sandbox',
-    '--no-zygote',
+    // '--no-zygote',
     '--password-store=basic',
     '--use-gl=swiftshader',
     '--use-mock-keychain',
