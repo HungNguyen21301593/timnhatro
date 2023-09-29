@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+    web-api-0:
+      image: scanner
+      build: ./webapi
+      restart: always
+      privileged: true
+    
+    web-api-1:
+      image: scanner
+      build: ./webapi
+      restart: always
+      privileged: true
+    
+    web-api-2:
+      image: scanner
+      build: ./webapi
+      restart: always
+      privileged: true
+
+    web-api-3:
+      image: scanner
+      build: ./webapi
+      restart: always
+      privileged: true
+
+    web-api-4:
+      image: scanner
+      build: ./webapi
+      restart: always
+      privileged: true
+
+
+    web-api-5:
+      image: scanner
+      build: ./webapi
+      restart: always
+      privileged: true

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -15,6 +15,9 @@ import { WebApiService } from 'src/app/services/web-api.service';
   styleUrls: ['./posting-from-account-link.component.css']
 })
 export class PostingFromAccountLinkComponent implements OnInit {
+
+  @Input()
+  numberOfAllowedListing = 10;
 
   @Output()
   itemsPosted = new EventEmitter<RealstateData[]>;
@@ -90,7 +93,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
   async subscribeForDataFromUrl(listing: AccountUrlResponse) {
     var result = await this.webApiService.submitRequestMedataDataFromUrl(listing.url);
     var subscribe = this.db.object(`urlscanner/${result.key}`).valueChanges().subscribe((value: any) => {
-      if (!value?.UrlMetaResult) {
+      if (!value?.UrlMetaResult?.Address) {
         return;
       }
       var newRealstateData: RealstateData = {
@@ -102,7 +105,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
         title: value.UrlMetaResult.Title
       };
       this.scannedListings.push(newRealstateData);
-      this.value = Math.round((this.scannedListings?.length ?? 0) / (this.newListings.length - 1) * 100);
+      this.value = Math.round((this.scannedListings?.length ?? 0) / (this.newListings.length) * 100);
       if (this.scannedListings.length == this.newListings.length) {
         this.massPostingFormGroup.patchValue({ realstateDatas: this.scannedListings });
         this.scanSpinner = false;
