@@ -28,16 +28,21 @@ var scope = app.Services.CreateScope();
 var scannerService = scope.ServiceProvider.GetRequiredService<ScannerService>();
 var queueService = scope.ServiceProvider.GetRequiredService<QueueService>();
 
-var connectionFactory = new ConnectionFactory()
+var isQueueEnable = Environment.GetEnvironmentVariable("QUEUE_ENABLED") == "TRUE";
+if (isQueueEnable)
 {
-    UserName = UserName,
-    Password = Password,
-    HostName = HostName
-};
+    var connectionFactory = new ConnectionFactory()
+    {
+        UserName = UserName,
+        Password = Password,
+        HostName = HostName
+    };
 
-using var connection = connectionFactory.CreateConnection();
-using var channel = connection.CreateModel();
-queueService.InitConSummer<ScanResultDto>(channel, QueueName, scannerService.Scan);
+    using var connection = connectionFactory.CreateConnection();
+    using var channel = connection.CreateModel();
+    queueService.InitConSummer<ScanResultDto>(channel, QueueName, scannerService.Scan);
+}
+
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
