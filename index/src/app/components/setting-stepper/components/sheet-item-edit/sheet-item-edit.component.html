@@ -26,7 +26,7 @@
     </mat-form-field>
     <app-image-uploader [inputImages]="selectedImages" (imagesChanged)="imagesUpdated($event)"></app-image-uploader>
     <div>
-      <button class="button-front" mat-raised-button color="accent" (click)="update()" mat-button>{{isNew?'Đăng tin': 'Cập nhật thay đổi'}}</button>
+      <button class="button-front" mat-raised-button (click)="update()" mat-button>{{isNew?'Đăng tin': 'Cập nhật thay đổi'}}</button>
     </div>
   </div>
 </form>

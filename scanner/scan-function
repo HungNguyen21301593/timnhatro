@@ -52,7 +52,6 @@ app.use(express.json());
 const MAX_PAGES = 1;
 let pagePool = [];
 let dirtyPool = [];
-
 const tryCreatePageAndBrowser = async () => {
     try {
         const browser = await puppeteer.launch({ headless: 'new', args: minimal_args, defaultViewport: null, });
@@ -104,12 +103,12 @@ const managePagePool = async () => {
     dirtyPool = []
 };
 
-const scan = async (url, pagepool, dirtyPool) => {
+const scan = async (url, _pagepool, _dirtyPool) => {
     let pageObject;
 
     // Get a page from the pool
-    if (pagePool.length > 0) {
-        pageObject = pagePool.pop();
+    if (_pagepool.length > 0) {
+        pageObject = _pagepool.pop();
     }
     else {
         return;
@@ -156,7 +155,7 @@ const scan = async (url, pagepool, dirtyPool) => {
         metaInfo.address = addressElement
             ? addressElement.textContent.replace('Xem bản đồ', '').trim()
             : '';
-
+        _dirtyPool.push({ page, browser });
         return metaInfo;
     });
     console.timeEnd("read");
@@ -164,7 +163,7 @@ const scan = async (url, pagepool, dirtyPool) => {
     console.time("clean");
     // await page.close();
     // await browser.close();
-    dirtyPool.push({ page, browser });
+
     console.timeEnd("clean");
     // Create the URL metadata response
     const urlMeta = {
@@ -179,16 +178,7 @@ const scan = async (url, pagepool, dirtyPool) => {
 
 setInterval(managePagePool, 5000);
 
-// Route for getting metadata from a URL
-app.get('/metadata-from-url', async (req, res) => {
-    console.log(`received ${req.query.url}`)
-    console.time("metadata-from-url");
-    const url = req.query.url || 'https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/';
-    var urlMeta = await scan(url, pagePool, dirtyPool);
-    // Send response
-    res.json(urlMeta);
-});
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+module.exports = {
+    scan: scan
+};

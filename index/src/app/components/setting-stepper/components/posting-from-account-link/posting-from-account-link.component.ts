@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Guid } from 'guid-ts';
 import { AccountUrlResponse } from 'src/app/interfaces/account-url-response';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
 import { MapStateService } from 'src/app/services/map-state.service';
@@ -19,6 +21,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
 
   public listings: AccountUrlResponse[] = [];
   public newListings: AccountUrlResponse[] = [];
+  public scannedListings: RealstateData[] = [];
   public value = 0;
   public fetchListingsFromUrlSpinner = false;
   public scanSpinner = false;
@@ -32,6 +35,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private mapStateService: MapStateService,
+    private db: AngularFireDatabase,
     @Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<PostingFromAccountLinkComponent>) { }
 
   async ngOnInit() {
@@ -51,19 +55,12 @@ export class PostingFromAccountLinkComponent implements OnInit {
   async scan(listings: AccountUrlResponse[]) {
     this.scanSpinner = true;
     this.value = 0;
+    this.scannedListings = [];
     this.massPostingFormGroup.patchValue({ realstateDatas: [] })
-    var results: RealstateData[] = [];
     for (let index = 0; index < listings.length; index++) {
       const listing = listings[index];
-      var newRealStateData = await this.scanForSingleListing(listing);
-      if (!newRealStateData) {
-        continue;
-      }
-      results.push(newRealStateData);
-      this.value = Math.round(index / (listings.length - 1) * 100);
+      this.subscribeForDataFromUrl(listing);
     }
-    this.scanSpinner = false;
-    this.massPostingFormGroup.patchValue({ realstateDatas: results })
   }
 
   async scanForSingleListing(listing: AccountUrlResponse): Promise<RealstateData | null> {
@@ -88,6 +85,30 @@ export class PostingFromAccountLinkComponent implements OnInit {
       console.error(`Failed scanning ${listing.url}`);
       return null;
     }
+  }
+
+  async subscribeForDataFromUrl(listing: AccountUrlResponse) {
+    var result = await this.webApiService.submitRequestMedataDataFromUrl(listing.url);
+    var subscribe = this.db.object(`urlscanner/${result.key}`).valueChanges().subscribe((value: any) => {
+      if (!value?.UrlMetaResult) {
+        return;
+      }
+      var newRealstateData: RealstateData = {
+        id: Guid.newGuid().toString(),
+        address: value.UrlMetaResult.Address,
+        description: value.UrlMetaResult.Description,
+        html: listing.url,
+        images: listing.images ?? value.UrlMetaResult.Images,
+        title: value.UrlMetaResult.Title
+      };
+      this.scannedListings.push(newRealstateData);
+      this.value = Math.round((this.scannedListings?.length ?? 0) / (this.newListings.length - 1) * 100);
+      if (this.scannedListings.length == this.newListings.length) {
+        this.massPostingFormGroup.patchValue({ realstateDatas: this.scannedListings });
+        this.scanSpinner = false;
+      }
+      subscribe.unsubscribe();
+    })
   }
 
   postall() {

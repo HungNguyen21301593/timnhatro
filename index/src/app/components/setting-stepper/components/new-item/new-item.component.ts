@@ -85,10 +85,10 @@ export class NewItemComponent implements OnInit {
         title: "Đăng bài tự động qua link tài khoản",
         link: link,
         listings: listings
-      }
+      },
     });
     dialogRef.afterClosed().subscribe(data => {
-      this.itemposted.emit(data.items)
+      this.itemposted.emit(data.items ?? [])
     }
     );
   }

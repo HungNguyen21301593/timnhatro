@@ -32,6 +32,13 @@ namespace webapi.Service
             return json.Ads.Select(ad => ad.Info).ToList();
         }
 
+        public ScanResultDto Scan(ScanResultDto input)
+        {
+            var metadata = ReadUrlMetaDataWithAddress(input.Url);
+            input.UrlMetaResult = metadata;
+            return input;
+        }
+
         public UrlMetaResponse ReadUrlMetaData(string url)
         {
             url ??= "https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/";
@@ -47,6 +54,31 @@ namespace webapi.Service
                 Title = title?.GetAttribute("content") ?? "",
                 Description = description?.GetAttribute("content") ?? "",
                 Images = new List<string> { image?.GetAttribute("content") ?? "" }
+            };
+            driver.Manage().Cookies.DeleteAllCookies();
+            return urlMeta;
+        }
+
+        public UrlMetaResponse ReadUrlMetaDataWithAddress(string url)
+        {
+            url ??= "https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/";
+            var shouldCreateFreshInstance = url.Contains("nhatot");
+            var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
+            driver.Manage().Cookies.DeleteAllCookies();
+            driver.Navigate().GoToUrl(url);
+            var metaTags = driver.FindElements(By.TagName("meta"));
+            var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();
+            var description = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:description").FirstOrDefault();
+            var image = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:image").FirstOrDefault();
+
+            var xpath = "//span[contains(@class,'AdParam_address')]/parent::span";
+            var address = driver.FindElements(By.XPath(xpath)).FirstOrDefault();
+            var urlMeta = new UrlMetaResponse
+            {
+                Title = title?.GetAttribute("content") ?? "",
+                Address = address?.Text?.Replace("Xem bản đồ", "") ?? "",
+                Description = description?.GetAttribute("content") ?? "",
+                Images = new List<string> { image?.GetAttribute("content") ?? "" },
             };
             driver.Manage().Cookies.DeleteAllCookies();
             return urlMeta;

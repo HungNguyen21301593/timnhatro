@@ -35,14 +35,6 @@ services:
     volumes:
       - 'rabbitmq_data:/bitnami/rabbitmq/mnesia'
 
-  scanner:
-    container_name: scanner
-    build: ./scanner
-    restart: always
-    privileged: true
-    ports:
-      - 3000:3000
-
 volumes:
   rabbitmq_data:
     driver: local

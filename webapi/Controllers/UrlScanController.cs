@@ -2,6 +2,11 @@
 using OpenQA.Selenium;
 using core.Service;
 using webapi.Service;
+using System.Text;
+using RabbitMQ.Client;
+using Firebase.Database;
+using Firebase.Database.Query;
+using Newtonsoft.Json;
 
 namespace YourApiNamespace.Controllers
 {
@@ -9,17 +14,14 @@ namespace YourApiNamespace.Controllers
     [ApiController]
     public class UrlScanController : ControllerBase
     {
-        private readonly WebDriverManagerService webDriverManagerService;
+        private readonly QueueService queueService;
         private readonly ScannerService scannerService;
-        private readonly IHttpClientFactory httpClientFactory;
 
-        public UrlScanController(WebDriverManagerService webDriverManagerService, ScannerService scannerService, IHttpClientFactory httpClientFactory)
+        public UrlScanController(QueueService queueService, ScannerService scannerService)
         {
-            this.webDriverManagerService = webDriverManagerService ?? throw new ArgumentNullException(nameof(webDriverManagerService));
+            this.queueService = queueService;
             this.scannerService = scannerService;
-            this.httpClientFactory = httpClientFactory;
         }
-
 
         [HttpGet("listing-from-account")]
         public async Task<IActionResult> ReadListingInfo(string url)
@@ -35,29 +37,22 @@ namespace YourApiNamespace.Controllers
 
 
         [HttpGet("metadata-from-url")]
-        public IActionResult ReadUrlMetaData(string url)
+        public async Task<IActionResult> ReadUrlMetaData(string url)
+        {
+            var urlMeta = scannerService.ReadUrlMetaDataWithAddress(url);
+            return new OkObjectResult(urlMeta);
+        }
+
+        [HttpPost("metadata-from-url")]
+        public async Task<IActionResult> SubmitScanRequest(string url)
         {
             url ??= "https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/";
-            var shouldCreateFreshInstance = url.Contains("nhatot");
-            var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
-            driver.Manage().Cookies.DeleteAllCookies();
-            driver.Navigate().GoToUrl(url);
-            var metaTags = driver.FindElements(By.TagName("meta"));
-            var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();
-            var description = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:description").FirstOrDefault();
-            var image = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:image").FirstOrDefault();
-
-            var xpath = "//span[contains(@class,'AdParam_address')]/parent::span";
-            var address = driver.FindElements(By.XPath(xpath)).FirstOrDefault();
-            var urlMeta = new UrlMetaResponse
+            var scanResult = new ScanResultDto
             {
-                Title = title?.GetAttribute("content") ?? "",
-                Address = address?.Text?.Replace("Xem bản đồ", "") ?? "",
-                Description = description?.GetAttribute("content") ?? "",
-                Images = new List<string> { image?.GetAttribute("content") ?? "" },
+                Url = url,
             };
-            driver.Manage().Cookies.DeleteAllCookies();
-            return new OkObjectResult(urlMeta);
+            await queueService.SendMessage(scanResult, "urlscanner");
+            return new OkObjectResult(scanResult);
         }
     }
 }

@@ -17,6 +17,7 @@ namespace YourApiNamespace.Controllers
         public ImageUploadController(WebDriverManagerService webDriverManagerService)
         {
             this.webDriverManagerService = webDriverManagerService ?? throw new ArgumentNullException(nameof(webDriverManagerService));
+
         }
 
         [HttpPost("upload")]

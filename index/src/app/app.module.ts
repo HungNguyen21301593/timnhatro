@@ -48,6 +48,12 @@ import { MesureToolComponent } from './components/main/mesure-tool/mesure-tool.c
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { IndexComponent } from './components/index/index/index.component';
 import { FrontpageTrialComponent } from './components/index/frontpage-trial/frontpage-trial.component';
+import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFireAuthModule } from "@angular/fire/compat/auth";
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { environment } from 'src/environment';
 
 @NgModule({
   declarations: [
@@ -104,6 +110,8 @@ import { FrontpageTrialComponent } from './components/index/frontpage-trial/fron
     MatSelectModule,
     MatRadioModule,
     MatProgressBarModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

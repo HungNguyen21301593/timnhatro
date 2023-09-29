@@ -80,3 +80,5 @@ C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\Firebase.
 C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\LiteDB.dll
 C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\System.Reactive.dll
 C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\System.Runtime.InteropServices.WindowsRuntime.dll
+C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\RabbitMQ.Client.dll
+C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\System.Threading.Channels.dll
