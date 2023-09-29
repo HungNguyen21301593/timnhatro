@@ -2,10 +2,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "strict": false,
     "outDir": "./out-tsc/spec",
+    "skipLibCheck": true,
     "types": [
       "jasmine"
-    ]
+    ],
   },
   "include": [
     "src/**/*.spec.ts",

@@ -27,7 +27,7 @@
     "@prvinsharma/angular-image-viewer": "^5.0.0",
     "@types/heremaps": "^3.1.10",
     "@types/underscore": "^1.11.9",
-    "firebase": "9.9.1",
+    "firebase": "9.16.0",
     "get-link-preview": "^1.0.7",
     "guid-ts": "^1.1.2",
     "lodash": "^4.17.21",
