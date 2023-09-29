@@ -5,3 +5,7 @@ mat-form-field {
 mat-progress-bar {
     width: 100%;
 }
+
+button {
+    margin: 5px 5px 5px 0 !important;
+  }
