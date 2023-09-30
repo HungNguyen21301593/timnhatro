@@ -82,3 +82,9 @@ C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\System.Re
 C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\System.Runtime.InteropServices.WindowsRuntime.dll
 C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\RabbitMQ.Client.dll
 C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\System.Threading.Channels.dll
+C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\MassTransit.dll
+C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\MassTransit.Abstractions.dll
+C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\MassTransit.RabbitMqTransport.dll
+C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\Microsoft.Extensions.Diagnostics.HealthChecks.dll
+C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll
+C:\Personal\Projects\rs-agent-helper\timnhatro\webapi\bin\Debug\net6.0\MassTransit.ExtensionsDependencyInjectionIntegration.dll

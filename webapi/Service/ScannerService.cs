@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
+using Firebase.Database;
+using webapi.Model;
 
 namespace webapi.Service
 {
@@ -13,11 +15,13 @@ namespace webapi.Service
     {
         private readonly WebDriverManagerService webDriverManagerService;
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly IConfiguration configuration;
 
-        public ScannerService(WebDriverManagerService webDriverManagerService, IHttpClientFactory httpClientFactory)
+        public ScannerService(WebDriverManagerService webDriverManagerService, IHttpClientFactory httpClientFactory,IConfiguration configuration)
         {
             this.webDriverManagerService = webDriverManagerService;
             this.httpClientFactory = httpClientFactory;
+            this.configuration = configuration;
         }
 
         public async Task<List<Info>> ReadAccountUrl(string url)
@@ -32,10 +36,16 @@ namespace webapi.Service
             return json.Ads.Select(ad => ad.Info).ToList();
         }
 
-        public ScanResultDto Scan(ScanResultDto input)
+        public async Task<ScanResultsDtoMessage> Scan(ScanResultsDtoMessage input)
         {
-            var metadata = ReadUrlMetaDataWithAddress(input.Url);
-            input.UrlMetaResult = metadata;
+            var firebaseClient = new FirebaseClient(configuration["FirebaseDatabase:UrlScanner"]);
+            foreach (var url in input.Urls)
+            {
+                var metadata = ReadUrlMetaDataWithAddress(url);
+                input.UrlMetaResults.Add(metadata);
+                await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}/UrlMetaResults")
+                    .PutAsync(JsonConvert.SerializeObject(input.UrlMetaResults));
+            }
             return input;
         }
 
@@ -53,7 +63,8 @@ namespace webapi.Service
             {
                 Title = title?.GetAttribute("content") ?? "",
                 Description = description?.GetAttribute("content") ?? "",
-                Images = new List<string> { image?.GetAttribute("content") ?? "" }
+                Images = new List<string> { image?.GetAttribute("content") ?? "" },
+                Url = url,
             };
             driver.Manage().Cookies.DeleteAllCookies();
             return urlMeta;
@@ -61,7 +72,6 @@ namespace webapi.Service
 
         public UrlMetaResponse ReadUrlMetaDataWithAddress(string url)
         {
-            url ??= "https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/";
             var shouldCreateFreshInstance = url.Contains("nhatot");
             var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
             driver.Manage().Cookies.DeleteAllCookies();
@@ -79,6 +89,7 @@ namespace webapi.Service
                 Address = address?.Text?.Replace("Xem bản đồ", "") ?? "",
                 Description = description?.GetAttribute("content") ?? "",
                 Images = new List<string> { image?.GetAttribute("content") ?? "" },
+                Url = url,
             };
             driver.Manage().Cookies.DeleteAllCookies();
             return urlMeta;

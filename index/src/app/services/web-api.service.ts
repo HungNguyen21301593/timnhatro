@@ -96,12 +96,10 @@ export class WebApiService {
     }
   }
 
-  async submitRequestMedataDataFromUrl(url: string): Promise<{ key: string }> {
+  async submitRequestMedataDataFromUrls(urls: string[]): Promise<string> {
     try {
-      const res = await lastValueFrom(this.httpClient.post(`/api/url-scanner/metadata-from-url?url=${url}`, {}));
-      return {
-        key: (res as any).key
-      };
+      const res = await lastValueFrom(this.httpClient.post(`/api/url-scanner/metadata-from-url`, {Urls: urls}));
+      return (res as any).key;
     } catch (error) {
       console.error('submitRequestMedataDataFromUrl failed', error);
       throw error;

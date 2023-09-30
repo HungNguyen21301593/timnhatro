@@ -1,14 +1,25 @@
 ﻿using System.Collections.Generic;
 
-public class ScanResultDto: IKey
-{
-    public string Url { get; set; }
-    
-    public UrlMetaResponse UrlMetaResult { get; set; }
-    public string Key { get; set; }
-}
 
-public interface IKey
+namespace webapi.Model
 {
-    public string Key { get; set; }
+    [Serializable]
+    public class ScanResultsDtoMessage : IKey
+    {
+        public ScanResultsDtoMessage()
+        {
+            Urls = new List<string>();
+            UrlMetaResults = new List<UrlMetaResponse>();
+        }
+        public List<string> Urls { get; set; }
+
+        public List<UrlMetaResponse> UrlMetaResults { get; set; }
+        public string Key { get; set; }
+    }
+
+    public interface IKey
+    {
+        public string Key { get; set; }
+    }
+
 }

@@ -7,6 +7,8 @@ using RabbitMQ.Client;
 using Firebase.Database;
 using Firebase.Database.Query;
 using Newtonsoft.Json;
+using AngleSharp.Dom;
+using webapi.Model;
 
 namespace YourApiNamespace.Controllers
 {
@@ -44,15 +46,14 @@ namespace YourApiNamespace.Controllers
         }
 
         [HttpPost("metadata-from-url")]
-        public async Task<IActionResult> SubmitScanRequest(string url)
+        public async Task<IActionResult> SubmitScanRequest(ScanResultRequest request)
         {
-            url ??= "https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/";
-            var scanResult = new ScanResultDto
+            var message = new ScanResultsDtoMessage
             {
-                Url = url,
+                Urls = request.Urls,
             };
-            await queueService.SendMessage(scanResult, "urlscanner");
-            return new OkObjectResult(scanResult);
+            var results = await queueService.SendMessage(message, "urlscanner");
+            return new OkObjectResult(results);
         }
     }
 }

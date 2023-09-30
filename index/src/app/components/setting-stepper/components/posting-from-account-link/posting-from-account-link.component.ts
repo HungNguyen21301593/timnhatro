@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Guid } from 'guid-ts';
+import { forEach } from 'lodash';
 import { AccountUrlResponse } from 'src/app/interfaces/account-url-response';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
 import { MapStateService } from 'src/app/services/map-state.service';
@@ -60,10 +61,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
     this.value = 0;
     this.scannedListings = [];
     this.massPostingFormGroup.patchValue({ realstateDatas: [] })
-    for (let index = 0; index < listings.length; index++) {
-      const listing = listings[index];
-      this.subscribeForDataFromUrl(listing);
-    }
+    this.subscribeForDataFromUrls(listings);
   }
 
   async scanForSingleListing(listing: AccountUrlResponse): Promise<RealstateData | null> {
@@ -90,28 +88,46 @@ export class PostingFromAccountLinkComponent implements OnInit {
     }
   }
 
-  async subscribeForDataFromUrl(listing: AccountUrlResponse) {
-    var result = await this.webApiService.submitRequestMedataDataFromUrl(listing.url);
-    var subscribe = this.db.object(`urlscanner/${result.key}`).valueChanges().subscribe((value: any) => {
-      if (!value?.UrlMetaResult?.Address) {
+  async subscribeForDataFromUrls(listings: AccountUrlResponse[]) {
+    var urls = listings.map(listing => listing.url);
+    var key = await this.webApiService.submitRequestMedataDataFromUrls(urls);
+    console.log(key);
+    var subscribe = this.db.object(`urlscanner/${key}`).valueChanges().subscribe((value: any) => {
+      if ((value?.UrlMetaResults?.length ?? 0) == 0) {
         return;
       }
-      var newRealstateData: RealstateData = {
-        id: Guid.newGuid().toString(),
-        address: value.UrlMetaResult.Address,
-        description: value.UrlMetaResult.Description,
-        html: listing.url,
-        images: listing.images ?? value.UrlMetaResult.Images,
-        title: value.UrlMetaResult.Title
-      };
-      this.scannedListings.push(newRealstateData);
+      var results = value?.UrlMetaResults as RealstateData[];
+      this.scannedListings = results;
       this.value = Math.round((this.scannedListings?.length ?? 0) / (this.newListings.length) * 100);
       if (this.scannedListings.length == this.newListings.length) {
         this.massPostingFormGroup.patchValue({ realstateDatas: this.scannedListings });
         this.scanSpinner = false;
+        subscribe.unsubscribe();
       }
-      subscribe.unsubscribe();
     })
+    // for (let index = 0; index < result.keys.length; index++) {
+    //   const key = result.keys[index];
+    //   var subscribe = this.db.object(`urlscanner/${key}`).valueChanges().subscribe((value: any) => {
+    // if (!value?.UrlMetaResult?.Address) {
+    //   return;
+    // }
+    // var newRealstateData: RealstateData = {
+    //   id: Guid.newGuid().toString(),
+    //   address: value.UrlMetaResult.Address,
+    //   description: value.UrlMetaResult.Description,
+    //   html: listings[index].url,
+    //   images: listings[index].images ?? value.UrlMetaResult.Images,
+    //   title: value.UrlMetaResult.Title
+    // };
+    //     this.scannedListings.push(newRealstateData);
+    //     this.value = Math.round((this.scannedListings?.length ?? 0) / (this.newListings.length) * 100);
+    //     if (this.scannedListings.length == this.newListings.length) {
+    //       this.massPostingFormGroup.patchValue({ realstateDatas: this.scannedListings });
+    //       this.scanSpinner = false;
+    //     }
+    //     subscribe.unsubscribe();
+    //   })
+    // }
   }
 
   postall() {

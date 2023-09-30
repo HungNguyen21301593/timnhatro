@@ -5,27 +5,33 @@ services:
       build: ./webapi
       restart: always
       privileged: true
-    environment:
-      - QUEUE_ENABLED=TRUE
+      environment:
+        - QUEUE_ENABLED=TRUE
+
+    web-api-1:
+      image: scanner
+      build: ./webapi
+      restart: always
+      privileged: true
+      environment:
+        - QUEUE_ENABLED=TRUE 
     
-    # web-api-1:
-    #   image: scanner
-    #   build: ./webapi
-    #   restart: always
-    #   privileged: true
-    
-    # web-api-2:
-    #   image: scanner
-    #   build: ./webapi
-    #   restart: always
-    #   privileged: true
+    web-api-2:
+      image: scanner
+      build: ./webapi
+      restart: always
+      privileged: true
+      environment:
+        - QUEUE_ENABLED=TRUE 
 
     # web-api-3:
     #   image: scanner
     #   build: ./webapi
     #   restart: always
     #   privileged: true
-
+    #   environment:
+    #     - QUEUE_ENABLED=TRUE 
+    
     # web-api-4:
     #   image: scanner
     #   build: ./webapi
