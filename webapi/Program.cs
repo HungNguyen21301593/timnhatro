@@ -26,10 +26,7 @@ internal class Program
         builder.Services.AddScoped<ScannerService>();
         builder.Services.AddScoped<QueueService>();
 
-        var isQueueEnable = Environment.GetEnvironmentVariable("QUEUE_ENABLED") == "TRUE";
-        if (isQueueEnable)
-        {
-            builder.Services.AddMassTransit(config =>
+        builder.Services.AddMassTransit(config =>
         {
             config.UsingRabbitMq((context, cfg) =>
             {
@@ -44,8 +41,7 @@ internal class Program
             });
             config.AddConsumer<UrlScannerConsumer>();
         });
-            builder.Services.AddMassTransitHostedService();
-        }
+        builder.Services.AddMassTransitHostedService();
         var app = builder.Build();
 
         app.Services.GetRequiredService<WebDriverManagerService>().GetDriver();
