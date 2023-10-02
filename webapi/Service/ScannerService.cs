@@ -48,7 +48,7 @@ namespace webapi.Service
                 {
                     var metadata = await ReadUrlMetaDataWithAddress(url);
                     input.UrlMetaResults.Add(metadata);
-                    await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}/UrlMetaResults")
+                    await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}/urlMetaResults")
                         .PutAsync(JsonConvert.SerializeObject(input.UrlMetaResults));
                 }
             }
