@@ -1,9 +1,8 @@
 <h1 mat-dialog-title>{{title}}</h1>
 <div mat-dialog-content fxLayout="column" fxLayoutAlign="start start">
-
-
   <form [formGroup]="massPostingFormGroup" fxLayout="column" fxLayoutAlign="start start">
-    <h3>Kết quả: Tổng cộng {{listings.length}} bài đăng, {{newListings.length}} bài mới:</h3>
+    <h3>Kết quả: Tổng cộng {{listings.length}} bài đăng, {{newListings.length}} bài mới</h3>
+    <h3 *ngIf="(numberOfNewRequests+numberOfOngoingRequests)!==0">Đang có {{numberOfNewRequests+numberOfOngoingRequests}} requests</h3>
     <div fxLayout="row" fxLayoutAlign="start center">
       <button mat-raised-button color="accent" (click)="scan(newListings)" mat-button [disabled]="listings.length ==0"
         [disabled]="newListings.length==0 || scanSpinner">

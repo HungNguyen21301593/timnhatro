@@ -18,11 +18,13 @@ namespace YourApiNamespace.Controllers
     {
         private readonly QueueService queueService;
         private readonly ScannerService scannerService;
+        private readonly IConfiguration configuration;
 
-        public UrlScanController(QueueService queueService, ScannerService scannerService)
+        public UrlScanController(QueueService queueService, ScannerService scannerService, IConfiguration configuration)
         {
-            this.queueService = queueService;
-            this.scannerService = scannerService;
+            this.queueService = queueService ?? throw new ArgumentNullException(nameof(queueService));
+            this.scannerService = scannerService ?? throw new ArgumentNullException(nameof(scannerService));
+            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         [HttpGet("listing-from-account")]
@@ -52,7 +54,7 @@ namespace YourApiNamespace.Controllers
             {
                 Urls = request.Urls,
             };
-            var results = await queueService.SendMessage(message, "urlscanner");
+            var results = await queueService.SendMessage(message, configuration["FirebaseDatabase:QueueName"] ?? "urlscanner");
             return new OkObjectResult(results);
         }
     }

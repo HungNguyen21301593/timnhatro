@@ -49,7 +49,7 @@ namespace core.Service
             var options = new ChromeOptions();
             options.AddExcludedArgument("enable-automation");
             options.AddArguments(chromeArguments);
-            options.PageLoadStrategy = PageLoadStrategy.Eager;
+            options.PageLoadStrategy = PageLoadStrategy.Normal;
             var remoteDriver = new ChromeDriver(options);
             return remoteDriver ?? throw new ArgumentNullException($"Could not init web diver");
         }

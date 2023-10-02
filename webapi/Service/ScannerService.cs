@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using Firebase.Database;
 using webapi.Model;
+using Firebase.Database.Query;
 
 namespace webapi.Service
 {
@@ -39,13 +40,28 @@ namespace webapi.Service
         public async Task<ScanResultsDtoMessage> Scan(ScanResultsDtoMessage input)
         {
             var firebaseClient = new FirebaseClient(configuration["FirebaseDatabase:UrlScanner"]);
-            foreach (var url in input.Urls)
+            input.Status = Status.InProgress;
+            await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}").PutAsync(input);
+            try
             {
-                var metadata = ReadUrlMetaDataWithAddress(url);
-                input.UrlMetaResults.Add(metadata);
-                await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}/UrlMetaResults")
-                    .PutAsync(JsonConvert.SerializeObject(input.UrlMetaResults));
+                foreach (var url in input.Urls)
+                {
+                    var metadata = await ReadUrlMetaDataWithAddress(url);
+                    input.UrlMetaResults.Add(metadata);
+                    await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}/UrlMetaResults")
+                        .PutAsync(JsonConvert.SerializeObject(input.UrlMetaResults));
+                }
             }
+            catch (Exception e)
+            {
+                input.Status = Status.Error;
+                await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}").PutAsync(input);
+                throw;
+            }
+            
+
+            input.Status = Status.Done;
+            await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}").PutAsync(input);
             return input;
         }
 
@@ -54,6 +70,7 @@ namespace webapi.Service
             url ??= "https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/";
             var shouldCreateFreshInstance = url.Contains("nhatot");
             var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
+            driver.Manage().Cookies.DeleteAllCookies();
             driver.Navigate().GoToUrl(url);
             var metaTags = driver.FindElements(By.TagName("meta"));
             var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();
@@ -66,11 +83,10 @@ namespace webapi.Service
                 Images = new List<string> { image?.GetAttribute("content") ?? "" },
                 Url = url,
             };
-            driver.Manage().Cookies.DeleteAllCookies();
             return urlMeta;
         }
 
-        public UrlMetaResponse ReadUrlMetaDataWithAddress(string url)
+        public async Task<UrlMetaResponse> ReadUrlMetaDataWithAddress(string url)
         {
             var shouldCreateFreshInstance = url.Contains("nhatot");
             var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
@@ -92,7 +108,7 @@ namespace webapi.Service
                 Url = url,
             };
             driver.Manage().Cookies.DeleteAllCookies();
-            return urlMeta;
+            return await Task.FromResult(urlMeta);
         }
 
         private async Task<JsonResponse?> ReadAllListing(string id)

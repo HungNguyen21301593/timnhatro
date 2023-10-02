@@ -30,7 +30,10 @@ export class PostingFromAccountLinkComponent implements OnInit {
   public fetchListingsFromUrlSpinner = false;
   public scanSpinner = false;
   public link = '';
-  public title = ''
+  public title = '';
+  public numberOfNewRequests = 0;
+  public numberOfOngoingRequests = 0;
+  public numberOfRequests = this.numberOfNewRequests + this.numberOfOngoingRequests;
 
   massPostingFormGroup = this._formBuilder.group({
     realstateDatas: [[] as RealstateData[], Validators.required],
@@ -49,6 +52,12 @@ export class PostingFromAccountLinkComponent implements OnInit {
     var currentreastates = this.mapStateService.stateObservable.value.geoItems.map(item => item.realstateData).flat();
     this.newListings = this.filterNewListing(this.listings, currentreastates);
     await this.scan(this.newListings);
+    this.db.list('urlscanner', ref => ref.orderByChild("status").equalTo(0)).valueChanges().subscribe((value: any) => {
+      this.numberOfNewRequests = value.length;
+    });
+    this.db.list('urlscanner', ref => ref.orderByChild("status").equalTo(1)).valueChanges().subscribe((value: any) => {
+      this.numberOfOngoingRequests = value.length;
+    });
   }
 
   filterNewListing(input: AccountUrlResponse[], allCurrent: RealstateData[]) {
@@ -64,39 +73,15 @@ export class PostingFromAccountLinkComponent implements OnInit {
     this.subscribeForDataFromUrls(listings);
   }
 
-  async scanForSingleListing(listing: AccountUrlResponse): Promise<RealstateData | null> {
-    try {
-      var listingMetada = await this.webApiService.getMedataDataFromUrl(listing.url);
-
-      var georesults = await this.mapStateService.getGeoCodeResult(listingMetada.address, true);
-      if (georesults.length == 0) {
-        console.error(`Failed scanning ${listing.url}`);
-        return null;
-      }
-      var newRealStateData: RealstateData = {
-        id: listingMetada.id,
-        address: georesults[0].address.label,
-        description: listingMetada.description,
-        html: listing.url,
-        images: listing.images.length != 0 ? listing.images : listingMetada.images,
-        title: listing.title !== '' ? listing.title : listingMetada.title,
-      }
-      return newRealStateData;
-    } catch (error) {
-      console.error(`Failed scanning ${listing.url}`);
-      return null;
-    }
-  }
-
   async subscribeForDataFromUrls(listings: AccountUrlResponse[]) {
     var urls = listings.map(listing => listing.url);
     var key = await this.webApiService.submitRequestMedataDataFromUrls(urls);
     console.log(key);
     var subscribe = this.db.object(`urlscanner/${key}`).valueChanges().subscribe((value: any) => {
-      if ((value?.UrlMetaResults?.length ?? 0) == 0) {
+      if ((value?.urlMetaResults?.length ?? 0) == 0) {
         return;
       }
-      var results = value?.UrlMetaResults as RealstateData[];
+      var results = value?.urlMetaResults as RealstateData[];
       this.scannedListings = results;
       this.value = Math.round((this.scannedListings?.length ?? 0) / (this.newListings.length) * 100);
       if (this.scannedListings.length == this.newListings.length) {
@@ -105,29 +90,6 @@ export class PostingFromAccountLinkComponent implements OnInit {
         subscribe.unsubscribe();
       }
     })
-    // for (let index = 0; index < result.keys.length; index++) {
-    //   const key = result.keys[index];
-    //   var subscribe = this.db.object(`urlscanner/${key}`).valueChanges().subscribe((value: any) => {
-    // if (!value?.UrlMetaResult?.Address) {
-    //   return;
-    // }
-    // var newRealstateData: RealstateData = {
-    //   id: Guid.newGuid().toString(),
-    //   address: value.UrlMetaResult.Address,
-    //   description: value.UrlMetaResult.Description,
-    //   html: listings[index].url,
-    //   images: listings[index].images ?? value.UrlMetaResult.Images,
-    //   title: value.UrlMetaResult.Title
-    // };
-    //     this.scannedListings.push(newRealstateData);
-    //     this.value = Math.round((this.scannedListings?.length ?? 0) / (this.newListings.length) * 100);
-    //     if (this.scannedListings.length == this.newListings.length) {
-    //       this.massPostingFormGroup.patchValue({ realstateDatas: this.scannedListings });
-    //       this.scanSpinner = false;
-    //     }
-    //     subscribe.unsubscribe();
-    //   })
-    // }
   }
 
   postall() {

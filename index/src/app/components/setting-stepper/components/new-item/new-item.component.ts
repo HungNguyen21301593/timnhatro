@@ -88,7 +88,7 @@ export class NewItemComponent implements OnInit {
       },
     });
     dialogRef.afterClosed().subscribe(data => {
-      this.itemposted.emit(data.items ?? [])
+      this.itemposted.emit(data?.items ?? [])
     }
     );
   }

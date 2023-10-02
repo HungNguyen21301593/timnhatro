@@ -35,7 +35,7 @@ internal class Program
                     h.Username("user");     // RabbitMQ username
                     h.Password("bitnami");  // RabbitMQ password
                 });
-
+                cfg.UseConcurrencyLimit(1);
                 cfg.ConfigureEndpoints(context);
 
             });
