@@ -2,7 +2,7 @@
 <div mat-dialog-content fxLayout="column" fxLayoutAlign="start start">
   <form [formGroup]="massPostingFormGroup" fxLayout="column" fxLayoutAlign="start start">
     <h3>Kết quả: Tổng cộng {{listings.length}} bài đăng, {{newListings.length}} bài mới</h3>
-    <h3 *ngIf="(numberOfNewRequests+numberOfOngoingRequests)!==0">Đang có {{numberOfNewRequests+numberOfOngoingRequests}} requests</h3>
+    <span  *ngIf="(numberOfNewRequests+numberOfOngoingRequests)>1">Hiện tại hệ thống đang xử lý yêu cầu từ người dùng khác, bạn vui lòng đợi trong vài phút, hệ thống sẽ xử lý yêu cầu của bạn ngay khi sẵn sàng, xin lỗi vì sự bất tiện này. Hiện tại, đang có {{numberOfNewRequests+numberOfOngoingRequests}} yêu cầu đang được xử lý.</span>
     <div fxLayout="row" fxLayoutAlign="start center">
       <button mat-raised-button color="accent" (click)="scan(newListings)" mat-button [disabled]="listings.length ==0"
         [disabled]="newListings.length==0 || scanSpinner">

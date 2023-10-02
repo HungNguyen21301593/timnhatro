@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Firebase.Database;
 using webapi.Model;
 using Firebase.Database.Query;
+using MassTransit.Transports;
+using System;
 
 namespace webapi.Service
 {
@@ -92,6 +94,8 @@ namespace webapi.Service
             var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
             driver.Manage().Cookies.DeleteAllCookies();
             driver.Navigate().GoToUrl(url);
+            SolvePleaseRetryLater(3, url);
+
             var metaTags = driver.FindElements(By.TagName("meta"));
             var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();
             var description = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:description").FirstOrDefault();
@@ -109,6 +113,19 @@ namespace webapi.Service
             };
             driver.Manage().Cookies.DeleteAllCookies();
             return await Task.FromResult(urlMeta);
+        }
+
+        private void SolvePleaseRetryLater(int times, string url)
+        {
+            var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
+            for (int i = 0; i < times; i++)
+            {
+                var pleaseTryAgainLater = driver.FindElements(By.XPath("//*[contains(text(), 'Please try again later!')]"));
+                if (pleaseTryAgainLater.Any())
+                {
+                    driver.Navigate().GoToUrl(url);
+                }
+            }
         }
 
         private async Task<JsonResponse?> ReadAllListing(string id)

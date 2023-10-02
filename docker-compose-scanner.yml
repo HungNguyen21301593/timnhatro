@@ -15,12 +15,12 @@ services:
       environment:
         - QUEUE_ENABLED=TRUE 
     
-    web-api-2:
-      image: scanner
-      restart: always
-      privileged: true
-      environment:
-        - QUEUE_ENABLED=TRUE 
+    # web-api-2:
+    #   image: scanner
+    #   restart: always
+    #   privileged: true
+    #   environment:
+    #     - QUEUE_ENABLED=TRUE 
 
     # web-api-3:
     #   image: scanner
