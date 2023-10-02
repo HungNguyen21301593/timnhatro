@@ -19,6 +19,7 @@ services:
       - 5173:5173
     environment:
       - ASPNETCORE_URLS=http://+:5173
+      - QUEUE_ENABLED=TRUE
 
   rabbitmq:
     image: docker.io/bitnami/rabbitmq:3.12

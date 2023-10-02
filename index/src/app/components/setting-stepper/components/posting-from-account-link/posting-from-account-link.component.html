@@ -2,21 +2,28 @@
 <div mat-dialog-content fxLayout="column" fxLayoutAlign="start start">
   <form [formGroup]="massPostingFormGroup" fxLayout="column" fxLayoutAlign="start start">
     <h3>Kết quả: Tổng cộng {{listings.length}} bài đăng, {{newListings.length}} bài mới</h3>
-    <span  *ngIf="(numberOfNewRequests+numberOfOngoingRequests)>1">Hiện tại hệ thống đang xử lý yêu cầu từ người dùng khác, bạn vui lòng đợi trong vài phút, hệ thống sẽ xử lý yêu cầu của bạn ngay khi sẵn sàng, xin lỗi vì sự bất tiện này. Hiện tại, đang có {{numberOfNewRequests+numberOfOngoingRequests}} yêu cầu đang được xử lý.</span>
-    <div fxLayout="row" fxLayoutAlign="start center">
-      <button mat-raised-button color="accent" (click)="scan(newListings)" mat-button [disabled]="listings.length ==0"
-        [disabled]="newListings.length==0 || scanSpinner">
-        Tải lại: {{newListings.length}} bài</button>
-      <mat-spinner [diameter]="30" [hidden]="!scanSpinner"></mat-spinner>
+    <div *ngIf="(numberOfNewRequests+numberOfOngoingRequests)>1">
+      <p>
+        Hiện tại hệ thống đang xử lý yêu cầu từ người dùng khác, bạn vui lòng đợi trong vài phút,
+        hệ thống sẽ xử lý yêu cầu của bạn ngay khi sẵn sàng, xin lỗi vì sự bất tiện này.</p>
+      <p>
+        Hiện tại có {{numberOfNewRequests+numberOfOngoingRequests}} yêu cầu đang được xử lý.
+        <mat-spinner [diameter]="30" [hidden]="!scanSpinner"></mat-spinner>
+      </p>
     </div>
     <mat-progress-bar class="example-margin" color="primary" mode="determinate" [value]="value">
     </mat-progress-bar>
     <app-input-sheet-table formControlName="realstateDatas"></app-input-sheet-table>
-    <div fxLayout="row" fxLayoutAlign="space-between end" class="full-width" >
-      <button mat-raised-button  (click)="postall()" mat-button mat-dialog-close>Hủy</button>
-      <button mat-raised-button color="accent" (click)="postall()" mat-button
-      [disabled]="this.massPostingFormGroup.value.realstateDatas?.length == 0" mat-dialog-close>Đăng tất cả
-      tin</button>
+    <div fxLayout="row" fxLayoutAlign="space-between end" class="full-width">
+      <button mat-raised-button (click)="postall()" mat-button mat-dialog-close>Hủy</button>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <button mat-raised-button color="accent" (click)="scan(newListings)" mat-button [disabled]="listings.length ==0"
+          [disabled]="newListings.length==0 || scanSpinner">
+          Tải lại: {{newListings.length}} bài</button>
+        <button mat-raised-button color="accent" (click)="postall()" mat-button
+          [disabled]="this.massPostingFormGroup.value.realstateDatas?.length == 0" mat-dialog-close>Đăng tất cả
+          tin</button>
+      </div>
     </div>
   </form>
 </div>

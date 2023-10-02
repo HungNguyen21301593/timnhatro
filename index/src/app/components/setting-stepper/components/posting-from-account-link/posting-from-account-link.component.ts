@@ -3,8 +3,6 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Guid } from 'guid-ts';
-import { forEach } from 'lodash';
 import { AccountUrlResponse } from 'src/app/interfaces/account-url-response';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
 import { MapStateService } from 'src/app/services/map-state.service';
