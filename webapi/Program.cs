@@ -26,6 +26,7 @@ internal class Program
         builder.Services.AddScoped<ScannerService>();
         builder.Services.AddScoped<QueueService>();
 
+        var isConsumerEnabled = Environment.GetEnvironmentVariable("QUEUE_ENABLED") == "TRUE";
         builder.Services.AddMassTransit(config =>
         {
             config.UsingRabbitMq((context, cfg) =>
@@ -39,7 +40,11 @@ internal class Program
                 cfg.ConfigureEndpoints(context);
 
             });
-            config.AddConsumer<UrlScannerConsumer>();
+            if (isConsumerEnabled)
+            {
+                config.AddConsumer<UrlScannerConsumer>();
+            }
+
         });
         builder.Services.AddMassTransitHostedService();
         var app = builder.Build();

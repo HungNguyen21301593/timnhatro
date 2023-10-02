@@ -61,7 +61,7 @@ namespace webapi.Service
             
 
             input.Status = Status.Done;
-            await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}").PutAsync(input);
+            await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}").DeleteAsync();
             return input;
         }
 
