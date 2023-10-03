@@ -29,6 +29,9 @@ namespace webapi.Model
 
         [JsonProperty("createdOn")]
         public DateTime CreatedOn { get; set; }
+
+        [JsonProperty("notificationEmail")]
+        public string notificationEmail { get; set; }
     }
 
     public interface IKey

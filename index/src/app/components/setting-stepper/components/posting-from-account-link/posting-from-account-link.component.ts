@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AccountUrlResponse } from 'src/app/interfaces/account-url-response';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
+import { ScanResultsDto } from 'src/app/interfaces/scan-results-dto';
 import { MapStateService } from 'src/app/services/map-state.service';
 import { WebApiService } from 'src/app/services/web-api.service';
 
@@ -73,6 +74,15 @@ export class PostingFromAccountLinkComponent implements OnInit {
 
   async subscribeForDataFromUrls(listings: AccountUrlResponse[]) {
     var urls = listings.map(listing => listing.url);
+
+    var request: ScanResultsDto = {
+      key: "",
+      urls: urls,
+      notificationEmail: "hungnguyen21301593@gmail.com",
+      status: 0,
+      urlMetaResults: [],
+      createdOn: null
+    }
     var key = await this.webApiService.submitRequestMedataDataFromUrls(urls);
     console.log(key);
     var subscribe = this.db.object(`urlscanner/${key}`).valueChanges().subscribe((value: any) => {

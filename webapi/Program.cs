@@ -27,6 +27,7 @@ internal class Program
         builder.Services.AddScoped<QueueService>();
 
         var isConsumerEnabled = Environment.GetEnvironmentVariable("QUEUE_ENABLED") == "TRUE";
+        isConsumerEnabled = true;
         builder.Services.AddMassTransit(config =>
         {
             config.UsingRabbitMq((context, cfg) =>

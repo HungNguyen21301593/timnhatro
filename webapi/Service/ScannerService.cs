@@ -11,6 +11,12 @@ using webapi.Model;
 using Firebase.Database.Query;
 using MassTransit.Transports;
 using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Net.Mail;
+using System.Net;
 
 namespace webapi.Service
 {
@@ -64,6 +70,13 @@ namespace webapi.Service
 
             input.Status = Status.Done;
             await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}").DeleteAsync();
+            var client = new SmtpClient("live.smtp.mailtrap.io", 587)
+            {
+                Credentials = new NetworkCredential("api", "********4675"),
+                EnableSsl = true
+            };
+            client.Send("mailtrap@mapcuatui.com", input.notificationEmail, "Hello world", "testbody");
+            Console.WriteLine("Sent");
             return input;
         }
 

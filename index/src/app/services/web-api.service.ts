@@ -8,6 +8,7 @@ import { GeocodeResult } from '../interfaces/geocode-result';
 import { RealstateData } from '../interfaces/realstate-item';
 import { AccountUrlResponse } from '../interfaces/account-url-response';
 import { Guid } from 'guid-ts';
+import { ScanResultsDto } from '../interfaces/scan-results-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -96,9 +97,9 @@ export class WebApiService {
     }
   }
 
-  async submitRequestMedataDataFromUrls(urls: string[]): Promise<string> {
+  async submitRequestMedataDataFromUrls(request: ScanResultsDto): Promise<string> {
     try {
-      const res = await lastValueFrom(this.httpClient.post(`/api/url-scanner/metadata-from-url`, {Urls: urls}));
+      const res = await lastValueFrom(this.httpClient.post(`/api/url-scanner/metadata-from-url`, request));
       return (res as any).key;
     } catch (error) {
       console.error('submitRequestMedataDataFromUrl failed', error);
