@@ -83,7 +83,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
       urlMetaResults: [],
       createdOn: null
     }
-    var key = await this.webApiService.submitRequestMedataDataFromUrls(urls);
+    var key = await this.webApiService.submitRequestMedataDataFromUrls(request);
     console.log(key);
     var subscribe = this.db.object(`urlscanner/${key}`).valueChanges().subscribe((value: any) => {
       if ((value?.urlMetaResults?.length ?? 0) == 0) {

@@ -72,7 +72,7 @@ namespace webapi.Service
             await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}").DeleteAsync();
             var client = new SmtpClient("live.smtp.mailtrap.io", 587)
             {
-                Credentials = new NetworkCredential("api", "********4675"),
+                Credentials = new NetworkCredential("api", "8165507d6bc18eae3b7716e062464675"),
                 EnableSsl = true
             };
             client.Send("mailtrap@mapcuatui.com", input.notificationEmail, "Hello world", "testbody");
