@@ -1,22 +1,24 @@
-<section fxLayout="row" fxLayoutAlign="start center">
-    <mat-radio-group [(ngModel)]="type" [value]="'AccountLink'">
-        <div>
-            <mat-radio-button value="AccountLink">
-            </mat-radio-button>
-            <span>Nhập tin từ link tài khoản</span>
-        </div>
-        <div>
-            <mat-radio-button value='ListingLink'>
-            </mat-radio-button>
-            <span>Nhập tin từ link bài viết</span>
-        </div>
-    </mat-radio-group>
-</section>
 <div>
     <mat-form-field>
-        <mat-label>Link:</mat-label>
-        <textarea matInput [(ngModel)]="link" placeholder="Tự động nhập nội dung bằng link tài khoản hoặc bài viết"
-            required rows="2" (change)="linkUpdated(link)"></textarea>
+        <div fxLayout="column" fxLayoutAlign="start start">
+            <mat-label>Link:</mat-label>
+            <textarea matInput [(ngModel)]="link" placeholder="Tự động nhập nội dung bằng link tài khoản hoặc bài viết"
+                required rows="2" (change)="linkUpdated(link)">
+            </textarea>
+            <mat-radio-group [(ngModel)]="type" [value]="'AccountLink'" fxFlexOffset="1">
+                <div>
+                    <mat-radio-button value="AccountLink">
+                    </mat-radio-button>
+                    <span>Nhập tin từ link tài khoản</span>
+                </div>
+                <div>
+                    <mat-radio-button value='ListingLink'>
+                    </mat-radio-button>
+                    <span>Nhập tin từ link bài viết</span>
+                </div>
+            </mat-radio-group>
+        </div>
+        
     </mat-form-field>
     <button mat-raised-button color="accent" (click)="fetchListingsFromUrl(link)" mat-button>Xác nhận đường
         link</button>

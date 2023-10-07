@@ -3,6 +3,7 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Guid } from 'guid-ts';
 import { AccountUrlResponse } from 'src/app/interfaces/account-url-response';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
 import { ScanResultsDto } from 'src/app/interfaces/scan-results-dto';
@@ -90,7 +91,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
         return;
       }
       var results = value?.urlMetaResults as RealstateData[];
-      this.scannedListings = results;
+      this.scannedListings = results.map(result => { result.id = Guid.newGuid().toString(); return result });
       this.value = Math.round((this.scannedListings?.length ?? 0) / (this.newListings.length) * 100);
       if (this.scannedListings.length == this.newListings.length) {
         this.massPostingFormGroup.patchValue({ realstateDatas: this.scannedListings });

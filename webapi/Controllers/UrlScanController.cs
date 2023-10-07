@@ -48,12 +48,8 @@ namespace YourApiNamespace.Controllers
         }
 
         [HttpPost("metadata-from-url")]
-        public async Task<IActionResult> SubmitScanRequest(ScanResultRequest request)
+        public async Task<IActionResult> SubmitScanRequest(ScanResultsDtoMessage message)
         {
-            var message = new ScanResultsDtoMessage
-            {
-                Urls = request.Urls,
-            };
             var results = await queueService.SendMessage(message, configuration["FirebaseDatabase:QueueName"] ?? "urlscanner");
             return new OkObjectResult(results);
         }

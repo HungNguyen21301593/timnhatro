@@ -25,13 +25,13 @@ namespace webapi.Model
         public List<UrlMetaResponse> UrlMetaResults { get; set; }
 
         [JsonProperty("key")]
-        public string Key { get; set; }
+        public string? Key { get; set; }
 
         [JsonProperty("createdOn")]
-        public DateTime CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
         [JsonProperty("notificationEmail")]
-        public string notificationEmail { get; set; }
+        public string? notificationEmail { get; set; }
     }
 
     public interface IKey

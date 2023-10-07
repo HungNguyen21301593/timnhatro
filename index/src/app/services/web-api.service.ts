@@ -16,7 +16,7 @@ import { ScanResultsDto } from '../interfaces/scan-results-dto';
 export class WebApiService {
   constructor(private httpClient: HttpClient) { }
 
-  async createNewUserStateByPhone(state: MapState = new EmptyState()): Promise<{
+  async createNewUserState(state: MapState = new EmptyState()): Promise<{
     id: string,
     mapstate: MapState
   }> {

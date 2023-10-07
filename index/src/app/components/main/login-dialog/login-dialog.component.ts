@@ -17,7 +17,7 @@ export class LoginDialogComponent implements OnInit {
   }
 
   async newState(){
-    var result = await this.webApiService.createNewUserStateByPhone();
+    var result = await this.webApiService.createNewUserState();
     this.router.navigate(['/main/setting', result.id]);
     this.dialogRef.close();
   }

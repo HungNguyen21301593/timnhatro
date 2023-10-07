@@ -3932,11 +3932,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Personal\\Projects\\rs-agent-helper\\timnhatro\\webapi\\webapi.csproj",
+      "projectUniqueName": "D:\\Personal\\Projects\\rs-agent-helper\\timnhatro\\webapi\\webapi.csproj",
       "projectName": "webapi",
-      "projectPath": "C:\\Personal\\Projects\\rs-agent-helper\\timnhatro\\webapi\\webapi.csproj",
+      "projectPath": "D:\\Personal\\Projects\\rs-agent-helper\\timnhatro\\webapi\\webapi.csproj",
       "packagesPath": "C:\\Users\\nmh\\.nuget\\packages\\",
-      "outputPath": "C:\\Personal\\Projects\\rs-agent-helper\\timnhatro\\webapi\\obj\\",
+      "outputPath": "D:\\Personal\\Projects\\rs-agent-helper\\timnhatro\\webapi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

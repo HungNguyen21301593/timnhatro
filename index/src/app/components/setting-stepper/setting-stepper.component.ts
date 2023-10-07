@@ -129,35 +129,11 @@ export class SettingStepperComponent implements OnInit {
       image: "",
       link: agent.link ?? ""
     };
-    newState.geoItems = await this.mapToGeoItems(items);
+    newState.geoItems = await this.mapStateService.mapToGeoItems(items);
     return newState;
   }
 
-  private async mapToGeoItems(realstateData: RealstateData[]): Promise<GeocodeResult[]> {
-    var dictionary = groupBy(realstateData, 'address');
-    console.log(dictionary);
-
-    var results: GeocodeResult[] = [];
-    for (const [key, value] of Object.entries(dictionary)) {
-      if (!key) {
-        continue;
-      }
-      var geocodeResults = await this.mapStateService.getGeoCodeResult(key, true);
-      if (geocodeResults.length == 0) {
-        continue;
-      }
-      var geoItem: GeocodeResult = {
-        id: geocodeResults[0].id,
-        address: { label: geocodeResults[0].address.label },
-        position: geocodeResults[0].position,
-        type: 'Home',
-        realstateData: value,
-        color: GeneralHelper.getRandomRGB(1)
-      }
-      results.push(geoItem);
-    }
-    return results;
-  }
+  
 
   publish() {
     this.router.navigate(['main', this.stateId ?? '']);

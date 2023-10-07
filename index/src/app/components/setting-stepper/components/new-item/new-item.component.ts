@@ -86,6 +86,7 @@ export class NewItemComponent implements OnInit {
         link: link,
         listings: listings
       },
+      minWidth:"70vw"
     });
     dialogRef.afterClosed().subscribe(data => {
       this.itemposted.emit(data?.items ?? [])
@@ -111,7 +112,8 @@ export class NewItemComponent implements OnInit {
         title: "Đăng bài tự động qua link bài viết",
         link: link,
         listings: [listing]
-      }
+      },
+      minWidth:"70vw"
     });
     dialogRef.afterClosed().subscribe(data => {
       this.itemposted.emit(data.items)

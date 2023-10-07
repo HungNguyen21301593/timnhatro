@@ -16,6 +16,8 @@ import { GeoAddedHomeComponent } from '../components/main/geo-added-home-list/ge
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Guid } from 'guid-ts';
+import { RealstateData } from '../interfaces/realstate-item';
+import { groupBy } from 'underscore';
 
 @Injectable({
   providedIn: 'root'
@@ -205,6 +207,32 @@ export class MapStateService {
 
   checkItemExisting(item: GeocodeResult): boolean {
     return this.stateObservable.value.geoItems.some(value => this.compareLocation(value, item));
+  }
+
+  async mapToGeoItems(realstateData: RealstateData[]): Promise<GeocodeResult[]> {
+    var dictionary = groupBy(realstateData, 'address');
+    console.log(dictionary);
+
+    var results: GeocodeResult[] = [];
+    for (const [key, value] of Object.entries(dictionary)) {
+      if (!key) {
+        continue;
+      }
+      var geocodeResults = await this.getGeoCodeResult(key, true);
+      if (geocodeResults.length == 0) {
+        continue;
+      }
+      var geoItem: GeocodeResult = {
+        id: geocodeResults[0].id,
+        address: { label: geocodeResults[0].address.label },
+        position: geocodeResults[0].position,
+        type: 'Home',
+        realstateData: value,
+        color: GeneralHelper.getRandomRGB(1)
+      }
+      results.push(geoItem);
+    }
+    return results;
   }
 
   private findExisting(from: GeocodeResult, to: GeocodeResult): RoutePair[] {
