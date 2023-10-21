@@ -34,7 +34,7 @@ internal class Program
                     h.Username(builder.Configuration["RabbitMq:User"]);     // RabbitMQ username
                     h.Password(builder.Configuration["RabbitMq:Pass"]);  // RabbitMQ password
                 });
-                cfg.UseConcurrencyLimit(1);
+                cfg.UseConcurrencyLimit(0);
                 cfg.ConfigureEndpoints(context);
 
             });
