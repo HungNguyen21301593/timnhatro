@@ -7,10 +7,10 @@ services:
     privileged: true
     ports:
       - 80:80
+      - 443:443
     volumes:
       - ./data/nginx:/etc/nginx/conf.d
-      - /etc/letsencrypt/live/mapcuatui.com/fullchain.pem:/etc/nginx/cert.pem
-      - /etc/letsencrypt/live/mapcuatui.com/privkey.pem:/etc/nginx/cert.key
+      - ./certbot/www/:/var/www/certbot/:ro
 
   web-api:
     container_name: web-api
@@ -39,6 +39,11 @@ services:
     volumes:
       - 'rabbitmq_data:/bitnami/rabbitmq/mnesia'
   
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
   
 
 volumes:
