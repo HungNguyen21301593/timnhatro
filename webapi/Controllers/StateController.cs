@@ -43,13 +43,5 @@ namespace YourApiNamespace.Controllers
             await firebaseClient.Child($"state/{id}").PatchAsync(mapstate.StateJson);
             return Ok();
         }
-
-
-        //[HttpPost("{id}/geoItems")]
-        //public async Task<IActionResult> UpdateGeoItemById([FromRoute]  string id, [FromBody] GeoItemDto geoItemDto)
-        //{
-        //    var result = await firebaseClient.Child($"state/{id}/geoItems").PostAsync(geoItemDto.Json);
-        //    return Ok(result);
-        //}
     }
 }

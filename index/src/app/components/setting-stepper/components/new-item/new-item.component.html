@@ -1,25 +1,25 @@
-<div>
-    <mat-form-field>
-        <div fxLayout="column" fxLayoutAlign="start start">
-            <mat-label>Link:</mat-label>
-            <textarea matInput [(ngModel)]="link" placeholder="Tự động nhập nội dung bằng link tài khoản hoặc bài viết"
-                required rows="2" (change)="linkUpdated(link)">
+<div fxLayout="column" fxLayoutAlign="center center" class="full-width">
+    <div fxLayout="row" fxLayoutAlign="space-between start" class="full-width">
+        <div fxFlex="100">
+            <mat-form-field >
+                <textarea matInput [(ngModel)]="link" placeholder="Vui lòng nhập đường link tài khoản hoặc bài viết tại đây"
+                    required rows="1" (change)="linkUpdated(link)">
             </textarea>
-            <mat-radio-group [(ngModel)]="type" [value]="'AccountLink'" fxFlexOffset="1">
-                <div>
-                    <mat-radio-button value="AccountLink">
-                    </mat-radio-button>
-                    <span>Nhập tin từ link tài khoản</span>
-                </div>
-                <div>
-                    <mat-radio-button value='ListingLink'>
-                    </mat-radio-button>
-                    <span>Nhập tin từ link bài viết</span>
-                </div>
-            </mat-radio-group>
+            </mat-form-field>
         </div>
+            <!-- <mat-radio-group fxFlex="20" fxLayout="column" fxLayoutAlign="start start" [(ngModel)]="type" [value]="'AccountLink'" fxFlexOffset="1">
+                <div>
+                    <mat-radio-button value="AccountLink" color="primary">
+                    </mat-radio-button>
+                    <span>Link tài khoản</span>
+                </div>
+                <div>
+                    <mat-radio-button value='ListingLink' color="primary">
+                    </mat-radio-button>
+                    <span>Link bài viết</span>
+                </div>
+            </mat-radio-group> -->
         
-    </mat-form-field>
-    <button mat-raised-button color="accent" (click)="fetchListingsFromUrl(link)" mat-button>Xác nhận đường
-        link</button>
+    </div>
+    <button mat-raised-button color="primary" (click)="fetchListingsFromUrl(link)" mat-button>Xác nhận</button>
 </div>

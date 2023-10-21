@@ -3,5 +3,15 @@
       // "target": "http://103.15.222.118:5173",
       "target": "http://localhost:5173",
       "secure": false
-    }
+    },
+    "/images": {
+      // "target": "http://103.15.222.118:5173",
+      "target": "http://mapcuatuiv2.my.canva.site/",
+      "secure": false
+    },
+    // "/fonts": {
+    //   // "target": "http://103.15.222.118:5173",
+    //   "target": "http://mapcuatuiv2.my.canva.site/",
+    //   "secure": false
+    // }
   }

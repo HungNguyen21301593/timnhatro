@@ -25,7 +25,8 @@
               "src/css",
               "src/js",
               "src/mail",
-              "src/images"
+              "src/images",
+              "src/fonts"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
@@ -88,7 +89,8 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              "src/assets"
+              "src/assets",
+              "fonts"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",

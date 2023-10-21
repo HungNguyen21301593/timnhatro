@@ -2,143 +2,301 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- PAGE settings -->
-    <link rel="icon" href="https://templates.pingendo.com/assets/Pingendo_favicon.ico">
-    <title>Conference Aquamarine - Pingendo template</title>
-    <meta name="description" content="Free Bootstrap 4 Pingendo Aquamarine template for unique events.">
-    <meta name="keywords" content="Pingendo conference event aquamarine free template bootstrap 4">
-    <!-- CSS dependencies -->
-    <!-- <link rel="stylesheet" href="css/aquamarine.css"> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        type="text/css">
-    <!-- Script: Make my navbar transparent when the document is scrolled to top -->
-    <script src="js/navbar-ontop.js"></script>
-    <!-- Script: Animated entrance -->
-    <script src="js/animate-in.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- PAGE settings -->
+  <link rel="icon" href="https://templates.pingendo.com/assets/Pingendo_favicon.ico">
+  <title>Conference Aquamarine - Pingendo template</title>
+  <meta name="description" content="Free Bootstrap 4 Pingendo Aquamarine template for unique events.">
+  <meta name="keywords" content="Pingendo conference event aquamarine free template bootstrap 4">
+  <!-- CSS dependencies -->
+  <link rel="stylesheet" href="aquamarine.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <!-- Script: Make my navbar transparent when the document is scrolled to top -->
+  <script src="js/navbar-ontop.js"></script>
+  <!-- Script: Animated entrance -->
+  <script src="js/animate-in.js"></script>
 </head>
 
 <body class="text-center">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-md fixed-top bg-dark navbar-dark">
-        <div class="container">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-                data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-            <div class="collapse navbar-collapse justify-content-center" id="navbar2SupportedContent">
-                <ul class="navbar-nav">
-                    <li class="nav-item mx-2">
-                        <a class="nav-link" href="#">Trang chủ</a>
-                    </li>
-                    <li class="nav-item mx-2">
-                        <a class="nav-link" href="#contact">Liên hệ</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- Cover -->
-    <div class="d-flex align-items-center section-aquamarine py-5 cover"
-        style="background-image: url(&quot;assets/conference/cover.jpg&quot;);">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-white mt-5">
-                    <h1 class="display-2 d-none d-md-block">Map của tui</h1>
-                    <h1 class="display-4 d-block d-md-none">Map của tui</h1>
-                    <p class="">BẢN ĐỒ SẢN PHẨM BẤT ĐỘNG SẢN BÁN/CHO THUÊ CỦA RIÊNG BẠN </p>
-                    <a href="#try_to_post_now" class="btn btn-lg mt-4 btn-outline-light">Dùng miễn phí tại đây</a><i
-                        class="d-block fa fa-angle-down pt-5 fa-3x"></i>
-                </div>
-            </div>
-        </div>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-md fixed-top bg-dark navbar-dark">
+    <div class="container">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbar2SupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="#">Trang chủ</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="#contact">Liên hệ</a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <!-- Parallax section -->
-    <div class="py-5 section-parallax" id="try_to_post_now"
-        style="	background-image: url(&quot;assets/conference/schedule.jpg&quot;);	background-position: top left;	background-size: 100%;	background-repeat: repeat;"
-        >
-        <div class="container section-aquamarine">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="text-white mt-4">Xuất bản đồ của bạn hoàn toàn tự động!</h1>
-                </div>
+  </nav>
+  <!-- Cover -->
+  <div class="d-flex align-items-center section-aquamarine py-5 cover" style="background-image: url(&quot;assets/conference/cover.jpg&quot;);">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-white mt-5">
+          <h1 class="display-2 d-none d-md-block">Map của Tui</h1>
+          <h1 class="display-4 d-block d-md-none">Map của tui</h1>
+          <p class="">TẠO BẢN ĐỒ SẢN PHẨM BẤT ĐỘNG SẢN BÁN/CHO THUÊ DÀNH RIÊNG CHO BẠN CHỈ VỚI MỘT CÚ CLICK CHUỘT</p>
+          <a href="#free-trial" class="btn btn-lg mt-4 btn-outline-light">Dùng miễn phí tại đây</a><i class="d-block fa fa-angle-down pt-5 fa-3x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Parallax section -->
+  <div class="section-parallax py-2" style="" id="schedule">
+    <div class="container text-light">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12 mb-0">
+              <h2 class="text-danger pt-3"><b>CÓ PHẢI BẠN ĐANG GẶP VẤN ĐỀ?</b></h2>
             </div>
-            <div class="row text-left text-dark">
+          </div>
+          <div class="row">
+            <div class="col-md-6 d-flex align-items-center" style="">
+              <div class="row">
                 <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-12" style="">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <app-frontpage-trial id="try_to_post_now"
-                                                class="full-width"></app-frontpage-trial>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                  <p class="text-dark text-left">Dù đã đăng sản phẩm thông tin sản phẩm, bạn vẫn phải tư vấn và chia sẻ thông tin cho khách hàng vì họ không muốn tìm kiếm từng bài đăng.</p>
+                  <p class="text-dark text-left">Bạn có rất nhiều sản phẩm nhưng thiếu danh sách tổng hợp một cách trực quan.</p>
+                  <p class="text-dark text-left" style="">Dựa trên nhu cầu của khách hàng trong việc tìm kiếm các sản phẩm gần khu vực làm việc hoặc học tập của họ tăng tỷ lệ chốt được sản phẩm </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6"><img class="d-block img-fluid mx-auto w-77" src="https://mapcuatuiv2.my.canva.site/images/2b9ffab7b4cb83e0fbdc9b9150be491d.png" style=""></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5" style="	background-image: linear-gradient(to bottom, #5562ad, #5562ad);	background-position: top left;	background-size: 100%;	background-repeat: repeat;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-5 d-flex align-items-center justify-content-end" style=""><img class="d-block float-left h-50" src="assets/conference/71e6bf06581fc13f217c9a62af6b7f41.svg"></div>
+        <div class="col-md-6" style="">
+          <div class="row">
+            <div class="col-md-6 d-flex m-0 p-2" style="">
+              <div class="card rounded">
+                <div class="card-header"><i class="fa fa-2x fa-refresh"></i></div>
+                <div class="card-body" style="">
+                  <h4 class="text-dark"><b>Tự động cập nhật</b></h4>
+                  <p class="text-dark"><span style="font-weight: normal;">Phần mềm tự động quét trang cá nhân mỗi ngày để cập nhật các bài đăng mới của bạn vào bản đồ</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 d-flex p-2" style="">
+              <div class="card rounded">
+                <div class="card-header"><i class="fa fa-2x fa-search"></i></div>
+                <div class="card-body">
+                  <h4><b>Tìm kiếm theo bán kính</b></h4>
+                  <p><span style="font-weight: normal;">Từ vị trí khách hàng chọn, lựa chọn hiển thị các bất động sản bán/cho thuê theo bán kính 2km, 5km, 10km</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 d-flex p-2" style="">
+              <div class="card rounded">
+                <div class="card-header"><i class="fa fa-2x fa-check-square-o"></i></div>
+                <div class="card-body">
+                  <h4><b>Không trùng lặp</b></h4>
+                  <p><span style="font-weight: normal;">Phần mềm sẽ tự động lọc và loại bỏ các bài đăng trùng lặp</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 d-flex p-2" style="">
+              <div class="card rounded">
+                <div class="card-header" style=""><i class="fa fa-2x fa-file-text-o"></i></div>
+                <div class="card-body">
+                  <h4><b>Danh sách sản phẩm thông minh</b></h4>
+                  <p><span style="font-weight: normal;">Các sản phẩm BĐS cùng địa chỉ được tự động sắp xếp dễ dàng và trực quan cho người xem thông tin</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5" style="" id="price">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
+              <h2 class="p-2 text-danger" style=""><b>CÁC GÓI DỊCH VỤ</b></h2>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6" style="">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h5 class=""><b>CƠ BẢN</b></h5>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="py-5 section-parallax"
-        style="	background-image: url(&quot;assets/conference/schedule.jpg&quot;);	background-position: top left;	background-size: 100%;	background-repeat: repeat;"
-        id="schedule">
-        <div class="container section-aquamarine">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="text-white mt-4">Liên hệ với chúng tôi ngay hôm nay!</h1>
-                </div>
-            </div>
-            <div class="row text-left text-dark">
-                <div class="col-md-12">
-                    <div class="row">
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="row">
                         <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-12" style="">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <form class="" id="contact">
-                                                <div class="form-group">
-                                                    <label>Email</label>
-                                                    <input type="email" class="form-control" placeholder="Nhập email của bạn">
-                                                </div>
-                                                <div class="form-group"> <label>Nội dung</label>
-                                                     <textarea type="email" class="form-control"
-                                                        placeholder="Nhập email của bạn" rows="4">
-                                                    </textarea> 
-                                                </div>
-                                                <button type="submit" class="btn btn-primary">Gửi</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item align-items-center d-flex"><i class="fa mr-2 fa-check-square text-success"></i>Tự động tạo bản đồ từ đường link bạn cung cấp</li>
+                            <li class="list-group-item align-items-center d-flex"><i class="fa mr-2 fa-check-square text-success"></i>Tạo danh mục tối đa 10 sản phẩm</li>
+                            <li class="list-group-item align-items-center">&nbsp;</li>
+                            <li class="list-group-item align-items-center">&nbsp;</li>
+                            <li class="list-group-item align-items-center">&nbsp;</li>
+                            <li class="list-group-item align-items-center">&nbsp;</li><a class="btn btn-primary" href="#free-trial">Miễn phí</a>
+                          </ul>
                         </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h5 class=""><b>NÂNG CAO</b></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex  align-items-center"><i class="fa mr-2 fa-check-square text-success"></i>Tự động tạo bản đồ từ đường link bạn cung cấp</li>
+                            <li class="list-group-item d-flex align-items-center"><i class="fa mr-2 fa-check-square text-success"></i>Danh mục sản phẩm không giới hạn</li>
+                            <li class="list-group-item d-flex align-items-center"><i class="fa mr-2 fa-check-square text-success"></i>Tự động cập nhật bài đăng mới vào bản đồ</li>
+                            <li class="list-group-item d-flex align-items-center"><i class="fa mr-2 fa-check-square text-success"></i>Cho phép chỉnh sửa bài viết trước khi đăng</li>
+                            <li class="list-group-item d-flex align-items-center"><i class="fa mr-2 fa-check-square text-success"></i>Tùy chọn các kiểu bản đồ</li>
+                            <li class="list-group-item d-flex align-items-center"><i class="fa mr-2 fa-check-square text-success"></i>Gọi điện thoại, Email trong bản đồ</li><a class="btn btn-primary" href="#contact">50k/Tháng</a>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-    <!-- Speakers -->
-    <!-- Schedule -->
-    <!-- Sponsor logos -->
-    <!-- Call to action -->
-    <!-- Footer -->
-    <footer class="text-md-left text-center p-4 bg-dark text-light"></footer>
-    <!-- JavaScript dependencies -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
-    <!-- Script: Smooth scrolling between anchors in the same page -->
-    <script src="js/smooth-scroll.js" style=""></script>
+  </div>
+  <div class="py-5" id="free-trial">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-12">
+                  <h2 class="text-primary" id="free-trial"><b>DÙNG MIỄN PHÍ</b></h2>
+                </div>
+              </div>
+              <div class="row">
+                <app-frontpage-trial class="full-width"></app-frontpage-trial>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-ride="carousel">
+            <ol class="carousel-indicators">
+              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"> </li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="1"> </li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="2"> </li>
+            </ol>
+            <div class="carousel-inner">
+              <div class="carousel-item active"> <img class="d-block img-fluid w-100" src="assets/conference/people_2.jpg">
+                <div class="carousel-caption">
+                  <h5 class="m-0">Carousel</h5>
+                  <p>with indicators</p>
+                </div>
+              </div>
+              <div class="carousel-item "> <img class="d-block img-fluid w-100" src="assets/conference/people_5.jpg" >
+                <div class="carousel-caption">
+                  <h5 class="m-0">Carousel</h5>
+                  <p>with indicators</p>
+                </div>
+              </div>
+              <div class="carousel-item"> <img class="d-block img-fluid w-100" src="assets/conference/people_5.jpg">
+                <div class="carousel-caption">
+                  <h5 class="m-0">Carousel</h5>
+                  <p>with indicators</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5 text-center text-white" style="	background-image: linear-gradient(to bottom, #5271FF, rgba(0, 0, 0, .75)), url(&quot;https://static.pingendo.com/cover-bubble-dark.svg&quot;);	background-position: center center, center center;	background-size: cover, cover;	background-repeat: repeat, repeat;">
+    <div class="container">
+      <div class="row">
+        <div class="mx-auto col-md-10 p-4" id="contact">
+          <h1 class="text-light">Liên hệ với chúng tôi</h1>
+          <p class="mb-4 lead text-light">Hãy liên hệ với chúng tôi ngay hôm nay để nhận được chăm sóc ngay hôm nay nhé!</p>
+          <form>
+            <div class="form-row">
+              <div class="form-group col-md-4"> <input type="text" class="form-control" id="form22" placeholder="Tên*"> </div>
+              <div class="form-group col-md-4"> <input type="email" class="form-control" id="form23" placeholder="Thư điện tử*"> </div>
+              <div class="form-group col-md-4"> <input type="number" class="form-control" id="form24" placeholder="Số điện thoại"> </div>
+            </div>
+            <div class="form-group"> <input type="text" class="form-control" id="form25" placeholder="Tiêu đề"> </div>
+            <div class="form-group"> <textarea class="form-control" id="form26" rows="3" placeholder="Nội dung"></textarea> </div> <button type="submit" class="btn btn-primary">Gửi</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-3 bg-dark">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center d-md-flex align-items-center"> <i class="d-block fa fa-stop-circle fa-2x mr-md-5 text-primary"></i>
+          <ul class="nav mx-md-auto d-flex justify-content-center">
+            <li class="nav-item"> <a class="nav-link active" href="#">Tramg chủ</a> </li>
+            <li class="nav-item"> <a class="nav-link" href="#free-trial">Tính năng</a> </li>
+            <li class="nav-item text-light"> <a class="nav-link" href="#price">Gói</a> </li>
+          </ul>
+          <div class="row">
+            <div class="col-md-12 d-flex align-items-center justify-content-md-between justify-content-center my-2"> <a href="#">
+                <i class="d-block fa fa-facebook-official text-muted fa-lg mx-2"></i>
+              </a> <a href="#">
+                <i class="d-block fa fa-instagram text-muted fa-lg mx-2"></i>
+              </a> <a href="#">
+                <i class="d-block fa fa-twitter text-muted fa-lg ml-2"></i>
+              </a> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Speakers -->
+  <!-- Schedule -->
+  <!-- Sponsor logos -->
+  <!-- Call to action -->
+  <!-- Footer -->
+  <!-- JavaScript dependencies -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" style=""></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <!-- Script: Smooth scrolling between anchors in the same page -->
+  <script src="js/smooth-scroll.js" style=""></script>
 </body>
 
 </html>
