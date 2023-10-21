@@ -23,12 +23,13 @@ internal class Program
         builder.Services.AddScoped<QueueService>();
 
         var isConsumerEnabled = Environment.GetEnvironmentVariable("QUEUE_ENABLED") == "TRUE";
+        var queueHost = Environment.GetEnvironmentVariable("QUEUE_HOST");
         isConsumerEnabled = true;
         builder.Services.AddMassTransit(config =>
         {
             config.UsingRabbitMq((context, cfg) =>
             {
-                cfg.Host(builder.Configuration["RabbitMq:Host"], 5672, "/", h =>
+                cfg.Host(queueHost ?? builder.Configuration["RabbitMq:Host"], 5672, "/", h =>
                 {
                     h.Username(builder.Configuration["RabbitMq:User"]);     // RabbitMQ username
                     h.Password(builder.Configuration["RabbitMq:Pass"]);  // RabbitMQ password
