@@ -37,7 +37,6 @@ internal class Program
                 });
                 cfg.UseConcurrencyLimit(0);
                 cfg.ConfigureEndpoints(context);
-                
             });
             if (isConsumerEnabled)
             {
