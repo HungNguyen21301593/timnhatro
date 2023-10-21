@@ -21,7 +21,7 @@ services:
       - 5173:5173
     environment:
       - ASPNETCORE_URLS=http://+:5173
-      - QUEUE_ENABLED=TRUE
+      - QUEUE_ENABLED=FALSE
 
   rabbitmq:
     image: docker.io/bitnami/rabbitmq:3.12
@@ -38,13 +38,7 @@ services:
       - RABBITMQ_LOGS=-
     volumes:
       - 'rabbitmq_data:/bitnami/rabbitmq/mnesia'
-  
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
-  
+ 
 
 volumes:
   rabbitmq_data:

@@ -8,10 +8,6 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
-        string UserName = "user";
-        string Password = "bitnami";
-        string HostName = "103.15.222.118";
-        string QueueName = "urlscanner";
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
@@ -32,10 +28,10 @@ internal class Program
         {
             config.UsingRabbitMq((context, cfg) =>
             {
-                cfg.Host("103.15.222.118", 5672, "/", h =>
+                cfg.Host(builder.Configuration["RabbitMq:Host"], 5672, "/", h =>
                 {
-                    h.Username("user");     // RabbitMQ username
-                    h.Password("bitnami");  // RabbitMQ password
+                    h.Username(builder.Configuration["RabbitMq:User"]);     // RabbitMQ username
+                    h.Password(builder.Configuration["RabbitMq:Pass"]);  // RabbitMQ password
                 });
                 cfg.UseConcurrencyLimit(1);
                 cfg.ConfigureEndpoints(context);

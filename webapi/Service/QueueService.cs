@@ -1,37 +1,35 @@
-﻿using AngleSharp.Dom;
-using core.Service;
-using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium;
-using System.Text.RegularExpressions;
-using System.Net.Http;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Mvc;
+﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Text;
-using System;
 using Firebase.Database;
 using Firebase.Database.Query;
 using RabbitMQ.Client.Events;
-using Telegram.Bot.Types;
 using MassTransit;
-using MassTransit.Transports;
 using webapi.Model;
 
 namespace webapi.Service
 {
     public class QueueService
     {
-        string UserName = "user";
-        string Password = "bitnami";
-        string HostName = "103.15.222.118";
-        string QueueName = "urlscanner";
         private readonly FirebaseClient firebaseClient;
+        private readonly IConfiguration Configuration;
+        private readonly string UserName;
+        private readonly string Password;
+        private readonly string HostName;
+        private readonly string QueueName;
 
         public IPublishEndpoint PublishEndpoint { get; }
 
         public QueueService(IConfiguration configuration, IPublishEndpoint publishEndpoint)
         {
-            firebaseClient = new FirebaseClient(configuration["FirebaseDatabase:UrlScanner"]);
+            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            firebaseClient = new FirebaseClient(Configuration["FirebaseDatabase:UrlScanner"]);
+            HostName = Configuration["RabbitMq:Host"]?? "103.15.222.118";
+            QueueName = Configuration["RabbitMq:QueueName"]?? "urlscanner";
+            UserName = Configuration["RabbitMq:User"]?? "user";
+            Password = Configuration["RabbitMq:Pass"]?? "bitnami";
+            
+            
             PublishEndpoint = publishEndpoint;
         }
 
