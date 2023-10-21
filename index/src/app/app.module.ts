@@ -54,6 +54,8 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from 'src/environment';
+import { HeaderComponent } from './components/index/header/header.component';
+import { FooterComponent } from './components/index/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +81,9 @@ import { environment } from 'src/environment';
     CircleToolComponent,
     MesureToolComponent,
     IndexComponent,
-    FrontpageTrialComponent
+    FrontpageTrialComponent,
+    HeaderComponent,
+    FooterComponent
     ],
   imports: [
     NgFor,
