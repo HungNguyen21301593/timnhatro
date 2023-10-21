@@ -2,6 +2,7 @@ using core.Service;
 using MassTransit;
 using RabbitMQ.Client;
 using webapi.Consumers;
+using webapi.Model;
 using webapi.Service;
 
 internal class Program
@@ -22,9 +23,9 @@ internal class Program
         builder.Services.AddScoped<ScannerService>();
         builder.Services.AddScoped<QueueService>();
 
-        var isConsumerEnabled = Environment.GetEnvironmentVariable("QUEUE_ENABLED") == "TRUE";
+        var QUEUE_ENABLED = Environment.GetEnvironmentVariable("QUEUE_ENABLED");
+        var isConsumerEnabled = QUEUE_ENABLED == "TRUE";
         var queueHost = Environment.GetEnvironmentVariable("QUEUE_HOST");
-        isConsumerEnabled = true;
         builder.Services.AddMassTransit(config =>
         {
             config.UsingRabbitMq((context, cfg) =>
@@ -36,13 +37,12 @@ internal class Program
                 });
                 cfg.UseConcurrencyLimit(0);
                 cfg.ConfigureEndpoints(context);
-
+                
             });
             if (isConsumerEnabled)
             {
                 config.AddConsumer<UrlScannerConsumer>();
             }
-
         });
         builder.Services.AddMassTransitHostedService();
         var app = builder.Build();

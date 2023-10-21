@@ -4,8 +4,7 @@
       "commandName": "Project",
       "launchUrl": "api/weatherforecast",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "QUEUE_ENABLED": "TRUE"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5173"
