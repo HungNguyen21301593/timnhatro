@@ -25,7 +25,7 @@ FROM nginx:latest AS ngi
 COPY --from=build /dist/src/app/dist/timnhatro /usr/share/nginx/html/main
 
 COPY /nginx.conf  /etc/nginx/nginx.conf
-COPY /app.conf  /etc/nginx/app.conf
+COPY /app.conf  /etc/nginx/conf.d/app.conf
 # Exposing a port, here it means that inside the container 
 # the app will be using Port 80 while running
 EXPOSE 80
