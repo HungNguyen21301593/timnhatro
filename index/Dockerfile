@@ -12,7 +12,8 @@ WORKDIR /dist/src/app
 RUN npm cache clean --force
 # Copy files from local machine to virtual directory in docker image
 COPY . .
-RUN npm install --force
+# Temporary turned off
+# RUN npm install --force
 ENV NODE_OPTIONS=--max_old_space_size=2048
 RUN npm run build --prod
 
