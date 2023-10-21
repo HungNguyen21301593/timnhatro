@@ -22,9 +22,10 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:5173
       - QUEUE_ENABLED=TRUE
-      - QUEUE_HOST=localhost
+      - QUEUE_HOST=queue
 
   rabbitmq:
+    container_name: queue
     image: docker.io/bitnami/rabbitmq:3.12
     restart: always
     ports:
