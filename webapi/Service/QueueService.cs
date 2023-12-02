@@ -25,7 +25,7 @@ namespace webapi.Service
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             firebaseClient = new FirebaseClient(Configuration["FirebaseDatabase:UrlScanner"]);
             var envQueueHost = Environment.GetEnvironmentVariable("QUEUE_HOST");
-            HostName = envQueueHost ?? Configuration["RabbitMq:Host"]?? "103.15.222.118";
+            HostName = envQueueHost ?? Configuration["RabbitMq:Host"] ?? "103.15.222.118";
             QueueName = Configuration["RabbitMq:QueueName"]?? "urlscanner";
             UserName = Configuration["RabbitMq:User"]?? "user";
             Password = Configuration["RabbitMq:Pass"]?? "bitnami";
