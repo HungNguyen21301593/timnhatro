@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Optional, Output, Self } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Optional, Output, Self, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
 import { AbstractControlDirective, ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
@@ -34,6 +34,8 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
   @Output()
   itemsUpdated = new EventEmitter<RealstateData[]>();
 
+  // @ViewChild('target') target: ElementRef | undefined;
+
   id: string = "test id";
   placeholder: string = "";
   focused: boolean = false;
@@ -51,7 +53,7 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
   disabled = false;
 
   writeValue(obj: any): void {
-    this.value = _.cloneDeep( _.orderBy(obj, ['id'],['desc']));
+    this.value = _.cloneDeep(_.orderBy(obj, ['id'], ['desc']));
     this.dataSource = this.value ?? [];
   }
   onChange = (value: RealstateData[]) => { };
@@ -84,10 +86,15 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement!: RealstateData | null;
 
-  selectEdit(element: RealstateData) {
+  selectEdit(element: RealstateData, target: HTMLDivElement | null = null) {
     this.expandedElement = (this.expandedElement === element) ? null : element;
     var newData = this.updateElement(element);
     this.dataSource = newData;
+    if (target) {
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 200);
+    }
   }
 
   addNew() {

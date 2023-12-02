@@ -197,7 +197,7 @@ export class MapStateService {
     let dialogRef = this.dialog.open(GeoAddedHomeComponent, {
       enterAnimationDuration: '200ms',
       exitAnimationDuration: '200ms',
-      height:'90%',
+      height:'90vh',
     });
     let instance = dialogRef.componentInstance;
     instance.item = item;

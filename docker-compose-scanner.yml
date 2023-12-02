@@ -7,13 +7,8 @@ services:
       privileged: true
       environment:
         - QUEUE_ENABLED=TRUE
-
-    web-api-1:
-      image: scanner
-      restart: always
-      privileged: true
-      environment:
-        - QUEUE_ENABLED=TRUE 
+        # - HTTP_PROXY=http://mozb7w2y:mozb7w2y@103.122.140.122:39997
+        # - HTTPS_PROXY=http://mozb7w2y:mozb7w2y@103.122.140.122:39997
     
     # web-api-2:
     #   image: scanner
