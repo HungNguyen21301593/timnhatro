@@ -50,6 +50,7 @@ namespace webapi.Service
             };
             using var connection = connectionFactory.CreateConnection();
             using var channel = connection.CreateModel();
+
             channel.QueueDeclare(queue: QueueName,
                      durable: true,
                      exclusive: false,
@@ -64,7 +65,7 @@ namespace webapi.Service
                                  routingKey: QueueName,
                                  basicProperties: null,
                                  body: body);
-            Console.WriteLine($" [x] Sent {JsonConvert.SerializeObject(message)}");
+            Console.WriteLine($" [x] Sent {JsonConvert.SerializeObject(message)}, host: {HostName}");
             return message;
         }
 
