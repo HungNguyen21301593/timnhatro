@@ -1,2 +1,2 @@
 #!/bin/sh
-podman-compose.exe -f docker-compose-scanner.yml up -d --build
+git pull origin && podman-compose.exe -f docker-compose-scanner.yml up -d --build
