@@ -22,7 +22,7 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:5173
       - QUEUE_ENABLED=TRUE
-      - QUEUE_HOST=queue
+      - QUEUE_HOST=localhost
 
   rabbitmq:
     container_name: queue

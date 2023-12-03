@@ -42,6 +42,7 @@ namespace webapi.Service
 
         public async Task<T> SendMessageLegacy<T>(T message, string queueName) where T : IKey
         {
+            Console.WriteLine($" [x] Sent {JsonConvert.SerializeObject(message)}, host: {HostName}");
             var connectionFactory = new ConnectionFactory()
             {
                 UserName = UserName,
