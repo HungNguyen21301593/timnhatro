@@ -13,6 +13,8 @@ services:
       - ./certbot/www/:/var/www/certbot/:ro
     networks:
           - web_net
+    depends_on:
+      - web-api
 
   web-api:
     container_name: web-api
@@ -27,6 +29,8 @@ services:
       - QUEUE_HOST=queue
     networks:
           - web_net
+    depends_on:
+      - queue
 
   rabbitmq:
     container_name: queue
