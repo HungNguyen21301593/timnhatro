@@ -11,6 +11,8 @@ services:
     volumes:
       - ./data/nginx:/etc/nginx/conf.d
       - ./certbot/www/:/var/www/certbot/:ro
+    networks:
+          - web_net
 
   web-api:
     container_name: web-api
@@ -22,7 +24,9 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:5173
       - QUEUE_ENABLED=TRUE
-      - QUEUE_HOST=localhost
+      - QUEUE_HOST=queue
+    networks:
+          - web_net
 
   rabbitmq:
     container_name: queue
@@ -40,7 +44,13 @@ services:
       - RABBITMQ_LOGS=-
     volumes:
       - 'rabbitmq_data:/bitnami/rabbitmq/mnesia'
+    networks:
+          - web_net
  
+networks:
+    web_net:
+      external: false
+      driver:  bridge
 
 volumes:
   rabbitmq_data:
