@@ -32,7 +32,7 @@ services:
     depends_on:
       - queue
 
-  rabbitmq:
+  queue:
     container_name: queue
     image: docker.io/bitnami/rabbitmq:3.12
     restart: always
