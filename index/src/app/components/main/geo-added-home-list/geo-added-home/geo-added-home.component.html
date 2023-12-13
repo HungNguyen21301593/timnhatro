@@ -6,8 +6,8 @@
         <p>
           <b>Địa chỉ:</b> {{item.realstateData[selectedElementIndex].address}}
         </p>
-        <p>
-          <b>Mô tả:</b> {{item.realstateData[selectedElementIndex].description}}
+        <p class="lines">
+          <b >Mô tả:</b> {{item.realstateData[selectedElementIndex].description}}
         </p>
       </div>
       <app-image-viewer *ngIf="item.realstateData[selectedElementIndex].images?.length??0 >0" 
@@ -17,7 +17,7 @@
   <div>
     <mat-button-toggle-group>
       <mat-button-toggle *ngFor="let item of item.realstateData;let indexOfelement=index;"
-        (change)="selectedElementIndex = indexOfelement">{{indexOfelement
+        (change)="selectedElementIndex = indexOfelement">Phòng {{indexOfelement
         +1}}</mat-button-toggle>
     </mat-button-toggle-group>
   </div>

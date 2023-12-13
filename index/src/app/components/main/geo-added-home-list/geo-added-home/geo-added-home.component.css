@@ -26,3 +26,7 @@ mat-button-toggle-group{
 mat-button-toggle{
     padding: 5px;
 }
+
+.lines {
+    white-space: pre-wrap;
+  }

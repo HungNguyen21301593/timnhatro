@@ -56,6 +56,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from 'src/environment';
 import { HeaderComponent } from './components/index/header/header.component';
 import { FooterComponent } from './components/index/footer/footer.component';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -116,6 +117,7 @@ import { FooterComponent } from './components/index/footer/footer.component';
     MatProgressBarModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule,
+    MatSlideToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]
