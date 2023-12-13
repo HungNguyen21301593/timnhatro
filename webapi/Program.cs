@@ -12,12 +12,23 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddHttpClient("ChototClient", client =>
+        builder.Services.AddHttpClient("ChototClientV1", client =>
         {
-            client.BaseAddress = new Uri("https://gateway.chotot.com/v1/public/theia/");
+            client.BaseAddress = new Uri("https://gateway.chotot.com/v1/public/ad-listing");
             // You can configure additional settings here if needed
         });
 
+        builder.Services.AddHttpClient("ChototClientV2User", client =>
+        {
+            client.BaseAddress = new Uri("https://gateway.chotot.com/v2/public/chat/user/get/");
+            // You can configure additional settings here if needed
+        });
+
+        builder.Services.AddHttpClient("ChototClientV1Theia", client =>
+        {
+            client.BaseAddress = new Uri("https://gateway.chotot.com/v1/public/theia/");
+            //
+        });
         builder.Services.AddControllers();
         builder.Services.AddSingleton<WebDriverManagerService>();
         builder.Services.AddScoped<ScannerService>();

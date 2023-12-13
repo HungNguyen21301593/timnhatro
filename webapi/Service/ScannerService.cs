@@ -10,6 +10,8 @@ using System.Net;
 using System.Diagnostics;
 using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
+using System.Security.Cryptography;
+using AngleSharp.Common;
 
 namespace webapi.Service
 {
@@ -19,7 +21,7 @@ namespace webapi.Service
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IConfiguration configuration;
 
-        public ScannerService(WebDriverManagerService webDriverManagerService, IHttpClientFactory httpClientFactory,IConfiguration configuration)
+        public ScannerService(WebDriverManagerService webDriverManagerService, IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             this.webDriverManagerService = webDriverManagerService;
             this.httpClientFactory = httpClientFactory;
@@ -28,13 +30,12 @@ namespace webapi.Service
 
         public async Task<List<Info>> ReadAccountUrl(string url)
         {
-            var id = GetAccountIdFromUrl(url);
-            var json = await ReadAllListing(id);
+            var oid = GetAccountOIdFromUrl(url);
+            var json = await ReadAllListing(oid);
             if (json == null)
             {
                 return new List<Info>();
             }
-
             return json.Ads.Select(ad => ad.Info).ToList();
         }
 
@@ -47,31 +48,82 @@ namespace webapi.Service
             {
                 foreach (var url in input.Urls)
                 {
-                    var metadata = await ReadUrlMetaDataWithAddress(url);
+                    var metadata = await ReadListingDetailById(url);
                     input.UrlMetaResults.Add(metadata);
                     await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}/urlMetaResults")
                         .PutAsync(JsonConvert.SerializeObject(input.UrlMetaResults));
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 input.Status = Status.Error;
                 await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}").PutAsync(input);
                 throw;
             }
-            
+
 
             input.Status = Status.Done;
             await firebaseClient.Child($"{configuration["FirebaseDatabase:QueueName"]}/{input.Key}").DeleteAsync();
-            var client = new SmtpClient("live.smtp.mailtrap.io", 587)
-            {
-                Credentials = new NetworkCredential("api", "8165507d6bc18eae3b7716e062464675"),
-                EnableSsl = true
-            };
-            //client.Send("mailtrap@mapcuatui.com", input.notificationEmail, "Hello world", "testbody");
             Console.WriteLine("Sent");
             return input;
         }
+
+        public async Task<UrlMetaResponse> ReadListingDetailById(string url)
+        {
+            try
+            {
+                string pattern = @"(\d+)";
+
+                // Use Regex.Match to find the first match in the URL
+                Match match = Regex.Match(url, pattern);
+                if (!match.Success)
+                {
+                    throw new Exception($"Url invalid: {url}");
+                }
+                string listingId = match.Groups[1].Value;
+                var httpClient = httpClientFactory.CreateClient("ChototClientV1");
+                // Send the GET request
+                var response = await httpClient.GetAsync($"?state=accepted&key_param_included=true&list_id={listingId}");
+
+                // Check if the request was successful (status code 200)
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception("ReadAllListing failed");
+                }
+                // Read the response content as a string
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine(responseBody);
+                var jsonObject = JObject.Parse(responseBody);
+                var results = jsonObject["ads"]?.ToObject<List<JObject>>();
+                var region_name = results?.First()["region_name"]?.ToString() ?? "";
+
+                var area_name = results?.First()?["area_name"].ToString() ?? "";
+
+                var ward_name = results?.First()?["ward_name"].ToString() ?? "";
+
+                var street_name = results?.First()?["street_name"].ToString() ?? "";
+
+                var address = $"{street_name}, {ward_name}, {area_name}, {region_name}";
+                var result = new UrlMetaResponse
+                {
+                    Title = results?.First()?["subject"].ToString() ?? "",
+                    Description = results?.First()?["body"].ToString() ?? "",
+                    Address = address,
+                    Location = results?.First()?["location"].ToString() ?? "",
+                    Images = new List<string> { results?.First()?["image"].ToString() ?? "" },
+                    Url = url
+                };
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"Request error: {e.Message}");
+                throw new Exception($"ReadAllListing failed, {e.Message}");
+            }
+        }
+
+        [Obsolete]
 
         public async Task<UrlMetaResponse> ReadUrlMetaDataWithAddress(string url)
         {
@@ -87,7 +139,7 @@ namespace webapi.Service
                 driver.Manage().Cookies.DeleteAllCookies();
                 Console.WriteLine($"Elapsed time 2: {stopwatch.Elapsed}");
                 driver.Navigate().GoToUrl(url);
-                
+
                 Console.WriteLine($"Elapsed time 3: {stopwatch.Elapsed}");
                 SolvePleaseRetryLater(3, url);
                 Console.WriteLine($"Elapsed time 4: {stopwatch.Elapsed}");
@@ -119,7 +171,7 @@ namespace webapi.Service
                 var urlMeta = new UrlMetaResponse
                 {
                     Title = titleNode?.GetAttributeValue("content", "") ?? "",
-                    Address = address??"", // You can continue parsing for the address here,
+                    Address = address ?? "", // You can continue parsing for the address here,
                     Description = descriptionNode?.GetAttributeValue("content", "") ?? "",
                     Images = new List<string> { imageNode?.GetAttributeValue("content", "") ?? "" },
                     Url = url,
@@ -133,53 +185,6 @@ namespace webapi.Service
                 Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
             }
         }
-
-        //public async Task<UrlMetaResponse> ReadUrlMetaDataWithAddress(string url)
-        //{
-        //    // Create a stopwatch to measure the performance
-        //    Stopwatch stopwatch = new Stopwatch();
-        //    stopwatch.Start();
-
-        //    try
-        //    {
-        //        var shouldCreateFreshInstance = url.Contains("nhatot");
-        //        var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
-        //        Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
-        //        driver.Manage().Cookies.DeleteAllCookies();
-        //        Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
-        //        driver.Navigate().GoToUrl(url);
-        //        Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
-        //        SolvePleaseRetryLater(3, url);
-        //        Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
-
-        //        var metaTags = driver.FindElements(By.TagName("meta"));
-        //        Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
-        //        var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();
-        //        Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
-        //        var description = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:description").FirstOrDefault();
-        //        Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
-        //        var image = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:image").FirstOrDefault();
-        //        Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
-        //        //var xpath = "//span[contains(@class,'AdParam_address')]/parent::span";
-        //        //var address = driver.FindElements(By.XPath(xpath)).FirstOrDefault();
-        //        var urlMeta = new UrlMetaResponse
-        //        {
-        //            Title = title?.GetAttribute("content") ?? "",
-        //            Address = "", // address?.Text?.Replace("Xem bản đồ", "") ?? "",
-        //            Description = description?.GetAttribute("content") ?? "",
-        //            Images = new List<string> { image?.GetAttribute("content") ?? "" },
-        //            Url = url,
-        //        };
-
-        //        return await Task.FromResult(urlMeta);
-        //    }
-        //    finally
-        //    {
-        //        // Stop the stopwatch when the method is done
-        //        stopwatch.Stop();
-        //        Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
-        //    }
-        //}
 
         private void SolvePleaseRetryLater(int times, string url)
         {
@@ -195,29 +200,24 @@ namespace webapi.Service
             }
         }
 
-        private async Task<JsonResponse?> ReadAllListing(string id)
+        private async Task<JsonResponse?> ReadAllListing(string oid)
         {
-
             try
             {
-                var httpClient = httpClientFactory.CreateClient("ChototClient");
+                var httpClient = httpClientFactory.CreateClient("ChototClientV1Theia");
                 // Send the GET request
-                HttpResponseMessage response = await httpClient.GetAsync(id);
+                HttpResponseMessage response = await httpClient.GetAsync(oid);
 
                 // Check if the request was successful (status code 200)
-                if (response.IsSuccessStatusCode)
-                {
-                    // Read the response content as a string
-                    string responseBody = await response.Content.ReadAsStringAsync();
-
-                    Console.WriteLine(responseBody);
-                    return JsonConvert.DeserializeObject<JsonResponse>(responseBody);
-
-                }
-                else
+                if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception("ReadAllListing failed");
                 }
+                // Read the response content as a string
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine(responseBody);
+                return JsonConvert.DeserializeObject<JsonResponse>(responseBody);
             }
             catch (HttpRequestException e)
             {
@@ -226,7 +226,7 @@ namespace webapi.Service
             }
         }
 
-        private string GetAccountIdFromUrl(string url)
+        private string GetAccountOIdFromUrl(string url)
         {
             // Define the regex pattern to extract the desired value
             string pattern = @"\/user\/([a-fA-F0-9]+)";
@@ -235,14 +235,11 @@ namespace webapi.Service
             Match match = Regex.Match(url, pattern);
 
             // Check if a match was found
-            if (match.Success)
-            {
-                return match.Groups[1].Value;
-            }
-            else
+            if (!match.Success)
             {
                 return null;
             }
+            return match.Groups[1].Value;
         }
     }
 }

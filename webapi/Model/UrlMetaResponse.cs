@@ -13,6 +13,9 @@ public class UrlMetaResponse
     public string Description { get; set; }
     [JsonProperty("address")]
     public string Address { get; set; }
+    [JsonProperty("location")]
+    public string Location { get; set; }
+
     [JsonProperty("images")]
     public List<string> Images { get; set; }
 }

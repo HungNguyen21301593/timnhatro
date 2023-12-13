@@ -43,7 +43,7 @@ namespace YourApiNamespace.Controllers
         [HttpGet("metadata-from-url")]
         public async Task<IActionResult> ReadUrlMetaData(string url)
         {
-            var urlMeta = scannerService.ReadUrlMetaDataWithAddress(url);
+            var urlMeta = await scannerService.ReadListingDetailById(url);
             return new OkObjectResult(urlMeta);
         }
 
