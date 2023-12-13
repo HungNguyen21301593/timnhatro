@@ -2312,13 +2312,11 @@ class PostingFromAccountLinkComponent {
       var request = {
         key: "",
         urls: urls,
-        notificationEmail: "hungnguyen21301593@gmail.com",
         status: 0,
         urlMetaResults: [],
         createdOn: null
       };
       var key = yield _this3.webApiService.submitRequestMedataDataFromUrls(request);
-      console.log(key);
       var subscribe = _this3.db.object(`urlscanner/${key}`).valueChanges().subscribe(value => {
         if ((value?.urlMetaResults?.length ?? 0) == 0) {
           return;
@@ -2338,6 +2336,14 @@ class PostingFromAccountLinkComponent {
         }
       });
     })();
+  }
+  populateImages(scannedListings) {
+    scannedListings.forEach(scannedListing => {
+      var images = this.newListings.find(listing => listing.url == scannedListing.html)?.images;
+      if (images) {
+        scannedListing.images = images;
+      }
+    });
   }
   postall() {
     var items = this.massPostingFormGroup.value.realstateDatas;
