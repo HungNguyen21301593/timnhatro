@@ -6,7 +6,6 @@ export interface ScanResultsDto {
     urlMetaResults: UrlMetaResponse[];
     key: string;
     createdOn: Date | null;
-    notificationEmail: string | null;
 }
 
 enum Status {

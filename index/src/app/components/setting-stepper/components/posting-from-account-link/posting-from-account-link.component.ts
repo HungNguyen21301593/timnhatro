@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Guid } from 'guid-ts';
+import { forEach } from 'lodash';
 import { AccountUrlResponse } from 'src/app/interfaces/account-url-response';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
 import { ScanResultsDto } from 'src/app/interfaces/scan-results-dto';
@@ -79,13 +80,11 @@ export class PostingFromAccountLinkComponent implements OnInit {
     var request: ScanResultsDto = {
       key: "",
       urls: urls,
-      notificationEmail: "hungnguyen21301593@gmail.com",
       status: 0,
       urlMetaResults: [],
       createdOn: null
     }
     var key = await this.webApiService.submitRequestMedataDataFromUrls(request);
-    console.log(key);
     var subscribe = this.db.object(`urlscanner/${key}`).valueChanges().subscribe((value: any) => {
       if ((value?.urlMetaResults?.length ?? 0) == 0) {
         return;
@@ -99,6 +98,16 @@ export class PostingFromAccountLinkComponent implements OnInit {
         subscribe.unsubscribe();
       }
     })
+  }
+
+  populateImages(scannedListings: RealstateData[])
+  {
+    scannedListings.forEach(scannedListing => {
+      var images = this.newListings.find(listing=>listing.url == scannedListing.html)?.images;
+      if (images) {
+        scannedListing.images = images;
+      }
+    }); 
   }
 
   postall() {
