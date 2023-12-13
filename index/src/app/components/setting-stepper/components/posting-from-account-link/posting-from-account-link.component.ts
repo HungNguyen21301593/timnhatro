@@ -93,6 +93,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
       this.scannedListings = results.map(result => { result.id = Guid.newGuid().toString(); return result });
       this.value = Math.round((this.scannedListings?.length ?? 0) / (this.newListings.length) * 100);
       if (this.scannedListings.length == this.newListings.length) {
+        this.populateImages(this.scannedListings);
         this.massPostingFormGroup.patchValue({ realstateDatas: this.scannedListings });
         this.scanSpinner = false;
         subscribe.unsubscribe();

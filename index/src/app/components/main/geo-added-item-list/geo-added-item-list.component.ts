@@ -19,6 +19,10 @@ export class GeoAddedItemListComponent implements OnInit {
   }
 
   getList(): GeocodeResult[] {
+    if (this.mapStateService.stateObservable.value.
+      geoItems.length ==0) {
+      return [];
+    }
     return this.mapStateService.stateObservable.value.
       geoItems?.filter(a => this.types?.includes(a.type ?? ''));
   }

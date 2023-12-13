@@ -1287,6 +1287,9 @@ class GeoAddedItemListComponent {
   }
   ngOnInit() {}
   getList() {
+    if (this.mapStateService.stateObservable.value.geoItems.length == 0) {
+      return [];
+    }
     return this.mapStateService.stateObservable.value.geoItems?.filter(a => this.types?.includes(a.type ?? ''));
   }
   diplayText(result) {
@@ -2328,6 +2331,7 @@ class PostingFromAccountLinkComponent {
         });
         _this3.value = Math.round((_this3.scannedListings?.length ?? 0) / _this3.newListings.length * 100);
         if (_this3.scannedListings.length == _this3.newListings.length) {
+          _this3.populateImages(_this3.scannedListings);
           _this3.massPostingFormGroup.patchValue({
             realstateDatas: _this3.scannedListings
           });
