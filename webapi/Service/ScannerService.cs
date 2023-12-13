@@ -1,26 +1,15 @@
-﻿using AngleSharp.Dom;
-using core.Service;
-using OpenQA.Selenium.Interactions;
+﻿using core.Service;
 using OpenQA.Selenium;
 using System.Text.RegularExpressions;
-using System.Net.Http;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Mvc;
 using Firebase.Database;
 using webapi.Model;
 using Firebase.Database.Query;
-using MassTransit.Transports;
-using System;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Net.Mail;
 using System.Net;
 using System.Diagnostics;
 using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
-using System.Text.Json.Nodes;
 
 namespace webapi.Service
 {
@@ -82,27 +71,6 @@ namespace webapi.Service
             //client.Send("mailtrap@mapcuatui.com", input.notificationEmail, "Hello world", "testbody");
             Console.WriteLine("Sent");
             return input;
-        }
-
-        public UrlMetaResponse ReadUrlMetaData(string url)
-        {
-            url ??= "https://www.facebook.com/groups/binhthanh.phongtro.club/permalink/3562808350653044/";
-            var shouldCreateFreshInstance = url.Contains("nhatot");
-            var driver = webDriverManagerService.GetDriver(isFreshInstance: false);
-            driver.Manage().Cookies.DeleteAllCookies();
-            driver.Navigate().GoToUrl(url);
-            var metaTags = driver.FindElements(By.TagName("meta"));
-            var title = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:title").FirstOrDefault();
-            var description = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:description").FirstOrDefault();
-            var image = metaTags.Where(metatag => metatag.GetAttribute("property") == "og:image").FirstOrDefault();
-            var urlMeta = new UrlMetaResponse
-            {
-                Title = title?.GetAttribute("content") ?? "",
-                Description = description?.GetAttribute("content") ?? "",
-                Images = new List<string> { image?.GetAttribute("content") ?? "" },
-                Url = url,
-            };
-            return urlMeta;
         }
 
         public async Task<UrlMetaResponse> ReadUrlMetaDataWithAddress(string url)
