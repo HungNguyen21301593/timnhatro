@@ -25,7 +25,6 @@ export class PostingFromAccountLinkComponent implements OnInit {
   itemsPosted = new EventEmitter<RealstateData[]>;
 
   public listings: AccountUrlResponse[] = [];
-  public newListings: AccountUrlResponse[] = [];
   public scannedListings: RealstateData[] = [];
   public value = 0;
   public fetchListingsFromUrlSpinner = false;
@@ -50,9 +49,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
     this.link = this.data.link;
     this.title = this.data.title;
     this.listings = this.data.listings;
-    var currentreastates = this.mapStateService.stateObservable.value.geoItems.map(item => item.realstateData).flat();
-    this.newListings = this.filterNewListing(this.listings, currentreastates);
-    await this.scan(this.newListings);
+    await this.scan(this.listings);
     this.db.list('urlscanner', ref => ref.orderByChild("status").equalTo(0)).valueChanges().subscribe((value: any) => {
       this.numberOfNewRequests = value.length;
     });
@@ -91,8 +88,8 @@ export class PostingFromAccountLinkComponent implements OnInit {
       }
       var results = value?.urlMetaResults as RealstateData[];
       this.scannedListings = results.map(result => { result.id = Guid.newGuid().toString(); return result });
-      this.value = Math.round((this.scannedListings?.length ?? 0) / (this.newListings.length) * 100);
-      if (this.scannedListings.length == this.newListings.length) {
+      this.value = Math.round((this.scannedListings?.length ?? 0) / (this.listings.length) * 100);
+      if (this.scannedListings.length == this.listings.length) {
         this.populateImages(this.scannedListings);
         this.massPostingFormGroup.patchValue({ realstateDatas: this.scannedListings });
         this.scanSpinner = false;
@@ -104,7 +101,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
   populateImages(scannedListings: RealstateData[])
   {
     scannedListings.forEach(scannedListing => {
-      var images = this.newListings.find(listing=>listing.url == scannedListing.html)?.images;
+      var images = this.listings.find(listing=>listing.url == scannedListing.html)?.images;
       if (images) {
         scannedListing.images = images;
       }
@@ -117,7 +114,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
       return;
     }
     this.itemsPosted.emit(items);
-    this.snackBar.open(`Đăng ${items.length} bài thành công!`, "", { duration: 2000 });
+    this.snackBar.open(`Đăng ${items.length} bài thành công, map của bạn đang được tải lên, vui lòng chờ trong giây lát!`, "", { duration: 2000 });
     this.dialogRef.close({ items: items })
     this.reset();
   }

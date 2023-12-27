@@ -12,7 +12,7 @@ import { WebApiService } from './web-api.service';
 import { Meta } from '@angular/platform-browser';
 import { GeneralHelper } from './Util/general-helper';
 import _ from 'lodash';
-import { GeoAddedHomeComponent } from '../components/main/geo-added-home-list/geo-added-home/geo-added-home.component';
+import { GeoAddedHomeComponent } from '../components/main/geo-added-home/geo-added-home.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Guid } from 'guid-ts';
@@ -72,7 +72,6 @@ export class MapStateService {
       });
     var officeLists = this.stateObservable.value.geoItems.filter(item => item.type == 'Office');
     this.mapApiService.renderCirclesToMap(groupToRender, officeLists, this.stateObservable.value.distance);
-    
   }
 
   onRerenderMesureTool() {
@@ -197,7 +196,7 @@ export class MapStateService {
     let dialogRef = this.dialog.open(GeoAddedHomeComponent, {
       enterAnimationDuration: '200ms',
       exitAnimationDuration: '200ms',
-      height:'90vh',
+      height:'70vh',
     });
     let instance = dialogRef.componentInstance;
     instance.item = item;

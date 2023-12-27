@@ -1,10 +1,10 @@
 <div fxLayout="column">
-  <div fxLayout="row" fxLayoutAlign="start center">
+  <!-- <div fxLayout="row" fxLayoutAlign="start center">
     <button type="button" mat-raised-button (click)="fileInput.click()">Thêm ảnh cho nhà trọ</button>
     <mat-spinner [diameter]="40" [hidden]="!imagesUploadInProgress"></mat-spinner>
     <input hidden #fileInput (change)="onFileSelected(fileInput.files)" required type="file" multiple="multiple"
       accept="image/png, image/gif, image/jpeg">
-  </div>
+  </div> -->
   <div fxFlexOffset="1" fxLayout="row" fxLayoutAlign="start center">
     <app-image-viewer *ngIf="uploadedImages.length >0" [images]="uploadedImages" class="full-width"></app-image-viewer>
   </div>

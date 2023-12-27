@@ -34,8 +34,6 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
   @Output()
   itemsUpdated = new EventEmitter<RealstateData[]>();
 
-  // @ViewChild('target') target: ElementRef | undefined;
-
   id: string = "test id";
   placeholder: string = "";
   focused: boolean = false;
@@ -46,6 +44,12 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
   controlType?: string | undefined;
   autofilled?: boolean | undefined;
   userAriaDescribedBy?: string | undefined;
+
+  selectedItem?: RealstateData | undefined;
+  columnsToDisplay = ['title'];
+  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
+  expanded = false;
+
   setDescribedByIds(ids: string[]): void {
   }
   onContainerClick(event: MouseEvent): void {
@@ -54,7 +58,7 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
 
   writeValue(obj: any): void {
     this.value = _.cloneDeep(_.orderBy(obj, ['id'], ['desc']));
-    this.dataSource = this.value ?? [];
+    this.selectedItem = this.value.length > 0 ? this.value[0] : undefined;
   }
   onChange = (value: RealstateData[]) => { };
   registerOnChange(fn: any): void {
@@ -72,7 +76,6 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
 
   value: RealstateData[] | null = [];
   constructor() {
-
   }
 
   ngOnDestroy(): void {
@@ -81,75 +84,52 @@ export class InputSheetTableComponent implements OnInit, OnDestroy, ControlValue
 
   ngOnInit(): void {
   }
-  dataSource = this.value ?? [];
-  columnsToDisplay = ['title'];
-  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement!: RealstateData | null;
-
-  selectEdit(element: RealstateData, target: HTMLDivElement | null = null) {
-    this.expandedElement = (this.expandedElement === element) ? null : element;
-    var newData = this.updateElement(element);
-    this.dataSource = newData;
-    if (target) {
-      setTimeout(() => {
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 200);
-    }
-  }
-
-  addNew() {
-    if (this.value?.filter(item => item.title.includes(Constant.newPostTitle))?.length ?? 0 > 0) {
+ 
+  selected(id: String)
+  {
+    if (!this.value) {
       return;
     }
-    var newElement = {
-      id: Guid.newGuid().toString(),
-      address: "",
-      description: "",
-      images: [],
-      title: Constant.newPostTitle,
-      html: ""
-    }
-
-    this.value?.push(
-      newElement
-    )
-    this.selectEdit(newElement);
+    var index = this.value?.findIndex(e => e.id == id) ?? 0;
+    this.selectedItem = this.value[index];
   }
 
-  deletedItem(element: RealstateData) {
-    this.value = this.value?.filter(item => item.id !== element.id) ?? [];
-    this.dataSource = this.value;
+  expandItem()
+  {
+    this.expanded= !this.expanded;
+  }
 
+  deletedItem(element?: RealstateData) {
+    if (element == undefined) {
+      return;
+    }
+    this.value = this.value?.filter(item => item.id !== element.id) ?? [];
     this.onChange(this.value);
     this.stateChanges.next();
     this.onTouched(this.value);
     this.itemsUpdated.emit();
+    this.selectedItem = undefined;
   }
 
   itemUpdated(element: RealstateData) {
     if (!this.value) {
       return;
     }
-    var newData = this.updateElement(element);
-    this.value = newData;
-    this.dataSource = newData;
+    this.updateElement(element);
     this.onChange(this.value);
     this.stateChanges.next();
     this.onTouched(this.value);
     this.itemsUpdated.emit();
   }
 
-  updateElement(element: RealstateData): RealstateData[] {
+  updateElement(element: RealstateData){
     if (!this.value) {
-      return [];
+      return;
     }
     var index = this.value?.findIndex(RealstateData => RealstateData.id === element.id);
     if (index == -1) {
-      return this.value;
+      return;
     }
     this.value[index] = element;
-    var newData: RealstateData[] = [];
-    newData.push(... this.value);
-    return newData;
   }
 }

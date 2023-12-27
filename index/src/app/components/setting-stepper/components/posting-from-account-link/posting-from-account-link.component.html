@@ -8,15 +8,15 @@
 
 <div mat-dialog-content fxLayout="column" fxLayoutAlign="start start">
   <form [formGroup]="massPostingFormGroup" fxLayout="column" fxLayoutAlign="start start" class="full-width">
-    <h3>Kết quả: Tổng cộng {{listings.length}} bài đăng, {{newListings.length}} bài mới</h3>
+    <h3>Kết quả: Tổng cộng {{listings.length}} bài đăng, {{listings.length}} bài mới</h3>
     <mat-progress-bar class="example-margin" color="primary" mode="determinate" [value]="value">
     </mat-progress-bar>
     <app-input-sheet-table formControlName="realstateDatas" class="full-width"></app-input-sheet-table>
     <div fxLayout="row" fxLayoutAlign="space-between end" class="full-width" fxFlexOffset="5">
-      <button mat-raised-button color="accent" (click)="scan(newListings)" mat-button [disabled]="listings.length ==0"
-      [disabled]="newListings.length==0 || scanSpinner">
+      <button mat-raised-button color="primary" (click)="scan(listings)" mat-button [disabled]="listings.length ==0"
+      [disabled]="listings.length==0 || scanSpinner">
       Tải lại</button>
-    <button mat-raised-button color="accent" (click)="postall()" mat-button
+    <button mat-raised-button color="primary" (click)="postall()" mat-button
       [disabled]="this.massPostingFormGroup.value.realstateDatas?.length == 0" mat-dialog-close>Đăng tất cả
       tin</button>
     </div>

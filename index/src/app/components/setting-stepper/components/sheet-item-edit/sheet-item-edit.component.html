@@ -1,6 +1,6 @@
 <form [formGroup]="sheetItemEditForm">
   <div fxLayout="column">
-    <mat-form-field>
+    <mat-form-field hidden>
       <mat-label>Link bài viết:</mat-label>
       <textarea matInput #html formControlName="html" placeholder="Tự động nhập nội dung bằng link bài viết" required rows="2"
         (change)="fetchContentFromUrl(html.value)"></textarea>
@@ -14,19 +14,15 @@
       <input matInput formControlName="address" placeholder="Ví dụ: 26 Đinh Bộ Lĩnh, Bình Thạnh" required>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Tiêu đề:</mat-label>
-      <input matInput formControlName="title" placeholder="Tựa đề" required>
-      <mat-spinner [diameter]="30" [hidden]="!linkloading"></mat-spinner>
-    </mat-form-field>
-    <mat-form-field>
       <mat-label>Mô tả:</mat-label>
-      <textarea matInput formControlName="description" placeholder="Mô tả" required rows="4"
+      <br>
+      <textarea matInput formControlName="description" placeholder="Mô tả" required rows="10"
         [disabled]="true"></textarea>
         <mat-spinner [diameter]="30" [hidden]="!linkloading"></mat-spinner>
     </mat-form-field>
-    <app-image-uploader [inputImages]="selectedImages" (imagesChanged)="imagesUpdated($event)"></app-image-uploader>
-    <div>
-      <button class="button-front" mat-raised-button (click)="update()" mat-button>{{isNew?'Đăng tin': 'Cập nhật thay đổi'}}</button>
-    </div>
+    <button mat-raised-button (click)="expanded=!expanded">
+      <mat-icon>{{expanded?"expand_less":"expand_more"}}</mat-icon>
+    </button>
+    <app-image-uploader *ngIf="expanded" [inputImages]="selectedImages" (imagesChanged)="imagesUpdated($event)"></app-image-uploader>
   </div>
 </form>

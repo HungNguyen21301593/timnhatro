@@ -33,7 +33,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { ImageUploaderComponent } from './components/share/image-uploader/image-uploader.component';
 import { MainComponent } from './components/main/main.component';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { GeoAddedHomeComponent } from './components/main/geo-added-home-list/geo-added-home/geo-added-home.component';
+import { GeoAddedHomeComponent } from './components/main/geo-added-home/geo-added-home.component';
 import { GeoAddedHomeListComponent } from './components/main/geo-added-home-list/geo-added-home-list.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';

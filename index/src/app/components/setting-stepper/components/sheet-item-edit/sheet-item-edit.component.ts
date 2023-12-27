@@ -31,6 +31,9 @@ export class SheetItemEditComponent implements OnInit {
   @Input()
   isNew = false;
 
+  @Input()
+  expanded = false;
+
   @Output()
   updatedOrPosted = new EventEmitter<RealstateData>();
 
@@ -57,6 +60,9 @@ export class SheetItemEditComponent implements OnInit {
     }
     this.sheetItemEditForm.patchValue(this.realstateData);
     this.selectedImages = this.realstateData.images;
+    this.sheetItemEditForm.valueChanges.subscribe(()=>{
+      this.update();
+    });
   }
 
   async fetchContentFromUrl(url: string) {
@@ -94,13 +100,6 @@ export class SheetItemEditComponent implements OnInit {
       html: formValue.html ?? ''
     }
     this.updatedOrPosted.emit(value);
-    if (this.isNew) {
-      this.snackBar.open("Đăng bài thành công!", "", { duration: 2000 });
-    }
-    else {
-      this.snackBar.open("Cập nhật thành công!", "", { duration: 2000 });
-    }
-
   }
 
   deleteItem() {

@@ -1,17 +1,12 @@
-<div *ngFor="let element of value">
-  <div fxLayout="column" fxLayoutAlign="start start" class="sheet-item-container">
-    <div fxLayout="row" fxLayoutAlign="space-between start" class="sheet-item-header">
-      <h3>
-        {{element.title}}
-      </h3>
-
-      <div fxLayout="column" fxLayoutAlign="start start" #target>
-        <button mat-mini-fab color="primary" (click)="selectEdit(element, target)">Sửa</button>
-        <button mat-mini-fab color="warn" (click)="deletedItem(element)">Xoá</button>
-      </div>
-    </div>
-
-    <app-sheet-item-edit [hidden]="expandedElement !== element" [realstateData]="element" class="full-width"
-      (updatedOrPosted)="itemUpdated($event)" (deleted)="deletedItem($event)"></app-sheet-item-edit>
-  </div>
+<mat-form-field class="full-width">
+  <mat-label>Chọn bài đăng</mat-label>
+  <mat-select disableRipple (valueChange)="selected($event)" [value]="selectedItem?.id">
+    <mat-option [value]="element.id" [id]="element.id" *ngFor="let element of value">
+      {{element.title}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<div *ngIf="selectedItem!=undefined" fxLayout="column" fxLayoutAlign="start stretch"  class="sheet-item-container">
+  <app-sheet-item-edit  [realstateData]="selectedItem" class="full-width" [expanded]="expanded"
+    (updatedOrPosted)="itemUpdated($event)" (deleted)="deletedItem($event)"></app-sheet-item-edit>
 </div>
