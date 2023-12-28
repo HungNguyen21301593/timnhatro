@@ -3,12 +3,22 @@
     
     <h2>Phòng {{selectedElementIndex+1}}: {{item.realstateData[selectedElementIndex].title}}</h2>
       <div>
-        <p>
-          <b>Địa chỉ:</b> {{item.realstateData[selectedElementIndex].address}}
-        </p>
-        <p class="lines">
-          <b >Mô tả:</b>  <br>{{item.realstateData[selectedElementIndex].description}}
-        </p>
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Địa chỉ:</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{item.realstateData[selectedElementIndex].address}}</p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Mô tả:</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="lines">
+            <p>{{item.realstateData[selectedElementIndex].description}}</p>
+          </mat-card-content>
+        </mat-card>
       </div>
       <app-image-viewer *ngIf="item.realstateData[selectedElementIndex].images?.length??0 >0" 
         class="full-height full-width"
