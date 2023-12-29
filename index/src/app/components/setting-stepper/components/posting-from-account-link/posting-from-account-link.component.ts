@@ -4,7 +4,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Guid } from 'guid-ts';
-import { forEach } from 'lodash';
 import { AccountUrlResponse } from 'src/app/interfaces/account-url-response';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
 import { ScanResultsDto } from 'src/app/interfaces/scan-results-dto';
@@ -29,7 +28,6 @@ export class PostingFromAccountLinkComponent implements OnInit {
   public value = 0;
   public fetchListingsFromUrlSpinner = false;
   public scanSpinner = false;
-  public link = '';
   public title = '';
   public numberOfNewRequests = 0;
   public numberOfOngoingRequests = 0;
@@ -46,7 +44,6 @@ export class PostingFromAccountLinkComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<PostingFromAccountLinkComponent>) { }
 
   async ngOnInit() {
-    this.link = this.data.link;
     this.title = this.data.title;
     this.listings = this.data.listings;
     await this.scan(this.listings);

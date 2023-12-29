@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-public class Info
+public class ListingInfo
 {
     [JsonProperty("title")]
     public string Title { get; set; }
@@ -20,7 +20,7 @@ public class Info
 public class Ad
 {
     [JsonProperty("info")]
-    public Info Info { get; set; }
+    public ListingInfo Info { get; set; }
 }
 
 

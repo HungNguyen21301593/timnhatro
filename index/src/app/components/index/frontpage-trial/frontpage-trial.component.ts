@@ -24,6 +24,7 @@ export class FrontpageTrialComponent implements OnInit {
 
   async itemposted(realstateData: RealstateData[]) {
     if (realstateData.length == 0) {
+      this.resultLink = null;
       return;
     }
     var newState = new EmptyState();

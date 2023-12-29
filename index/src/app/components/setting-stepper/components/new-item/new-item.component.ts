@@ -6,8 +6,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { PostingFromAccountLinkComponent } from '../posting-from-account-link/posting-from-account-link.component';
 import { data } from '@here/maps-api-for-javascript';
 import { WebApiService } from 'src/app/services/web-api.service';
-import { AccountUrlResponse } from 'src/app/interfaces/account-url-response';
+import { AccountInfoResponse } from 'src/app/interfaces/account-info-response';
 import { Guid } from 'guid-ts';
+import { AccountUrlResponse } from 'src/app/interfaces/account-url-response';
 
 @Component({
   selector: 'app-new-item',
@@ -32,7 +33,8 @@ export class NewItemComponent implements OnInit {
   };
   public element!: RealstateData;
   type: 'ListingLink' | 'AccountLink' = 'AccountLink';
-
+  listings: AccountUrlResponse[] | undefined;
+  accountInfo: AccountInfoResponse | undefined;
 
   constructor(public dialog: MatDialog, private webApiService: WebApiService) { }
 
@@ -41,50 +43,42 @@ export class NewItemComponent implements OnInit {
   }
 
   reset() {
-    this.element = _.cloneDeep(this.emptyElement);
+    this.link = '';
+    this.accountInfo = undefined;
+    this.listings = undefined;
+    this.itemposted.emit([])
   }
 
-  linkUpdated(link: string)
+  async linkUpdated(link: string)
   {
     if (!link) {
       return;
     }
-    if (link.includes("nhatot")) {
-      this.type = 'ListingLink';
-    }
-
-    if (link.includes("www.chotot.com/user")) {
-      this.type = 'AccountLink';
-    }
+   this.listings = await this.webApiService.getListingsFromAccountUrl(link);
+   this.accountInfo = await this.webApiService.getAccountInforFromUrl(link);
+   console.log(this.listings);
+   console.log(this.accountInfo);
   }
 
-  async fetchListingsFromUrl(link: string) {
-    if (!link) {
-      return;
-    }
-    this.linkUpdated(link);
+  async openDialog() {
 
     switch (this.type) {
       case 'AccountLink':
-        this.openMultiplePostDialog(link);
+        this.openMultiplePostDialog();
         break;
       case 'ListingLink':
-        this.openSinglePostDialog(link);
+        // this.openSinglePostDialog(link);
         break;
       default:
         break;
     }
-
   }
 
-  async openMultiplePostDialog(link: string) {
-    var listings = await this.webApiService.getListingsFromAccountUrl(link);
-
+  async openMultiplePostDialog() {
     var dialogRef = this.dialog.open(PostingFromAccountLinkComponent, {
       data: {
         title: "Đăng bài tự động qua link tài khoản",
-        link: link,
-        listings: listings
+        listings: this.listings
       },
       minWidth:"70vw"
     });
@@ -94,32 +88,32 @@ export class NewItemComponent implements OnInit {
     );
   }
 
-  async openSinglePostDialog(link: string) {
-    const regex = /\/(\d+)\.htm/;
-    var matches = link.match(regex);
-    if (!matches) {
-      return;
-    }
-    var listing: AccountUrlResponse =
-    {
-      images: [],
-      listId: Number(matches[1]),
-      title: "",
-      url: link
-    }
-    var dialogRef = this.dialog.open(PostingFromAccountLinkComponent, {
-      data: {
-        title: "Đăng bài tự động qua link bài viết",
-        link: link,
-        listings: [listing]
-      },
-      minWidth:"70vw"
-    });
-    dialogRef.afterClosed().subscribe(data => {
-      this.itemposted.emit(data.items)
-    }
-    );
-  }
+  // async openSinglePostDialog(link: string) {
+  //   const regex = /\/(\d+)\.htm/;
+  //   var matches = link.match(regex);
+  //   if (!matches) {
+  //     return;
+  //   }
+  //   var listing: AccountUrlResponse =
+  //   {
+  //     images: [],
+  //     listId: Number(matches[1]),
+  //     title: "",
+  //     url: link
+  //   }
+  //   var dialogRef = this.dialog.open(PostingFromAccountLinkComponent, {
+  //     data: {
+  //       title: "Đăng bài tự động qua link bài viết",
+  //       link: link,
+  //       listings: [listing]
+  //     },
+  //     minWidth:"70vw"
+  //   });
+  //   dialogRef.afterClosed().subscribe(data => {
+  //     this.itemposted.emit(data.items)
+  //   }
+  //   );
+  // }
 
   multipleItemsPosted(elements: RealstateData[]) {
     this.itemposted.emit(elements);

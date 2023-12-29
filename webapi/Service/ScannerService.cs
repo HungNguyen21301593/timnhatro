@@ -28,13 +28,20 @@ namespace webapi.Service
             this.configuration = configuration;
         }
 
-        public async Task<List<Info>> ReadAccountUrl(string url)
+        public async Task<AccountInfoResult?> ReadAccountInfoByUrl(string url)
+        {
+            var oid = GetAccountOIdFromUrl(url);
+            var accountInfo = await ReadAccountInfo(oid);
+            return accountInfo?.Result;
+        }
+
+        public async Task<List<ListingInfo>> ReadListingByAccountUrl(string url)
         {
             var oid = GetAccountOIdFromUrl(url);
             var json = await ReadAllListing(oid);
             if (json == null)
             {
-                return new List<Info>();
+                return new List<ListingInfo>();
             }
             return json.Ads.Select(ad => ad.Info).ToList();
         }
@@ -197,6 +204,32 @@ namespace webapi.Service
                     return;
                 }
                 driver.Navigate().GoToUrl(url);
+            }
+        }
+
+        private async Task<AccountInfoResponse?> ReadAccountInfo(string oid)
+        {
+            try
+            {
+                var httpClient = httpClientFactory.CreateClient("ChototClientV2User");
+                // Send the GET request
+                HttpResponseMessage response = await httpClient.GetAsync(oid);
+
+                // Check if the request was successful (status code 200)
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception("ReadAccountInfo failed");
+                }
+                // Read the response content as a string
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine(responseBody);
+                return JsonConvert.DeserializeObject<AccountInfoResponse>(responseBody);
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"Request error: {e.Message}");
+                throw new Exception($"ReadAccountInfo failed, {e.Message}");
             }
         }
 

@@ -6,9 +6,10 @@ import { lastValueFrom } from 'rxjs';
 import { UrlMetaResponse } from '../interfaces/url-meta-response';
 import { GeocodeResult } from '../interfaces/geocode-result';
 import { RealstateData } from '../interfaces/realstate-item';
-import { AccountUrlResponse } from '../interfaces/account-url-response';
+import { AccountInfoResponse } from '../interfaces/account-info-response';
 import { Guid } from 'guid-ts';
 import { ScanResultsDto } from '../interfaces/scan-results-dto';
+import { AccountUrlResponse } from '../interfaces/account-url-response';
 
 @Injectable({
   providedIn: 'root'
@@ -113,6 +114,16 @@ export class WebApiService {
       return res as AccountUrlResponse[];
     } catch (error) {
       console.error('getListingsFromAccountUrl failed', error);
+      throw error;
+    }
+  }
+
+  async getAccountInforFromUrl(url: string): Promise<AccountInfoResponse> {
+    try {
+      const res = await lastValueFrom(this.httpClient.get(`/api/url-scanner/account-from-url?url=${url}`));
+      return res as AccountInfoResponse;
+    } catch (error) {
+      console.error('getAccountInforFromUrl failed', error);
       throw error;
     }
   }

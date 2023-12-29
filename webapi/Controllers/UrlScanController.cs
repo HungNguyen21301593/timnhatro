@@ -27,6 +27,18 @@ namespace YourApiNamespace.Controllers
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
+        [HttpGet("account-from-url")]
+        public async Task<IActionResult> ReadAccountInfo(string url)
+        {
+
+            if (!url.Contains("www.chotot.com/user"))
+            {
+                return new BadRequestResult();
+            }
+            var result = await scannerService.ReadAccountInfoByUrl(url);
+            return new OkObjectResult(result);
+        }
+
         [HttpGet("listing-from-account")]
         public async Task<IActionResult> ReadListingInfo(string url)
         {
@@ -35,7 +47,7 @@ namespace YourApiNamespace.Controllers
             {
                 return new BadRequestResult();
             }
-            var result = await scannerService.ReadAccountUrl(url);
+            var result = await scannerService.ReadListingByAccountUrl(url);
             return new OkObjectResult(result);
         }
 

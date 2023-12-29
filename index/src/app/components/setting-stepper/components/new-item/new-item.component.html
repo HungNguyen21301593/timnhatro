@@ -3,10 +3,14 @@
         <div fxFlex="100">
             <mat-form-field >
                 <textarea matInput [(ngModel)]="link" placeholder="Vui lòng nhập đường link tài khoản hoặc bài viết tại đây"
-                    required rows="1" (change)="linkUpdated(link)">
+                    required rows="5" (change)="linkUpdated(link)">
             </textarea>
             </mat-form-field>
+            <div>
+                <button *ngIf="accountInfo" mat-raised-button color="warn" (click)="reset()" mat-button>Cài lại</button>
+                <button *ngIf="accountInfo" mat-raised-button color="primary" (click)="openDialog()" mat-button>Tải bản đồ cho tài khoản "{{accountInfo?.memberDisplayName}}"</button>
+            </div>
+            
         </div>
     </div>
-    <button mat-raised-button color="primary" (click)="fetchListingsFromUrl(link)" mat-button>Xác nhận</button>
 </div>
