@@ -9,19 +9,20 @@ import { MapStateService } from 'src/app/services/map-state.service';
 })
 export class MesureToolComponent implements OnInit {
 
-  type: ToolMode = ToolMode.normal;
+  ToolMode = ToolMode;
   constructor(public mapStateService: MapStateService) { }
 
   ngOnInit() {
   }
-  change(value: ToolMode) {
-    if (value == ToolMode.normal) {
-      this.type = ToolMode.mesure
+
+  change(type: ToolMode, status: Boolean) {
+    if (type == ToolMode.mesure) {
+      this.mapStateService.stateObservable.value.toolMode = type
+      this.mapStateService.stateObservable.next(this.mapStateService.stateObservable.value);
     }
-    if (value == ToolMode.mesure) {
-      this.type  = ToolMode.normal
+    else{
+      this.mapStateService.stateObservable.value.toolMode = ToolMode.normal;
+      this.mapStateService.stateObservable.next(this.mapStateService.stateObservable.value);
     }
-    this.mapStateService.stateObservable.value.toolMode = this.type;
-    this.mapStateService.stateObservable.next(this.mapStateService.stateObservable.value);
   }
 }

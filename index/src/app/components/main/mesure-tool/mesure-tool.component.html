@@ -3,18 +3,6 @@
     <img src="/assets/image/measure.png">
   </mat-button-toggle>
 </mat-button-toggle-group> -->
-
-
-<mat-card>
-
-</mat-card>
-<mat-card-content fxLayout="column" fxLayoutAlign="space-between start">
-
-</mat-card-content>
-
-<mat-slide-toggle class="tool-margin" color="primary" [checked]="false" [disabled]="false">
-  Đo khoảng cách
-</mat-slide-toggle>
-<mat-slide-toggle class="tool-margin" color="primary" [checked]="false" [disabled]="false">
-  Đo khoảng cách
+<mat-label>Đo khoảng cách: </mat-label>
+<mat-slide-toggle (change)="change(ToolMode.mesure, true)" class="tool-margin" color="primary" [checked]="false" [disabled]="false">
 </mat-slide-toggle>

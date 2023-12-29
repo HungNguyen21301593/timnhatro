@@ -1,31 +1,5 @@
 #map {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: -1000;
-}
-
-
-.map-container {
-  width: 100%;
-  height: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-}
-
-.map-sidenav-content {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-}
-
-.map-sidenav {
-  width: 40%;
-}
-
-app-realstate-side-view{
-  width: 100%;
-  height: 100%;
-  top: 0;
-  position: fixed;
-  visibility: hidden;
 }

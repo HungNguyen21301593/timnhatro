@@ -57,6 +57,8 @@ import { environment } from 'src/environment';
 import { HeaderComponent } from './components/index/header/header.component';
 import { FooterComponent } from './components/index/footer/footer.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
+import { MainMaptoolsComponent } from './components/main/main-maptools/main-maptools.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +86,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     IndexComponent,
     FrontpageTrialComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    MainMaptoolsComponent
     ],
   imports: [
     NgFor,
@@ -117,7 +120,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatProgressBarModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatBottomSheetModule
   ],
   providers: [],
   bootstrap: [AppComponent]

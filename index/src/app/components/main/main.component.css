@@ -1,10 +1,13 @@
-/* mat-drawer-container {
-    width: 0;
-    height: 0;
-    top: 0 !important;
+.toggle-side-bar-button
+{
     position: fixed;
-    visibility: hidden !important;
-} */
+    z-index: 100;
+    bottom: 0;
+    left: 50vw;
+    transform: translate(-50%,50%);
+}
+
+
 app-address-autocomplete{
     position: fixed;
     z-index: 100;
