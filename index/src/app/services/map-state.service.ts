@@ -5,9 +5,9 @@ import { GeocodeResult } from '../interfaces/geocode-result';
 import { MapApiService } from './map-api.service';
 import { InteractToItem } from '../interfaces/interact-to-item.enum';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
-import { MapState, ToolMode } from '../interfaces/map-state';
+import { EmptyState, MapState, ToolType } from '../interfaces/map-state';
 import { AgentProfile } from '../interfaces/agent-profile';
-import { Dictionary } from 'lodash';
+import { Dictionary, forEach } from 'lodash';
 import { WebApiService } from './web-api.service';
 import { Meta } from '@angular/platform-browser';
 import { GeneralHelper } from './Util/general-helper';
@@ -24,15 +24,7 @@ import { groupBy } from 'underscore';
 })
 export class MapStateService {
   private routeDatabase: RoutePair[] = [];
-  private initState: MapState = {
-    geoItems: [] as GeocodeResult[],
-    geoCalculatingItems: [] as GeocodeResult[],
-    geoRoutePairs: [] as RoutePair[],
-    distance: 1000,
-    toolMode: ToolMode.normal,
-    agent: {} as AgentProfile,
-    geoCodeDatabase:{}
-  };
+  private initState: MapState = new EmptyState();
   public stateObservable: BehaviorSubject<MapState> = new BehaviorSubject(this.initState);
 
   public itemSelectedObservable: ReplaySubject<GeocodeResult | null> = new ReplaySubject(undefined);
@@ -44,18 +36,18 @@ export class MapStateService {
   }
 
   rerenderMap() {
-    switch (this.stateObservable.value.toolMode) {
-      case ToolMode.normal:
-        
-        this.onRerenderMapNormal();
-        break;
-      case ToolMode.mesure:
-        this.onRerenderMapNormal();
-        this.onRerenderMesureTool();
-        break;
-      default:
-        break;
-    }
+    this.stateObservable.value.toolState.forEach(tool => {
+      switch (tool.toolType) {
+        case ToolType.normal:
+          this.onRerenderMapNormal();
+          break;
+        case ToolType.mesure:
+          this.onRerenderMesureTool();
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   onRerenderMapNormal() {
@@ -121,6 +113,23 @@ export class MapStateService {
     this.meta.addTag({ property: "og:description", content: agent.description ?? "" })
     this.meta.addTag({ property: "og:image", content: `${agent.image}` })
     this.meta.addTag({ property: "og:url", content: `	http://146.190.84.59:8000/main/${agent.phone}` })
+  }
+
+  setToolStatus(type: ToolType, status: Boolean)
+  {
+    var tool = this.stateObservable.value.toolState.find(tool=>tool.toolType ==type);
+    if (!tool) {
+      return;
+    }
+    if (!tool.activated) {
+      return;
+    }
+
+    tool.status = status;
+    var newToolState = this.stateObservable.value.toolState.filter(tool=>tool.toolType != type);
+    newToolState.push(tool);
+    this.stateObservable.value.toolState = newToolState;
+    this.stateObservable.next(this.stateObservable.value);
   }
 
   setAgent(agent: AgentProfile) {

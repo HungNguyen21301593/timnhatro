@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToolMode } from 'src/app/interfaces/map-state';
+import { ToolType } from 'src/app/interfaces/map-state';
 import { MapStateService } from 'src/app/services/map-state.service';
 
 @Component({
@@ -9,20 +9,13 @@ import { MapStateService } from 'src/app/services/map-state.service';
 })
 export class MesureToolComponent implements OnInit {
 
-  ToolMode = ToolMode;
+  ToolType = ToolType;
   constructor(public mapStateService: MapStateService) { }
 
   ngOnInit() {
   }
 
-  change(type: ToolMode, status: Boolean) {
-    if (type == ToolMode.mesure) {
-      this.mapStateService.stateObservable.value.toolMode = type
-      this.mapStateService.stateObservable.next(this.mapStateService.stateObservable.value);
-    }
-    else{
-      this.mapStateService.stateObservable.value.toolMode = ToolMode.normal;
-      this.mapStateService.stateObservable.next(this.mapStateService.stateObservable.value);
-    }
+  change(type: ToolType, status: Boolean) {
+   this.mapStateService.setToolStatus(type, status);
   }
 }

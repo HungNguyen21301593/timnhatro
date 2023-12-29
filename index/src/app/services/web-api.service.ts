@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EmptyState, MapState, ToolMode } from '../interfaces/map-state';
+import { EmptyState, MapState } from '../interfaces/map-state';
 import { ImageUploadResponse } from '../interfaces/image-upload-response';
 import { lastValueFrom } from 'rxjs';
 import { UrlMetaResponse } from '../interfaces/url-meta-response';
@@ -42,14 +42,15 @@ export class WebApiService {
   async getStateById(stateId: string): Promise<MapState> {
     var dburl = `/api/state/${stateId}`
     var res = (await this.httpClient.get(dburl).toPromise()) as any;
+    var emptyState = new EmptyState();
     var state: MapState = {
-      geoItems: res?.geoItems?? [],
-      geoCalculatingItems: res?.geoCalculatingItems ?? [],
-      geoRoutePairs: res?.geoRoutePairs ?? [],
-      distance: res?.distance ?? 1000,
-      toolMode: res?.toolMode ?? ToolMode.normal,
-      agent: res?.agent ?? {},
-      geoCodeDatabase: res?.geoCodeDatabase ?? {}
+      geoItems: res?.geoItems?? emptyState.geoItems,
+      geoCalculatingItems: res?.geoCalculatingItems ?? emptyState.geoCalculatingItems,
+      geoRoutePairs: res?.geoRoutePairs ?? emptyState.geoRoutePairs,
+      distance: res?.distance ?? emptyState.distance,
+      toolState: res?.toolState ?? emptyState.toolState,
+      agent: res?.agent ?? emptyState.agent,
+      geoCodeDatabase: res?.geoCodeDatabase ?? emptyState.geoCodeDatabase
     };
     return state;
   }

@@ -4,5 +4,5 @@
   </mat-button-toggle>
 </mat-button-toggle-group> -->
 <mat-label>Đo khoảng cách: </mat-label>
-<mat-slide-toggle (change)="change(ToolMode.mesure, true)" class="tool-margin" color="primary" [checked]="false" [disabled]="false">
+<mat-slide-toggle #tool (change)="change(ToolType.mesure, tool.checked)" class="tool-margin" color="primary" [disabled]="false">
 </mat-slide-toggle>

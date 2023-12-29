@@ -1,20 +1,16 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
 import { MapStateService } from 'src/app/services/map-state.service';
 import { UrlUtil } from 'src/environment';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { MapState, ToolMode } from 'src/app/interfaces/map-state';
-import { groupBy } from 'underscore';
+import { MapState } from 'src/app/interfaces/map-state';
 import { WebApiService } from 'src/app/services/web-api.service';
-import _, { forEach } from 'lodash';
+import _ from 'lodash';
 import { Constant } from 'src/app/interfaces/constant.enum';
-import { GeneralHelper } from 'src/app/services/Util/general-helper';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Guid } from 'guid-ts';
 @Component({
   selector: 'app-setting-stepper',
   templateUrl: './setting-stepper.component.html',
