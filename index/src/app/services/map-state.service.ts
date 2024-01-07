@@ -5,9 +5,8 @@ import { GeocodeResult } from '../interfaces/geocode-result';
 import { MapApiService } from './map-api.service';
 import { InteractToItem } from '../interfaces/interact-to-item.enum';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
-import { EmptyState, MapState, ToolType } from '../interfaces/map-state';
+import { EmptyState, MapState, ToolState, ToolType } from '../interfaces/map-state';
 import { AgentProfile } from '../interfaces/agent-profile';
-import { Dictionary, forEach } from 'lodash';
 import { WebApiService } from './web-api.service';
 import { Meta } from '@angular/platform-browser';
 import { GeneralHelper } from './Util/general-helper';
@@ -15,7 +14,6 @@ import _ from 'lodash';
 import { GeoAddedHomeComponent } from '../components/main/geo-added-home/geo-added-home.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Guid } from 'guid-ts';
 import { RealstateData } from '../interfaces/realstate-item';
 import { groupBy } from 'underscore';
 
@@ -36,13 +34,14 @@ export class MapStateService {
   }
 
   rerenderMap() {
+    this.onRerenderBaseLayer();
     this.stateObservable.value.toolState.forEach(tool => {
       switch (tool.toolType) {
-        case ToolType.normal:
-          this.onRerenderMapNormal();
+        case ToolType.info:
+          this.rerenderMapInfo(tool.status);
           break;
         case ToolType.mesure:
-          this.onRerenderMesureTool();
+          this.renderMesureTool(tool.status);
           break;
         default:
           break;
@@ -50,44 +49,48 @@ export class MapStateService {
     });
   }
 
-  onRerenderMapNormal() {
-    this.mapApiService.measureGroup?.setVisibility(false);
-    this.mapApiService.normalGroup?.setVisibility(true);
-    this.mapApiService.clearAllBubble();
-
-    var groupToRender = this.mapApiService.normalGroup;
-    groupToRender?.removeAll();
-    groupToRender?.setVisibility(true);
-    this.mapApiService.renderLocationsToMap(groupToRender, this.stateObservable.value.geoItems,
-      (type: InteractToItem, item: GeocodeResult) => {
-        this.openItemDialog(item);
-      });
-    var officeLists = this.stateObservable.value.geoItems.filter(item => item.type == 'Office');
-    this.mapApiService.renderCirclesToMap(groupToRender, officeLists, this.stateObservable.value.distance);
+  onRerenderBaseLayer() {
+    this.mapApiService.baseGroup?.setVisibility(true);
+    this.mapApiService.renderLocationsToMap(this.mapApiService.baseGroup, this.stateObservable.value.geoItems,
+      () => { });
   }
 
-  onRerenderMesureTool() {
-    this.mapApiService.measureGroup?.setVisibility(true);
-    this.mapApiService.normalGroup?.setVisibility(true);
+  rerenderMapInfo(state:boolean) {
+    this.mapApiService.infoGroup.setVisibility(state);
+    if (!state) {
+      return;
+    }
+    var groupToRender = this.mapApiService.infoGroup;
+    groupToRender.removeAll();
+    this.mapApiService.renderInteractionsToMap(groupToRender, this.stateObservable.value.geoItems, async (type: InteractToItem, item: GeocodeResult) => {
+      this.interactionCallBack(type, item);
+    })
+  }
+  
+  renderMesureTool(state:boolean) {
+    this.mapApiService.measureGroup?.setVisibility(state);
+    if (!state) {
+      return;
+    }
     var groupToRender = this.mapApiService.measureGroup;
     groupToRender?.removeAll();
  
-    this.mapApiService.renderLocationsToMap(groupToRender, this.stateObservable.value.geoItems, async (type: InteractToItem, item: GeocodeResult) => {
+    this.mapApiService.renderInteractionsToMap(groupToRender, this.stateObservable.value.geoItems, async (type: InteractToItem, item: GeocodeResult) => {
       if (this.stateObservable.value.geoCalculatingItems.some(i => this.compareLocation(i, item))) {
         return;
       }
       this.stateObservable.value.geoCalculatingItems.push(item);
       var calculatingItems = this.stateObservable.value.geoCalculatingItems;
-      if (calculatingItems.length == 1) {
-        groupToRender?.removeAll();
-      }
+      // if (calculatingItems.length == 1) {
+      //   groupToRender?.removeAll();
+      // }
       this.mapApiService.renderCirclesToMap(groupToRender, calculatingItems, 100, { r: 17, g: 120, b: 100, a: 0.8 });
       if (calculatingItems.length == 2) {
         var route = await this.getRoute(calculatingItems[0], calculatingItems[1]);
         this.mapApiService.renderRouteShapesToMap(groupToRender, [route]);
         var route = await this.getRoute(calculatingItems[0], calculatingItems[1]);
         var travelSummary = route.sections[0].travelSummary;
-        this.snackBar.open(`${Math.round(travelSummary.length / 100) / 10} Km, ${Math.round(travelSummary.duration/60)} Phút`, "", { duration: 3000 })
+        this.snackBar.open(`${Math.round(travelSummary.length / 100) / 10} Km, ${Math.round(travelSummary.duration/60)} Phút`, "", { duration: 3000, horizontalPosition:'right',verticalPosition:'top' })
         this.stateObservable.value.geoCalculatingItems = [];
       }
     });
@@ -115,21 +118,30 @@ export class MapStateService {
     this.meta.addTag({ property: "og:url", content: `	http://146.190.84.59:8000/main/${agent.phone}` })
   }
 
-  setToolStatus(type: ToolType, status: Boolean)
+  setToolStatus(type: ToolType, status: boolean)
   {
+    console.log(type);
+    console.log(status);
     var tool = this.stateObservable.value.toolState.find(tool=>tool.toolType ==type);
     if (!tool) {
       return;
     }
-    if (!tool.activated) {
-      return;
-    }
 
     tool.status = status;
-    var newToolState = this.stateObservable.value.toolState.filter(tool=>tool.toolType != type);
+    var otherTools = this.stateObservable.value.toolState.filter(tool=>tool.toolType != type);
+    // otherTools.forEach(otherTool => {
+    //   otherTool.status = false;
+    // });
+    var newToolState = otherTools;
     newToolState.push(tool);
+
     this.stateObservable.value.toolState = newToolState;
     this.stateObservable.next(this.stateObservable.value);
+  }
+
+  getToolByType(type: ToolType): ToolState | undefined {
+    var tool = this.stateObservable.value.toolState.find(tool => tool.toolType == type);
+    return tool;
   }
 
   setAgent(agent: AgentProfile) {

@@ -14,14 +14,15 @@ export interface MapState {
 }
 
 export enum ToolType {
-    normal,
+    info,
     mesure
 }
 
 export class ToolState {
-    toolType: ToolType = ToolType.normal;
-    activated: Boolean = false;
-    status: Boolean = false; 
+    toolType: ToolType = ToolType.info;
+    description = "";
+    activated = false;
+    status = false;
 }
 
 export class EmptyState implements MapState {
@@ -29,11 +30,20 @@ export class EmptyState implements MapState {
     geoCalculatingItems: GeocodeResult[] = [];
     geoRoutePairs: RoutePair[] = [];
     distance: number = 1000;
-    toolState = [{
-        toolType: ToolType.normal,
-        activated: false,
-        status: true
-    }];
+    toolState = [
+        {
+            description: "Thông tin nhà trọ :",
+            toolType: ToolType.info,
+            activated: true,
+            status: true
+        },
+        {
+            description: "Đo khoảng cách :",
+            toolType: ToolType.mesure,
+            activated: true,
+            status: false
+        }
+    ];
     agent: AgentProfile = {};
     geoCodeDatabase: Dictionary<GeocodeResult[]> = {};
 }

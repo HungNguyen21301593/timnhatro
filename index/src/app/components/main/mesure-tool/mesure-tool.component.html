@@ -1,8 +1,3 @@
-<!-- <mat-button-toggle-group>
-  <mat-button-toggle mat-fab color="basic" #button [value]="type" (change)="change(button.value)">
-    <img src="/assets/image/measure.png">
-  </mat-button-toggle>
-</mat-button-toggle-group> -->
 <mat-label>Đo khoảng cách: </mat-label>
-<mat-slide-toggle #tool (change)="change(ToolType.mesure, tool.checked)" class="tool-margin" color="primary" [disabled]="false">
+<mat-slide-toggle #tool (change)="change(ToolType.mesure, tool.checked)" [checked]="currentTool?.status" class="tool-margin" color="primary" [disabled]="false">
 </mat-slide-toggle>

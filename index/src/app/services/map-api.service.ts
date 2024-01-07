@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { GeocodeResult } from '../interfaces/geocode-result';
 import { RouteResult, Section, TravelSummary } from '../interfaces/route-result';
 import { InteractToItem } from '../interfaces/interact-to-item.enum';
-import { Isoline, IsolineRessult } from '../interfaces/isoline-result';
-import { data } from '@here/maps-api-for-javascript';
+import { IsolineRessult } from '../interfaces/isoline-result';
 import { GeneralHelper } from './Util/general-helper';
-import _, { Dictionary } from 'lodash';
+import _ from 'lodash';
 import { Color } from '../interfaces/color';
 
 @Injectable({
@@ -15,8 +14,10 @@ export class MapApiService {
   platform: H.service.Platform | undefined;
   private map?: H.Map;
   defaultLayers: any;
-  public normalGroup?: H.map.Group = new H.map.Group({ zIndex: 0, data: {} });
-  public measureGroup?: H.map.Group = new H.map.Group({ zIndex: 1, data: {} });
+  public baseGroup: H.map.Group = new H.map.Group({ zIndex: 0, data: {} });
+  public infoGroup: H.map.Group = new H.map.Group({ zIndex: 1, data: {} });
+  public radiusGroup: H.map.Group = new H.map.Group({ zIndex: 2, data: {} });
+  public measureGroup: H.map.Group = new H.map.Group({ zIndex: 3, data: {} });
   ui?: H.ui.UI;
 
   alphabetDictionary: string[] = ["A", "B", "C", "D", "E", "F"];
@@ -34,6 +35,12 @@ export class MapApiService {
       zoom: 11,
       pixelRatio: window.devicePixelRatio || 1
     });
+    this.map.addObjects([
+      this.baseGroup,
+      this.infoGroup,
+      this.radiusGroup,
+      this.measureGroup
+    ])
 
     window.addEventListener('resize', () => this.map?.getViewPort().resize());
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
@@ -194,13 +201,10 @@ export class MapApiService {
     if (!group) {
       return;
     }
-    group = new H.map.Group();
-
+    group.removeAll();
+    this.map.removeObject(group)
     geocodeResults.filter(geocodeResult => geocodeResult.type == 'Home').forEach(geocodeResult => {
       var marker = new H.map.Marker(geocodeResult.position);
-      marker.addEventListener('tap', function (evt: any) {
-        interactionCallBack(InteractToItem.Select, geocodeResult);
-      }, false);
       marker.setIcon(new H.map.Icon('/assets/image/home.png'));
       group?.addObject(marker);
     })
@@ -216,7 +220,36 @@ export class MapApiService {
       marker.setIcon(new H.map.Icon(`/assets/image/${alphabetCharacter}.png`));
       group?.addObject(marker);
     };
+    // Add the locations group to the map
+    this.map?.addObject(group);
+  }
 
+  renderInteractionsToMap(group: H.map.Group | undefined, geocodeResults: GeocodeResult[], interactionCallBack: (type: InteractToItem, item: GeocodeResult) => void) {
+    if (!this.map) {
+      return;
+    }
+    if (!group) {
+      return;
+    }
+    group.removeAll();
+    this.map.removeObject(group)
+    geocodeResults.forEach(geocodeResult => {
+      var marker = new H.map.Marker(geocodeResult.position);
+      // if (geocodeResult.type == 'Home') {
+      //   marker.setIcon(new H.map.Icon('/assets/image/home.png'));
+      // }
+      // if (geocodeResult.type == 'Office') {
+      //   var index = geocodeResults.indexOf(geocodeResult);
+      //   var alphabetCharacter = this.alphabetDictionary[index];
+      //   geocodeResult.textId = alphabetCharacter;
+      //   marker.setIcon(new H.map.Icon(`/assets/image/${alphabetCharacter}.png`));
+      //   marker.setIcon(new H.map.Icon('/assets/image/home.png'));
+      // }
+      marker.addEventListener('tap', function (evt: any) {
+        interactionCallBack(InteractToItem.Select, geocodeResult);
+      }, false);
+      group.addObject(marker);
+    })
     // Add the locations group to the map
     this.map?.addObject(group);
   }
@@ -280,5 +313,11 @@ export class MapApiService {
 
   onError(error: unknown) {
     alert('Can\'t reach the remote server');
+  }
+
+  hideAllMapToolGroup() {
+    this.infoGroup.setVisibility(false);
+    this.measureGroup.setVisibility(false);
+    this.infoGroup.setVisibility(false);
   }
 }
