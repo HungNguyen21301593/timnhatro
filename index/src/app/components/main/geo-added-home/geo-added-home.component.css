@@ -6,7 +6,6 @@
 
 .realstate-content
 {
-    width: 70vw;
     overflow: scroll;
     -ms-overflow-style: none;
     /* Internet Explorer 10+ */

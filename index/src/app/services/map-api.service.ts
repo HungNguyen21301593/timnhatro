@@ -6,6 +6,8 @@ import { IsolineRessult } from '../interfaces/isoline-result';
 import { GeneralHelper } from './Util/general-helper';
 import _ from 'lodash';
 import { Color } from '../interfaces/color';
+import { delay } from 'rxjs';
+import { ToolsNavigationService } from './tools-navigation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +24,7 @@ export class MapApiService {
 
   alphabetDictionary: string[] = ["A", "B", "C", "D", "E", "F"];
 
-  constructor() {
+  constructor(private toolsNavigationService: ToolsNavigationService) {
     this.platform = new H.service.Platform({
       apikey: 'wQOFzJnltEfLDHulkvnkd26RgvFvmrDwGmr31xP1uhs'
     });
@@ -46,6 +48,10 @@ export class MapApiService {
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
     this.ui = H.ui.UI.createDefault(this.map, this.defaultLayers);
     this.setStyle();
+    this.map.addEventListener('mapviewchangestart', ()=> {
+      // this.toolsNavigationService.closeAllBottomSheet();
+    });
+
     return this.map;
   }
 
@@ -160,7 +166,6 @@ export class MapApiService {
             data: {}
           });
         polylines.push(polyline);
-        // this.renderRouteNoteMarker(linestring, section.travelSummary);
       });
       group?.addObjects(polylines);
 
@@ -171,19 +176,18 @@ export class MapApiService {
     });
   }
 
-  renderRouteNoteMarker(line: H.geo.LineString, travelSummary: TravelSummary) {
-    var count = line.getPointCount();
-    var point = line.extractPoint(Math.round(count / 2));
-    this.openBubble(point, `${Math.round(travelSummary.length / 100) / 10} Km`);
-  }
-
-  openBubble(position: H.geo.Point, text: string) {
+  openBubble(georesult: GeocodeResult) {
     var bubble = new H.ui.InfoBubble(
-      position,
-      // The FO property holds the province name.
-      { content: text });
+      georesult.position,
+      { content: this.getBubbleContent(georesult) });
     this.ui?.addBubble(bubble);
     bubble.open();
+  }
+
+  getBubbleContent(georesult: GeocodeResult) {
+    return `
+    <img class=bubble-info src=${georesult.realstateData[0].images[0]}>
+    `;
   }
 
   clearAllBubble() {
@@ -206,6 +210,9 @@ export class MapApiService {
     geocodeResults.filter(geocodeResult => geocodeResult.type == 'Home').forEach(geocodeResult => {
       var marker = new H.map.Marker(geocodeResult.position);
       marker.setIcon(new H.map.Icon('/assets/image/home.png'));
+      marker.addEventListener('tap', (evt: any)=> {
+        interactionCallBack(InteractToItem.Select, geocodeResult);
+      }, false);
       group?.addObject(marker);
     })
     var offices = geocodeResults.filter(geocodeResult => geocodeResult.type == 'Office');
@@ -215,6 +222,7 @@ export class MapApiService {
       marker.addEventListener('tap', function (evt: any) {
         interactionCallBack(InteractToItem.Select, geocodeResult);
       }, false);
+      
       var alphabetCharacter = this.alphabetDictionary[index];
       geocodeResult.textId = alphabetCharacter;
       marker.setIcon(new H.map.Icon(`/assets/image/${alphabetCharacter}.png`));
@@ -235,17 +243,7 @@ export class MapApiService {
     this.map.removeObject(group)
     geocodeResults.forEach(geocodeResult => {
       var marker = new H.map.Marker(geocodeResult.position);
-      // if (geocodeResult.type == 'Home') {
-      //   marker.setIcon(new H.map.Icon('/assets/image/home.png'));
-      // }
-      // if (geocodeResult.type == 'Office') {
-      //   var index = geocodeResults.indexOf(geocodeResult);
-      //   var alphabetCharacter = this.alphabetDictionary[index];
-      //   geocodeResult.textId = alphabetCharacter;
-      //   marker.setIcon(new H.map.Icon(`/assets/image/${alphabetCharacter}.png`));
-      //   marker.setIcon(new H.map.Icon('/assets/image/home.png'));
-      // }
-      marker.addEventListener('tap', function (evt: any) {
+      marker.addEventListener('tap',  (evt: any)=> {
         interactionCallBack(InteractToItem.Select, geocodeResult);
       }, false);
       group.addObject(marker);
@@ -296,6 +294,7 @@ export class MapApiService {
     if (!this.map) {
       return;
     }
+    
     if (locations.length == 0) {
       return;
     }
@@ -307,7 +306,7 @@ export class MapApiService {
     }
     this.map?.getViewModel().setLookAtData({
       bounds: dummyGroup.getBoundingBox(),
-      zoom: resolution,
+      zoom: resolution
     });
   }
 

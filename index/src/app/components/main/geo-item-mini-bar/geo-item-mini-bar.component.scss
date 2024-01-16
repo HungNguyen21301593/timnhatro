@@ -1,0 +1,11 @@
+.image{
+    max-width: 40vw;
+    min-width: 20vw;
+    height: 20vh;
+    object-fit: cover;
+}
+
+.tool-container{
+    max-height: 20vh;
+    overflow-y: scroll;
+}

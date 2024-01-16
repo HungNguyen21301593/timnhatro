@@ -1,56 +1,29 @@
-<div fxLayout="column" fxLayoutAlign="space-between start" class="dialog-container">
-  <div fxFlex="90" fxLayout="column" fxLayoutAlign="start start" class="realstate-content">
-    
-    <h2>Phòng {{selectedElementIndex+1}}: {{item.realstateData[selectedElementIndex].title}}</h2>
-      <div>
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Địa chỉ:</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p>{{item.realstateData[selectedElementIndex].address}}</p>
-          </mat-card-content>
-        </mat-card>
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Mô tả:</mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="lines">
-            <p>{{item.realstateData[selectedElementIndex].description}}</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
-      <app-image-viewer *ngIf="item.realstateData[selectedElementIndex].images?.length??0 >0" 
-        class="full-height full-width"
-        [images]="item.realstateData[selectedElementIndex].images" [height]="'200'"></app-image-viewer>
-  </div>
-  <div>
-    <mat-button-toggle-group>
-      <mat-button-toggle *ngFor="let item of item.realstateData;let indexOfelement=index;"
-        (change)="selectedElementIndex = indexOfelement">Phòng {{indexOfelement
-        +1}}</mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-  <div fxLayout="row" fxLayoutAlign="space-between end" class="full-width" fxFlex="10">
-    <div fxLayout="row" fxLayoutAlign="start end">
-      <button mat-mini-fab color="primary" (click)="target()">
-        <mat-icon> location_on</mat-icon>
-      </button>
-      <button mat-mini-fab color="primary" (click)="direction()">
-        <mat-icon> directions</mat-icon>
-      </button>
-      <a [href]="linkToMsg">
-        <button mat-mini-fab color="primary">
-          <mat-icon> phone</mat-icon>
-        </button>
-      </a>
-      
-    </div>
-    <div>
-      <button mat-flat-button color="primary" (click)="share(item.realstateData[selectedElementIndex].html)">
-        <span>Xem thêm</span>
-        <mat-icon>share</mat-icon>
-      </button>
-    </div>
-  </div>
+<div *ngIf="selectedElement" fxLayout="column" fxLayoutAlign="center stretch" class="realstate-content">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Tiêu đề:</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{selectedElement.title}}</p>
+      <a [href]="selectedElement.html">Bài gốc</a>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Địa chỉ:</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{selectedElement.address}}</p>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Mô tả:</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="lines">
+      <p>{{selectedElement.description}}</p>
+    </mat-card-content>
+  </mat-card>
+  <app-image-viewer *ngIf="selectedElement" class="full-height full-width" [images]="selectedElement.images"
+    [height]="'200'"></app-image-viewer>
 </div>

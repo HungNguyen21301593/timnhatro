@@ -1,0 +1,48 @@
+
+<mat-card *ngIf="item">
+  <mat-card-header>
+    <mat-card-title>{{item.address.label}}</mat-card-title>
+    <div fxLayout="row" fxLayoutAlign="end start" >
+      <button mat-mini-fab color="warn" (click)="close()">
+        <mat-icon>close</mat-icon>
+    </button>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <div fxLayout="row" fxLayoutAlign="space-between stretch" fxLayoutGap>
+      <div fxFlex="35">
+        <img class="image" [src]="item.realstateData[0].images[0]">
+      </div>
+      <div fxLayout="column" fxLayoutAlign="start stretch" class="tool-container">
+        <button mat-flat-button color="primary" (click)="openDetailsDialog()">
+          <span>Xem thêm</span>
+          <mat-icon> unfold_more</mat-icon>
+        </button>
+        <button mat-flat-button color="primary" (click)="enableMeasureTool()">
+          <span>Đo khoảng cách</span>
+          <mat-icon> straighten</mat-icon>
+        </button>
+        <button mat-flat-button color="primary" (click)="enableRadiusTool()">
+          <span>Vẽ bán kính</span>
+          <mat-icon> track_changes</mat-icon>
+        </button>
+        <button mat-flat-button color="primary" (click)="target()">
+          <span>Vị trí</span>
+          <mat-icon>location_on</mat-icon>
+        </button>
+        <button mat-flat-button color="primary" (click)="direction()">
+          <span>Chỉ đường</span>
+          <mat-icon> directions</mat-icon>
+        </button>
+        <button mat-flat-button color="primary" href="tel:+0858008266?">
+          <span>Gọi điện</span>
+          <mat-icon> phone</mat-icon>
+        </button>
+        <button mat-flat-button color="primary" href="sms:+0858008266?&body=Hi. My name is">
+          <span>Nhắn tin</span>
+          <mat-icon> textsms</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

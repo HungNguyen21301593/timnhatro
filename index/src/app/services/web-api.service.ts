@@ -44,6 +44,9 @@ export class WebApiService {
     var res = (await this.httpClient.get(dburl).toPromise()) as any;
     var emptyState = new EmptyState();
     var state: MapState = {
+      selectedItem: undefined,
+      selectedTool:undefined,
+      calculatedResult: undefined,
       geoItems: res?.geoItems?? emptyState.geoItems,
       geoCalculatingItems: res?.geoCalculatingItems ?? emptyState.geoCalculatingItems,
       geoRoutePairs: res?.geoRoutePairs ?? emptyState.geoRoutePairs,

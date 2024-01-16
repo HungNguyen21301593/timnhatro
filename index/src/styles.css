@@ -40,11 +40,6 @@ body {
   display: none;
 }
 
-.H_ib_content {
-  margin: 0.5em;
-  min-width: 4em;
-}
-
 .H_ui {
   visibility: hidden;
   z-index: 0;
@@ -83,4 +78,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-bottom-sheet-container
 {
     overflow: visible !important;
+}
+
+
+.bubble-info{
+  max-width: 40vw;
+  max-height: 40vh;
 }

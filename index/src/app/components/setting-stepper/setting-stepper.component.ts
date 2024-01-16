@@ -63,11 +63,11 @@ export class SettingStepperComponent implements OnInit {
   populatedUser(state: MapState) {
     var realstate = this.filteroutPostedItems(state.geoItems.map(item => item.realstateData).flat());
     this.settingFormGroup.patchValue({
-      name: state.agent.name,
-      phone: state.agent.phone,
-      link: state.agent.link,
-      description: state.agent.description,
-      image: state.agent.image,
+      name: state?.agent?.name,
+      phone: state?.agent?.phone,
+      link: state?.agent?.link,
+      description: state?.agent?.description,
+      image: state?.agent?.image,
       realstateDatas: realstate
     });
   }

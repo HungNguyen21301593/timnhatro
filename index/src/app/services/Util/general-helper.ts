@@ -19,4 +19,8 @@ export class GeneralHelper {
     public static toString(color: Color) {
         return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
     }
+
+    delay(ms: number) {
+        return new Promise( resolve => setTimeout(resolve, ms) );
+    }
 }

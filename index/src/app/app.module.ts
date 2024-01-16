@@ -44,21 +44,19 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio';
 import { PostingFromAccountLinkComponent } from './components/setting-stepper/components/posting-from-account-link/posting-from-account-link.component';
 import { CircleToolComponent } from './components/main/circle-tool/circle-tool.component';
-import { MesureToolComponent } from './components/main/mesure-tool/mesure-tool.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { IndexComponent } from './components/index/index/index.component';
 import { FrontpageTrialComponent } from './components/index/frontpage-trial/frontpage-trial.component';
 import { AngularFireModule } from "@angular/fire/compat";
-import { AngularFireAuthModule } from "@angular/fire/compat/auth";
-import { AngularFireStorageModule } from '@angular/fire/compat/storage';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from 'src/environment';
 import { HeaderComponent } from './components/index/header/header.component';
 import { FooterComponent } from './components/index/footer/footer.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
-import { MainMaptoolsComponent } from './components/main/main-maptools/main-maptools.component';
+import { GeoItemMiniBarComponent } from './components/main/geo-item-mini-bar/geo-item-mini-bar.component';
+import { MeasureToolComponent } from './components/main/measure-tool/measure-tool.component';
+import { RadiusToolComponent } from './components/main/radius-tool/radius-tool.component';
 
 @NgModule({
   declarations: [
@@ -82,12 +80,13 @@ import { MainMaptoolsComponent } from './components/main/main-maptools/main-mapt
     NewItemComponent,
     PostingFromAccountLinkComponent,
     CircleToolComponent,
-    MesureToolComponent,
     IndexComponent,
     FrontpageTrialComponent,
     HeaderComponent,
     FooterComponent,
-    MainMaptoolsComponent
+    GeoItemMiniBarComponent,
+    MeasureToolComponent,
+    RadiusToolComponent
     ],
   imports: [
     NgFor,

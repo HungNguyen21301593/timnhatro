@@ -11,11 +11,11 @@ import { WebApiService } from './web-api.service';
 import { Meta } from '@angular/platform-browser';
 import { GeneralHelper } from './Util/general-helper';
 import _ from 'lodash';
-import { GeoAddedHomeComponent } from '../components/main/geo-added-home/geo-added-home.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RealstateData } from '../interfaces/realstate-item';
 import { groupBy } from 'underscore';
+import { ToolsNavigationService } from './tools-navigation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,12 @@ export class MapStateService {
 
   public itemSelectedObservable: ReplaySubject<GeocodeResult | null> = new ReplaySubject(undefined);
 
-  constructor(private mapApiService: MapApiService, private webApiService: WebApiService, private meta: Meta, public dialog: MatDialog, private snackBar: MatSnackBar) {
+  constructor(private mapApiService: MapApiService,
+    private webApiService: WebApiService,
+    private meta: Meta,
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private toolsNavigationService: ToolsNavigationService) {
     this.stateObservable.subscribe(() => {
       this.rerenderMap();
     })
@@ -35,46 +40,24 @@ export class MapStateService {
 
   rerenderMap() {
     this.onRerenderBaseLayer();
-    this.stateObservable.value.toolState.forEach(tool => {
-      switch (tool.toolType) {
-        case ToolType.info:
-          this.rerenderMapInfo(tool.status);
-          break;
-        case ToolType.mesure:
-          this.renderMesureTool(tool.status);
-          break;
-        default:
-          break;
-      }
-    });
   }
 
   onRerenderBaseLayer() {
     this.mapApiService.baseGroup?.setVisibility(true);
     this.mapApiService.renderLocationsToMap(this.mapApiService.baseGroup, this.stateObservable.value.geoItems,
-      () => { });
+      (type: InteractToItem, item: GeocodeResult) => {
+        this.interactionCallBack(type, item);
+      });
   }
 
-  rerenderMapInfo(state:boolean) {
-    this.mapApiService.infoGroup.setVisibility(state);
-    if (!state) {
-      return;
-    }
-    var groupToRender = this.mapApiService.infoGroup;
-    groupToRender.removeAll();
-    this.mapApiService.renderInteractionsToMap(groupToRender, this.stateObservable.value.geoItems, async (type: InteractToItem, item: GeocodeResult) => {
-      this.interactionCallBack(type, item);
-    })
-  }
-  
-  renderMesureTool(state:boolean) {
+  renderMesureTool(state: boolean) {
     this.mapApiService.measureGroup?.setVisibility(state);
     if (!state) {
       return;
     }
     var groupToRender = this.mapApiService.measureGroup;
     groupToRender?.removeAll();
- 
+
     this.mapApiService.renderInteractionsToMap(groupToRender, this.stateObservable.value.geoItems, async (type: InteractToItem, item: GeocodeResult) => {
       if (this.stateObservable.value.geoCalculatingItems.some(i => this.compareLocation(i, item))) {
         return;
@@ -90,11 +73,10 @@ export class MapStateService {
         this.mapApiService.renderRouteShapesToMap(groupToRender, [route]);
         var route = await this.getRoute(calculatingItems[0], calculatingItems[1]);
         var travelSummary = route.sections[0].travelSummary;
-        this.snackBar.open(`${Math.round(travelSummary.length / 100) / 10} Km, ${Math.round(travelSummary.duration/60)} Phút`, "", { duration: 3000, horizontalPosition:'right',verticalPosition:'top' })
+        this.snackBar.open(`${Math.round(travelSummary.length / 100) / 10} Km, ${Math.round(travelSummary.duration / 60)} Phút`, "", { duration: 3000, horizontalPosition: 'right', verticalPosition: 'top' })
         this.stateObservable.value.geoCalculatingItems = [];
       }
     });
-
   }
 
   async reloadState(stateId: string): Promise<MapState | null> {
@@ -105,43 +87,42 @@ export class MapStateService {
     if (!state) {
       return null;
     }
-    this.updateMetaAndTitle(state.agent);
+    this.updateMetaAndTitle(state?.agent);
     this.stateObservable.next(state);
     return state;
   }
 
-  private updateMetaAndTitle(agent: AgentProfile) {
-    document.title = `Thông tin nhà trọ của ${agent.name}`;
-    this.meta.addTag({ property: "og:title", content: `Thông tin nhà trọ của ${agent.name}` })
-    this.meta.addTag({ property: "og:description", content: agent.description ?? "" })
-    this.meta.addTag({ property: "og:image", content: `${agent.image}` })
-    this.meta.addTag({ property: "og:url", content: `	http://146.190.84.59:8000/main/${agent.phone}` })
+  private updateMetaAndTitle(agent: AgentProfile | undefined) {
+    document.title = `Thông tin nhà trọ của ${agent?.name}`;
+    this.meta.addTag({ property: "og:title", content: `Thông tin nhà trọ của ${agent?.name}` })
+    this.meta.addTag({ property: "og:description", content: agent?.description ?? "" })
+    this.meta.addTag({ property: "og:image", content: `${agent?.image}` })
+    this.meta.addTag({ property: "og:url", content: `	http://146.190.84.59:8000/main/${agent?.phone}` })
   }
 
-  setToolStatus(type: ToolType, status: boolean)
-  {
-    console.log(type);
-    console.log(status);
-    var tool = this.stateObservable.value.toolState.find(tool=>tool.toolType ==type);
-    if (!tool) {
-      return;
-    }
-
-    tool.status = status;
-    var otherTools = this.stateObservable.value.toolState.filter(tool=>tool.toolType != type);
-    // otherTools.forEach(otherTool => {
-    //   otherTool.status = false;
-    // });
-    var newToolState = otherTools;
-    newToolState.push(tool);
-
-    this.stateObservable.value.toolState = newToolState;
+  setSelectedItem(item: GeocodeResult) {
+    this.stateObservable.value.selectedItem = item;
     this.stateObservable.next(this.stateObservable.value);
   }
 
-  getToolByType(type: ToolType): ToolState | undefined {
-    var tool = this.stateObservable.value.toolState.find(tool => tool.toolType == type);
-    return tool;
+  setToolStatus(type: ToolType | undefined) {
+    this.stateObservable.value.selectedTool = type;
+    switch (type) {
+      case ToolType.mesure:
+        this.stateObservable.value.calculatedResult=undefined;
+        break;
+      default:
+        this.mapApiService.measureGroup.removeAll(); 
+        this.mapApiService.radiusGroup.removeAll();   
+        break;
+    }
+    this.stateObservable.next(this.stateObservable.value);
+  }
+
+  setRadius(distance: number)
+  {
+    this.stateObservable.value.distance = distance;
+    this.stateObservable.next(this.stateObservable.value);
   }
 
   setAgent(agent: AgentProfile) {
@@ -200,29 +181,43 @@ export class MapStateService {
     this.stateObservable.next(this.stateObservable.value);
   }
 
-  interactionCallBack = (type: InteractToItem, item: GeocodeResult) => {
-    switch (type) {
-      case InteractToItem.Select:
-        this.openItemDialog(item);
-        break;
-      default:
-        break;
-    }
-  }
-
-  openItemDialog(item: GeocodeResult) {
-    if (!item || item.type === 'Office') {
+  interactionCallBack = async (type: InteractToItem, item: GeocodeResult) => {
+    if (type != InteractToItem.Select) {
       return;
     }
-    let dialogRef = this.dialog.open(GeoAddedHomeComponent, {
-      enterAnimationDuration: '200ms',
-      exitAnimationDuration: '200ms',
-      height:'70vh',
-    });
-    let instance = dialogRef.componentInstance;
-    instance.item = item;
-    instance.agent = this.stateObservable.value.agent;
-    instance.expanded = true;
+    switch (this.stateObservable.value.selectedTool) {
+      case ToolType.mesure:
+        var groupToRender = this.mapApiService.measureGroup;
+        groupToRender?.removeAll();
+        this.stateObservable.value.geoCalculatingItems.push(item);
+        if (this.stateObservable.value.geoCalculatingItems.length % 2 ==1) {
+          this.stateObservable.value.geoCalculatingItems= [item];
+          this.stateObservable.value.calculatedResult = undefined;
+        }
+
+        var calculatingItems = this.stateObservable.value.geoCalculatingItems;
+        this.mapApiService.renderCirclesToMap(groupToRender, this.stateObservable.value.geoCalculatingItems, 100, { r: 17, g: 120, b: 100, a: 0.8 });
+        if (this.stateObservable.value.geoCalculatingItems.length == 2) {
+          var route = await this.getRoute(calculatingItems[0], calculatingItems[1]);
+          this.mapApiService.renderRouteShapesToMap(groupToRender, [route]);
+          var travelSummary = route.sections[0].travelSummary;
+          this.stateObservable.value.calculatedResult = travelSummary;
+        }
+        
+        this.stateObservable.next(this.stateObservable.value);
+        this.toolsNavigationService.openMeasureTool();
+        break;
+      case ToolType.radius:
+        var groupToRender = this.mapApiService.radiusGroup;
+        this.mapApiService.renderCirclesToMap(groupToRender,
+           [item], this.stateObservable.value.distance, { r: 17, g: 120, b: 100, a: 0.8 });
+        this.toolsNavigationService.openRadiusTool();
+        break;
+      default:
+        this.setSelectedItem(item);
+        this.toolsNavigationService.openBottomSheet(item);
+        break;
+    }
   }
 
   checkItemExisting(item: GeocodeResult): boolean {

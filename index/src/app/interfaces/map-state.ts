@@ -2,34 +2,41 @@ import { Dictionary } from "lodash";
 import { AgentProfile } from "./agent-profile";
 import { GeocodeResult } from "./geocode-result";
 import { RoutePair } from "./pair-route";
+import { TravelSummary } from "./route-result";
 
 export interface MapState {
     geoItems: GeocodeResult[];
+    selectedItem: GeocodeResult | undefined;
     geoCalculatingItems: GeocodeResult[];
+    calculatedResult: TravelSummary | undefined;
     geoRoutePairs: RoutePair[];
     distance: number;
+    selectedTool: ToolType | undefined;
     toolState: ToolState[];
-    agent: AgentProfile;
+    agent: AgentProfile | undefined;
     geoCodeDatabase: Dictionary<GeocodeResult[]>;
 }
 
 export enum ToolType {
     info,
-    mesure
+    mesure,
+    radius
 }
 
 export class ToolState {
     toolType: ToolType = ToolType.info;
     description = "";
     activated = false;
-    status = false;
 }
 
 export class EmptyState implements MapState {
     geoItems: GeocodeResult[] = [];
+    selectedItem: undefined;
     geoCalculatingItems: GeocodeResult[] = [];
+    calculatedResult = undefined;
     geoRoutePairs: RoutePair[] = [];
     distance: number = 1000;
+    selectedTool: ToolType | undefined = undefined;
     toolState = [
         {
             description: "Thông tin nhà trọ :",

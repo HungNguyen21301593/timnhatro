@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { MainMaptoolsComponent } from './main-maptools.component';
+import { MeasureToolComponent } from './measure-tool.component';
 
-describe('MainMaptoolsComponent', () => {
-  let component: MainMaptoolsComponent;
-  let fixture: ComponentFixture<MainMaptoolsComponent>;
+describe('MeasureToolComponent', () => {
+  let component: MeasureToolComponent;
+  let fixture: ComponentFixture<MeasureToolComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MainMaptoolsComponent ]
+      declarations: [ MeasureToolComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MainMaptoolsComponent);
+    fixture = TestBed.createComponent(MeasureToolComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

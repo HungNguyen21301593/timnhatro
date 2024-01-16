@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { MesureToolComponent } from './mesure-tool.component';
+import { GeoItemMiniBarComponent } from './geo-item-mini-bar.component';
 
-describe('MesureToolComponent', () => {
-  let component: MesureToolComponent;
-  let fixture: ComponentFixture<MesureToolComponent>;
+describe('GeoItemMiniBarComponent', () => {
+  let component: GeoItemMiniBarComponent;
+  let fixture: ComponentFixture<GeoItemMiniBarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MesureToolComponent ]
+      declarations: [ GeoItemMiniBarComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MesureToolComponent);
+    fixture = TestBed.createComponent(GeoItemMiniBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
