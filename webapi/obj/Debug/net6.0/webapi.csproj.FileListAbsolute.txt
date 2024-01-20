@@ -178,3 +178,4 @@ D:\Personal\Projects\rs-agent-helper\timnhatro\webapi\obj\Debug\net6.0\refint\we
 D:\Personal\Projects\rs-agent-helper\timnhatro\webapi\obj\Debug\net6.0\webapi.pdb
 D:\Personal\Projects\rs-agent-helper\timnhatro\webapi\obj\Debug\net6.0\webapi.genruntimeconfig.cache
 D:\Personal\Projects\rs-agent-helper\timnhatro\webapi\obj\Debug\net6.0\ref\webapi.dll
+D:\Personal\Projects\rs-agent-helper\timnhatro\webapi\obj\Debug\net6.0\webapi.sourcelink.json

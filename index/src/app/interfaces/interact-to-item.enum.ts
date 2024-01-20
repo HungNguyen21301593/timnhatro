@@ -1,4 +1,6 @@
 export enum InteractToItem {
-    Remove,
+    Click,
     Select,
+    Measure,
+    Radius
 }

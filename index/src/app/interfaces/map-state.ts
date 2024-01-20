@@ -18,13 +18,12 @@ export interface MapState {
 }
 
 export enum ToolType {
-    info,
     mesure,
     radius
 }
 
 export class ToolState {
-    toolType: ToolType = ToolType.info;
+    toolType: ToolType = ToolType.mesure;
     description = "";
     activated = false;
 }
@@ -40,7 +39,7 @@ export class EmptyState implements MapState {
     toolState = [
         {
             description: "Thông tin nhà trọ :",
-            toolType: ToolType.info,
+            toolType: ToolType.mesure,
             activated: true,
             status: true
         },

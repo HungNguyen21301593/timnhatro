@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "2c/qbCHy/+z2WKCwlUW3Upul1l3DDdnZlfgg6mVaU+F9tXlIQWZvwz0M2eUr7Gw+ZeLcok0eNigCbbrlIPpuNg==",
+  "dgSpecHash": "7vnCtp7MVwuOsHkiqQtb7B0VeleVkn7/a1jlgVyHkMYw7KybfpPAT8mOhWfVFrJ0YeAyUdJJdutKcmauUNlltQ==",
   "success": true,
   "projectFilePath": "D:\\Personal\\Projects\\rs-agent-helper\\timnhatro\\webapi\\webapi.csproj",
   "expectedPackageFiles": [
@@ -81,7 +81,11 @@
     "C:\\Users\\nmh\\.nuget\\packages\\system.threading.channels\\7.0.0\\system.threading.channels.7.0.0.nupkg.sha512",
     "C:\\Users\\nmh\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
     "C:\\Users\\nmh\\.nuget\\packages\\telegram.bot\\17.0.0\\telegram.bot.17.0.0.nupkg.sha512",
-    "C:\\Users\\nmh\\.nuget\\packages\\webdrivermanager\\2.17.1\\webdrivermanager.2.17.1.nupkg.sha512"
+    "C:\\Users\\nmh\\.nuget\\packages\\webdrivermanager\\2.17.1\\webdrivermanager.2.17.1.nupkg.sha512",
+    "C:\\Users\\nmh\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.26\\microsoft.windowsdesktop.app.ref.6.0.26.nupkg.sha512",
+    "C:\\Users\\nmh\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.26\\microsoft.netcore.app.ref.6.0.26.nupkg.sha512",
+    "C:\\Users\\nmh\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.26\\microsoft.aspnetcore.app.ref.6.0.26.nupkg.sha512",
+    "C:\\Users\\nmh\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.26\\microsoft.netcore.app.host.win-x64.6.0.26.nupkg.sha512"
   ],
   "logs": []
 }

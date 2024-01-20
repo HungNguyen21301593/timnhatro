@@ -47,36 +47,62 @@ export class MapStateService {
     this.mapApiService.renderLocationsToMap(this.mapApiService.baseGroup, this.stateObservable.value.geoItems,
       (type: InteractToItem, item: GeocodeResult) => {
         this.interactionCallBack(type, item);
-      });
+      })
   }
 
-  renderMesureTool(state: boolean) {
-    this.mapApiService.measureGroup?.setVisibility(state);
-    if (!state) {
-      return;
-    }
-    var groupToRender = this.mapApiService.measureGroup;
-    groupToRender?.removeAll();
+  handleClickInteraction = async (type: InteractToItem, item: GeocodeResult)=>{
+    switch (this.stateObservable.value.selectedTool) {
+      case ToolType.mesure:
+        var groupToRender = this.mapApiService.measureGroup;
+        groupToRender?.removeAll();
+        this.stateObservable.value.geoCalculatingItems.push(item);
+        if (this.stateObservable.value.geoCalculatingItems.length % 2 ==1) {
+          this.stateObservable.value.geoCalculatingItems= [item];
+          this.stateObservable.value.calculatedResult = undefined;
+        }
 
-    this.mapApiService.renderInteractionsToMap(groupToRender, this.stateObservable.value.geoItems, async (type: InteractToItem, item: GeocodeResult) => {
-      if (this.stateObservable.value.geoCalculatingItems.some(i => this.compareLocation(i, item))) {
-        return;
-      }
-      this.stateObservable.value.geoCalculatingItems.push(item);
-      var calculatingItems = this.stateObservable.value.geoCalculatingItems;
-      // if (calculatingItems.length == 1) {
-      //   groupToRender?.removeAll();
-      // }
-      this.mapApiService.renderCirclesToMap(groupToRender, calculatingItems, 100, { r: 17, g: 120, b: 100, a: 0.8 });
-      if (calculatingItems.length == 2) {
-        var route = await this.getRoute(calculatingItems[0], calculatingItems[1]);
-        this.mapApiService.renderRouteShapesToMap(groupToRender, [route]);
-        var route = await this.getRoute(calculatingItems[0], calculatingItems[1]);
-        var travelSummary = route.sections[0].travelSummary;
-        this.snackBar.open(`${Math.round(travelSummary.length / 100) / 10} Km, ${Math.round(travelSummary.duration / 60)} Phút`, "", { duration: 3000, horizontalPosition: 'right', verticalPosition: 'top' })
-        this.stateObservable.value.geoCalculatingItems = [];
-      }
-    });
+        var calculatingItems = this.stateObservable.value.geoCalculatingItems;
+        this.mapApiService.renderCirclesToMap(groupToRender, this.stateObservable.value.geoCalculatingItems, 100, { r: 17, g: 120, b: 100, a: 0.8 });
+        if (this.stateObservable.value.geoCalculatingItems.length == 2) {
+          var route = await this.getRoute(calculatingItems[0], calculatingItems[1]);
+          this.mapApiService.renderRouteShapesToMap(groupToRender, [route]);
+          var travelSummary = route.sections[0].travelSummary;
+          this.stateObservable.value.calculatedResult = travelSummary;
+        }
+        
+        this.stateObservable.next(this.stateObservable.value);
+        this.toolsNavigationService.openMeasureTool();
+        break;
+      case ToolType.radius:
+        var groupToRender = this.mapApiService.radiusGroup;
+        this.mapApiService.renderCirclesToMap(groupToRender,
+           [item], this.stateObservable.value.distance, { r: 17, g: 120, b: 100, a: 0.8 });
+        this.toolsNavigationService.openRadiusTool();
+        break;
+      default:
+        
+        break;
+    }
+  }
+
+  interactionCallBack = async (type: InteractToItem, item: GeocodeResult) => {
+    switch (type) {
+      case InteractToItem.Select:
+        this.setSelectedItem(item);
+        this.toolsNavigationService.openBottomSheet(item);
+        break;
+      case InteractToItem.Measure:
+        this.setToolStatus(ToolType.mesure)
+        break;
+      case InteractToItem.Radius:
+        this.setToolStatus(ToolType.radius)
+        break;
+      case InteractToItem.Click:
+        this.handleClickInteraction(type, item)
+        break;
+      default:
+        break;
+    }
   }
 
   async reloadState(stateId: string): Promise<MapState | null> {
@@ -181,44 +207,7 @@ export class MapStateService {
     this.stateObservable.next(this.stateObservable.value);
   }
 
-  interactionCallBack = async (type: InteractToItem, item: GeocodeResult) => {
-    if (type != InteractToItem.Select) {
-      return;
-    }
-    switch (this.stateObservable.value.selectedTool) {
-      case ToolType.mesure:
-        var groupToRender = this.mapApiService.measureGroup;
-        groupToRender?.removeAll();
-        this.stateObservable.value.geoCalculatingItems.push(item);
-        if (this.stateObservable.value.geoCalculatingItems.length % 2 ==1) {
-          this.stateObservable.value.geoCalculatingItems= [item];
-          this.stateObservable.value.calculatedResult = undefined;
-        }
-
-        var calculatingItems = this.stateObservable.value.geoCalculatingItems;
-        this.mapApiService.renderCirclesToMap(groupToRender, this.stateObservable.value.geoCalculatingItems, 100, { r: 17, g: 120, b: 100, a: 0.8 });
-        if (this.stateObservable.value.geoCalculatingItems.length == 2) {
-          var route = await this.getRoute(calculatingItems[0], calculatingItems[1]);
-          this.mapApiService.renderRouteShapesToMap(groupToRender, [route]);
-          var travelSummary = route.sections[0].travelSummary;
-          this.stateObservable.value.calculatedResult = travelSummary;
-        }
-        
-        this.stateObservable.next(this.stateObservable.value);
-        this.toolsNavigationService.openMeasureTool();
-        break;
-      case ToolType.radius:
-        var groupToRender = this.mapApiService.radiusGroup;
-        this.mapApiService.renderCirclesToMap(groupToRender,
-           [item], this.stateObservable.value.distance, { r: 17, g: 120, b: 100, a: 0.8 });
-        this.toolsNavigationService.openRadiusTool();
-        break;
-      default:
-        this.setSelectedItem(item);
-        this.toolsNavigationService.openBottomSheet(item);
-        break;
-    }
-  }
+  
 
   checkItemExisting(item: GeocodeResult): boolean {
     return this.stateObservable.value.geoItems.some(value => this.compareLocation(value, item));

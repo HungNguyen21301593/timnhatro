@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { GeocodeResult } from '../interfaces/geocode-result';
-import { RouteResult, Section, TravelSummary } from '../interfaces/route-result';
+import { RouteResult, Section } from '../interfaces/route-result';
 import { InteractToItem } from '../interfaces/interact-to-item.enum';
 import { IsolineRessult } from '../interfaces/isoline-result';
 import { GeneralHelper } from './Util/general-helper';
 import _ from 'lodash';
 import { Color } from '../interfaces/color';
-import { delay } from 'rxjs';
-import { ToolsNavigationService } from './tools-navigation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,10 +19,10 @@ export class MapApiService {
   public radiusGroup: H.map.Group = new H.map.Group({ zIndex: 2, data: {} });
   public measureGroup: H.map.Group = new H.map.Group({ zIndex: 3, data: {} });
   ui?: H.ui.UI;
-
+  behavior?: H.mapevents.Behavior;
   alphabetDictionary: string[] = ["A", "B", "C", "D", "E", "F"];
 
-  constructor(private toolsNavigationService: ToolsNavigationService) {
+  constructor() {
     this.platform = new H.service.Platform({
       apikey: 'wQOFzJnltEfLDHulkvnkd26RgvFvmrDwGmr31xP1uhs'
     });
@@ -45,13 +43,12 @@ export class MapApiService {
     ])
 
     window.addEventListener('resize', () => this.map?.getViewPort().resize());
-    var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
+    this.behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
     this.ui = H.ui.UI.createDefault(this.map, this.defaultLayers);
     this.setStyle();
-    this.map.addEventListener('mapviewchangestart', ()=> {
+    this.map.addEventListener('mapviewchangestart', () => {
       // this.toolsNavigationService.closeAllBottomSheet();
     });
-
     return this.map;
   }
 
@@ -150,7 +147,6 @@ export class MapApiService {
     if (!this.map) {
       return;
     }
-    this.clearAllBubble();
     var polylines: H.map.Polyline[] = [];
     routes.forEach((route: RouteResult) => {
       route.sections.forEach((section: Section) => {
@@ -176,29 +172,10 @@ export class MapApiService {
     });
   }
 
-  openBubble(georesult: GeocodeResult) {
-    var bubble = new H.ui.InfoBubble(
-      georesult.position,
-      { content: this.getBubbleContent(georesult) });
-    this.ui?.addBubble(bubble);
-    bubble.open();
-  }
-
-  getBubbleContent(georesult: GeocodeResult) {
-    return `
-    <img class=bubble-info src=${georesult.realstateData[0].images[0]}>
-    `;
-  }
-
-  clearAllBubble() {
-    this.ui?.getBubbles().forEach(bu => this.ui?.removeBubble(bu));
-    if (!this.map) {
-      return;
-    }
-    this.ui = H.ui.UI.createDefault(this.map, this.defaultLayers);
-  }
-
-  renderLocationsToMap(group: H.map.Group | undefined, geocodeResults: GeocodeResult[], interactionCallBack: (type: InteractToItem, item: GeocodeResult) => void) {
+  renderLocationsToMap(group: H.map.Group | undefined,
+    geocodeResults: GeocodeResult[],
+    interactionCallBack: (type: InteractToItem, item: GeocodeResult) => void,
+  ) {
     if (!this.map) {
       return;
     }
@@ -207,50 +184,61 @@ export class MapApiService {
     }
     group.removeAll();
     this.map.removeObject(group)
+
     geocodeResults.filter(geocodeResult => geocodeResult.type == 'Home').forEach(geocodeResult => {
       var marker = new H.map.Marker(geocodeResult.position);
       marker.setIcon(new H.map.Icon('/assets/image/home.png'));
-      marker.addEventListener('tap', (evt: any)=> {
-        interactionCallBack(InteractToItem.Select, geocodeResult);
-      }, false);
+      this.addEventListenerForMarker(marker, geocodeResult, interactionCallBack)
       group?.addObject(marker);
     })
+
     var offices = geocodeResults.filter(geocodeResult => geocodeResult.type == 'Office');
     for (let index = 0; index < offices.length; index++) {
       const geocodeResult = offices[index];
       var marker = new H.map.Marker(geocodeResult.position);
-      marker.addEventListener('tap', function (evt: any) {
-        interactionCallBack(InteractToItem.Select, geocodeResult);
-      }, false);
-      
       var alphabetCharacter = this.alphabetDictionary[index];
       geocodeResult.textId = alphabetCharacter;
       marker.setIcon(new H.map.Icon(`/assets/image/${alphabetCharacter}.png`));
+      this.addEventListenerForMarker(marker, geocodeResult, interactionCallBack)
       group?.addObject(marker);
     };
-    // Add the locations group to the map
     this.map?.addObject(group);
   }
 
-  renderInteractionsToMap(group: H.map.Group | undefined, geocodeResults: GeocodeResult[], interactionCallBack: (type: InteractToItem, item: GeocodeResult) => void) {
-    if (!this.map) {
-      return;
-    }
-    if (!group) {
-      return;
-    }
-    group.removeAll();
-    this.map.removeObject(group)
-    geocodeResults.forEach(geocodeResult => {
-      var marker = new H.map.Marker(geocodeResult.position);
-      marker.addEventListener('tap',  (evt: any)=> {
-        interactionCallBack(InteractToItem.Select, geocodeResult);
-      }, false);
-      group.addObject(marker);
+  addEventListenerForMarker(marker: H.map.Marker,
+    geocodeResult: GeocodeResult,
+    interactionCallBack: (type: InteractToItem, item: GeocodeResult) => void
+  ) {
+    marker.addEventListener('tap', (event:any)=>{
+      interactionCallBack(InteractToItem.Click, geocodeResult);
     })
-    // Add the locations group to the map
-    this.map?.addObject(group);
+    marker.addEventListener('contextmenu', function(evt: any){
+        console.log(evt);
+        evt.items.push(
+          new H.util.ContextItem({
+            label: 'Xem thêm',
+            callback: () => { 
+              interactionCallBack(InteractToItem.Select, geocodeResult) 
+            }
+          }),
+          H.util.ContextItem.SEPARATOR,
+          new H.util.ContextItem({
+            label: 'Đo khoảng cách',
+            callback: () => { 
+              interactionCallBack(InteractToItem.Measure, geocodeResult) 
+            }
+          }),
+          H.util.ContextItem.SEPARATOR,
+          new H.util.ContextItem({
+            label: 'Vẽ bán kính',
+            callback: () => { 
+              interactionCallBack(InteractToItem.Radius, geocodeResult) 
+            }
+          }),
+        );
+      });
   }
+
 
   renderCirclesToMap(group: H.map.Group | undefined, geocodeResults: GeocodeResult[], distance: number = 100, color: null | Color = null) {
     if (!this.map) {
@@ -294,7 +282,7 @@ export class MapApiService {
     if (!this.map) {
       return;
     }
-    
+
     if (locations.length == 0) {
       return;
     }
