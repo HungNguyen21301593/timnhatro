@@ -89,13 +89,15 @@ export class MapStateService {
     switch (type) {
       case InteractToItem.Select:
         this.setSelectedItem(item);
-        this.toolsNavigationService.openBottomSheet(item);
+        this.toolsNavigationService.openItemDialog(item, {});
         break;
       case InteractToItem.Measure:
         this.setToolStatus(ToolType.mesure)
+        this.handleClickInteraction(InteractToItem.Click, item)
         break;
       case InteractToItem.Radius:
         this.setToolStatus(ToolType.radius)
+        this.handleClickInteraction(InteractToItem.Click, item)
         break;
       case InteractToItem.Click:
         this.handleClickInteraction(type, item)
@@ -149,6 +151,7 @@ export class MapStateService {
   {
     this.stateObservable.value.distance = distance;
     this.stateObservable.next(this.stateObservable.value);
+    this.mapApiService.radiusGroup.removeAll();
   }
 
   setAgent(agent: AgentProfile) {

@@ -19,8 +19,7 @@ export class RadiusToolComponent implements OnInit {
 
   setDistance(distance:number)
   {
-    this.mapStateService.stateObservable.value.distance = distance;
-    this.mapStateService.stateObservable.next(this.mapStateService.stateObservable.value);
+    this.mapStateService.setRadius(distance)
   }
 
   close()
