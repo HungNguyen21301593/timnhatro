@@ -50,7 +50,7 @@ export class MapStateService {
       })
   }
 
-  handleClickInteraction = async (type: InteractToItem, item: GeocodeResult)=>{
+  handleClickInteraction = async (item: GeocodeResult)=>{
     switch (this.stateObservable.value.selectedTool) {
       case ToolType.mesure:
         var groupToRender = this.mapApiService.measureGroup;
@@ -80,27 +80,28 @@ export class MapStateService {
         this.toolsNavigationService.openRadiusTool();
         break;
       default:
-        
+        this.setSelectedItem(item);
+        this.toolsNavigationService.openItemDialog(item, {});
         break;
     }
   }
 
   interactionCallBack = async (type: InteractToItem, item: GeocodeResult) => {
     switch (type) {
-      case InteractToItem.Select:
-        this.setSelectedItem(item);
-        this.toolsNavigationService.openItemDialog(item, {});
+      case InteractToItem.Click:
+        this.handleClickInteraction(item)
+        
         break;
       case InteractToItem.Measure:
         this.setToolStatus(ToolType.mesure)
-        this.handleClickInteraction(InteractToItem.Click, item)
+        this.handleClickInteraction(item)
         break;
       case InteractToItem.Radius:
         this.setToolStatus(ToolType.radius)
-        this.handleClickInteraction(InteractToItem.Click, item)
+        this.handleClickInteraction(item)
         break;
       case InteractToItem.Click:
-        this.handleClickInteraction(type, item)
+        this.handleClickInteraction(item)
         break;
       default:
         break;

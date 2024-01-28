@@ -8,6 +8,22 @@
       <a [href]="selectedElement.html">Bài gốc</a>
     </mat-card-content>
   </mat-card>
+  <button mat-flat-button color="primary" (click)="direction()">
+    <span>Chỉ đường</span>
+    <mat-icon> directions</mat-icon>
+  </button>
+  <button mat-flat-button color="primary" href="tel:+0858008266?">
+    <span>Gọi điện</span>
+    <mat-icon> phone</mat-icon>
+  </button>
+  <button mat-flat-button color="primary" href="sms:+0858008266?&body=Hi. My name is">
+    <span>Nhắn tin</span>
+    <mat-icon> textsms</mat-icon>
+  </button>
+  <button mat-flat-button color="primary" href="sms:+0858008266?&body=Hi. My name is">
+    <span>Zalo</span>
+    <mat-icon>textsms</mat-icon>
+  </button>
   <mat-card>
     <mat-card-header>
       <mat-card-title>Địa chỉ:</mat-card-title>
@@ -21,9 +37,10 @@
       <mat-card-title>Mô tả:</mat-card-title>
     </mat-card-header>
     <mat-card-content class="lines">
-      <p>{{selectedElement.description}}</p>
+      <p >{{selectedElement.description}}</p>
     </mat-card-content>
   </mat-card>
   <app-image-viewer *ngIf="selectedElement" class="full-height full-width" [images]="selectedElement.images"
-    [height]="'200'"></app-image-viewer>
+    [height]="'300'"></app-image-viewer>
 </div>
+

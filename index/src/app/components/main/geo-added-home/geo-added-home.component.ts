@@ -16,4 +16,11 @@ export class GeoAddedHomeComponent implements OnInit {
   async ngOnInit() {
     this.selectedElement = this.item.realstateData[0];
   }
+
+  direction() {
+    if (!this.item.address) {
+      return;
+    }
+    window.open(`https://www.google.com/maps/search/?api=1&query=${this.item.address.label}`, '_blank');
+  }
 }

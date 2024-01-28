@@ -57,6 +57,7 @@ import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import { GeoItemMiniBarComponent } from './components/main/geo-item-mini-bar/geo-item-mini-bar.component';
 import { MeasureToolComponent } from './components/main/measure-tool/measure-tool.component';
 import { RadiusToolComponent } from './components/main/radius-tool/radius-tool.component';
+import { MapContextMenuComponent } from './components/main/map-context-menu/map-context-menu.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { RadiusToolComponent } from './components/main/radius-tool/radius-tool.c
     FooterComponent,
     GeoItemMiniBarComponent,
     MeasureToolComponent,
-    RadiusToolComponent
+    RadiusToolComponent,
+    MapContextMenuComponent
     ],
   imports: [
     NgFor,

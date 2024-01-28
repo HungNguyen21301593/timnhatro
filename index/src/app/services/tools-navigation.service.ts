@@ -24,7 +24,7 @@ export class ToolsNavigationService {
     let dialogRef = this.dialog.open(GeoAddedHomeComponent, {
       enterAnimationDuration: '200ms',
       exitAnimationDuration: '200ms',
-      height: '80vh',
+      height: '70vh',
       width: '100vw',
     });
     let instance = dialogRef.componentInstance;
