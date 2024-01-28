@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AgentProfile } from 'src/app/interfaces/agent-profile';
 import { GeocodeResult } from 'src/app/interfaces/geocode-result';
 import { RealstateData } from 'src/app/interfaces/realstate-item';
 @Component({
@@ -9,6 +10,9 @@ import { RealstateData } from 'src/app/interfaces/realstate-item';
 export class GeoAddedHomeComponent implements OnInit {
   @Input()
   item!: GeocodeResult;
+
+  @Input()
+  agent?: AgentProfile;
 
   public selectedElement: RealstateData | undefined = undefined;
   constructor() { }
@@ -22,5 +26,10 @@ export class GeoAddedHomeComponent implements OnInit {
       return;
     }
     window.open(`https://www.google.com/maps/search/?api=1&query=${this.item.address.label}`, '_blank');
+  }
+
+  gotoZalo()
+  {
+    window.open(`https://zalo.me/${this.agent?.phone}`, '_blank');
   }
 }

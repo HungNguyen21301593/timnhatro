@@ -29,6 +29,7 @@ export class ToolsNavigationService {
     });
     let instance = dialogRef.componentInstance;
     instance.item = item;
+    instance.agent = agent
     return dialogRef;
   }
 

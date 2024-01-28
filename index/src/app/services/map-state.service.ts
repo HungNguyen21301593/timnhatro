@@ -81,7 +81,7 @@ export class MapStateService {
         break;
       default:
         this.setSelectedItem(item);
-        this.toolsNavigationService.openItemDialog(item, {});
+        this.toolsNavigationService.openItemDialog(item, this.stateObservable.value.agent ?? {});
         break;
     }
   }
