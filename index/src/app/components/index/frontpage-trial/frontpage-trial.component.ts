@@ -33,6 +33,7 @@ export class FrontpageTrialComponent implements OnInit {
     this.mapStateService.stateObservable.next(newState);
     var result = await this.webApiService.createNewUserState(newState);
     this.resultLink = this.sanitizer.bypassSecurityTrustUrl(`main/${result.id}`);
-    window.open(`main/${result.id}`);
+    window.location.href = `main/${result.id}`;
+    // window.open(`main/${result.id}`);
   }
 }

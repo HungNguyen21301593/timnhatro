@@ -7,10 +7,9 @@
             </textarea>
             </mat-form-field>
             <div>
-                <button *ngIf="accountInfo" mat-raised-button color="warn" (click)="reset()" mat-button>Cài lại</button>
                 <button *ngIf="accountInfo" mat-raised-button color="primary" (click)="openDialog()" mat-button>Tải bản đồ cho tài khoản "{{accountInfo.memberDisplayName}}"</button>
+                <button *ngIf="accountInfo" mat-raised-button color="warn" (click)="reset()" mat-button>Cài lại</button>
             </div>
-            
         </div>
     </div>
 </div>

@@ -111,7 +111,7 @@ export class PostingFromAccountLinkComponent implements OnInit {
       return;
     }
     this.itemsPosted.emit(items);
-    this.snackBar.open(`Đăng ${items.length} bài thành công, map của bạn đang được tải lên, vui lòng chờ trong giây lát!`, "", { duration: 2000 });
+    this.snackBar.open(`Đăng ${items.length} bài thành công, map của bạn đang được tải lên, vui lòng chờ trong giây lát!`, "", { duration: 30000 });
     this.dialogRef.close({ items: items })
     this.reset();
   }

@@ -88,33 +88,6 @@ export class NewItemComponent implements OnInit {
     );
   }
 
-  // async openSinglePostDialog(link: string) {
-  //   const regex = /\/(\d+)\.htm/;
-  //   var matches = link.match(regex);
-  //   if (!matches) {
-  //     return;
-  //   }
-  //   var listing: AccountUrlResponse =
-  //   {
-  //     images: [],
-  //     listId: Number(matches[1]),
-  //     title: "",
-  //     url: link
-  //   }
-  //   var dialogRef = this.dialog.open(PostingFromAccountLinkComponent, {
-  //     data: {
-  //       title: "Đăng bài tự động qua link bài viết",
-  //       link: link,
-  //       listings: [listing]
-  //     },
-  //     minWidth:"70vw"
-  //   });
-  //   dialogRef.afterClosed().subscribe(data => {
-  //     this.itemposted.emit(data.items)
-  //   }
-  //   );
-  // }
-
   multipleItemsPosted(elements: RealstateData[]) {
     this.itemposted.emit(elements);
     this.reset();
