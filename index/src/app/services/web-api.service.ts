@@ -49,7 +49,6 @@ export class WebApiService {
       calculatedResult: undefined,
       geoItems: res?.geoItems?? emptyState.geoItems,
       geoCalculatingItems: res?.geoCalculatingItems ?? emptyState.geoCalculatingItems,
-      geoRoutePairs: res?.geoRoutePairs ?? emptyState.geoRoutePairs,
       distance: res?.distance ?? emptyState.distance,
       toolState: res?.toolState ?? emptyState.toolState,
       agent: res?.agent ?? emptyState.agent,

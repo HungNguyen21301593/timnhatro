@@ -36,9 +36,9 @@ body {
   margin-bottom: 0.5em;
 }
 
-.H_ib_close {
+/* .H_ib_close {
   display: none;
-}
+} */
 
 /* .H_ui {
   visibility: hidden;
@@ -84,4 +84,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .bubble-info{
   max-width: 40vw;
   max-height: 40vh;
+}
+
+.warning-dialog {
+  z-index: 5000 !important;
 }

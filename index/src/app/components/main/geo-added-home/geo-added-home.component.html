@@ -1,5 +1,21 @@
+<div class="contact-bubble" fxLayout="column" fxLayoutAlign="end end">
+  
+  <button class="button" *ngIf="agent?.phone" (click)="call()"  mat-flat-button color="primary">
+    <span>Gọi điện</span>
+    <mat-icon> phone</mat-icon>
+  </button>
+  <button class="button" *ngIf="agent?.phone" (click)="gotoZalo()" mat-flat-button color="primary" href="sms:+0858008266?&body=Hi. My name is">
+    <span>ZALO</span>
+    <mat-icon>textsms</mat-icon>
+  </button>
+</div>
 <div *ngIf="selectedElement" fxLayout="column" fxLayoutAlign="center stretch" class="realstate-content">
-  <mat-card>
+  
+  <mat-card> <div fxLayout="row" fxLayoutAlign="end start" >
+    <button mat-mini-fab color="warn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
     <mat-card-header>
       <mat-card-title>Tiêu đề:</mat-card-title>
     </mat-card-header>
@@ -8,18 +24,8 @@
       <a [href]="selectedElement.html">Bài gốc</a>
     </mat-card-content>
   </mat-card>
-  <button mat-flat-button color="primary" (click)="direction()">
-    <span>Chỉ đường</span>
-    <mat-icon> directions</mat-icon>
-  </button>
-  <a *ngIf="agent" mat-flat-button color="primary" href="tel:+0858008266?">
-    <span>Gọi điện</span>
-    <mat-icon> phone</mat-icon>
-  </a>
-  <button *ngIf="agent" (click)="gotoZalo()" mat-flat-button color="primary" href="sms:+0858008266?&body=Hi. My name is">
-    <span>Zalo</span>
-    <mat-icon>textsms</mat-icon>
-  </button>
+  
+  
   <mat-card>
     <mat-card-header>
       <mat-card-title>Địa chỉ:</mat-card-title>
@@ -27,6 +33,10 @@
     <mat-card-content>
       <p>{{selectedElement.address}}</p>
     </mat-card-content>
+    <button class="button" mat-flat-button color="primary" (click)="direction()">
+      <span>Chỉ đường</span>
+      <mat-icon> directions</mat-icon>
+    </button>
   </mat-card>
   <mat-card>
     <mat-card-header>

@@ -1,0 +1,6 @@
+<div fxLayout="column" fxLayoutAlign="center center" >
+  <button class="full-width" *ngFor="let tool of tools" (click)="enableTool(tool.toolType)"  mat-flat-button color="primary">
+    <span>{{tool.description}}</span>
+    <mat-icon>{{tool.icon}}</mat-icon>
+  </button>
+</div>
