@@ -1,7 +1,6 @@
-<div xLayout="column" fxLayoutAlign="end end">
-  
-  <button *ngFor="let tool of tools" (click)="enableTool(tool.toolType)"  mat-flat-button color="primary">
+<div fxLayout="column" fxLayoutAlign="center center" >
+  <button class="full-width" *ngFor="let tool of tools" (click)="enableTool(tool.toolType)"  mat-flat-button color="primary">
     <span>{{tool.description}}</span>
-    <mat-icon>textsms</mat-icon>
+    <mat-icon>{{tool.icon}}</mat-icon>
   </button>
 </div>

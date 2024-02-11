@@ -21,6 +21,7 @@ export class ToolsDialogComponent implements OnInit {
     this.tools = this.mapStateService.stateObservable.value.toolState
   }
   enableTool(type: ToolType) {
+    this.mapStateService.setToolStatus(type);
     switch (type) {
       case ToolType.mesure:
         this.toolsNavigationService.openMeasureTool();
@@ -31,6 +32,11 @@ export class ToolsDialogComponent implements OnInit {
       default:
         break;
     }
+    this.dialog.close();
+  }
+
+  close()
+  {
     this.dialog.close();
   }
 }

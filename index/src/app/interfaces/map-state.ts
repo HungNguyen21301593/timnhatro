@@ -36,6 +36,7 @@ export class ToolState {
     toolType: ToolType = ToolType.mesure;
     description = "";
     activated = false;
+    icon: undefined | string = "";
 }
 
 export class EmptyState implements MapState {
@@ -48,16 +49,18 @@ export class EmptyState implements MapState {
     selectedTool: ToolType | undefined = undefined;
     toolState = [
         {
-            description: "Thông tin nhà trọ :",
-            toolType: ToolType.mesure,
-            activated: true,
-            status: true
-        },
-        {
             description: "Đo khoảng cách :",
             toolType: ToolType.mesure,
             activated: true,
-            status: false
+            status: true,
+            icon: "straighten",
+        },
+        {
+            description: "Vẽ bán kính :",
+            toolType: ToolType.radius,
+            activated: true,
+            status: false,
+            icon: "360",
         }
     ];
     agent: AgentProfile = {};
