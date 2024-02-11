@@ -1,11 +1,10 @@
-.dialog-container{
+.dialog-container {
     height: 100%;
     width: 100%;
     padding: 20px;
 }
 
-.realstate-content
-{
+.realstate-content {
     overflow: scroll;
     -ms-overflow-style: none;
     /* Internet Explorer 10+ */
@@ -18,14 +17,26 @@
     /* Safari and Chrome */
 }
 
-mat-button-toggle-group{
+mat-button-toggle-group {
     padding: 5px;
 }
 
-mat-button-toggle{
+mat-button-toggle {
     padding: 5px;
 }
 
 .lines {
     white-space: pre-wrap;
-  }
+}
+
+.contact-bubble
+{
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+    z-index: 10000;
+    
+}
+.contact-bubble .button{
+    min-width: 40vw;
+}

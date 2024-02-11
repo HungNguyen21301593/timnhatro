@@ -90,18 +90,9 @@ export class MapStateService {
     switch (type) {
       case InteractToItem.Click:
         this.handleClickInteraction(item)
-        
         break;
-      case InteractToItem.Measure:
-        this.setToolStatus(ToolType.mesure)
-        this.handleClickInteraction(item)
-        break;
-      case InteractToItem.Radius:
-        this.setToolStatus(ToolType.radius)
-        this.handleClickInteraction(item)
-        break;
-      case InteractToItem.Click:
-        this.handleClickInteraction(item)
+      case InteractToItem.Hold:
+        this.toolsNavigationService.openToolsDialog();
         break;
       default:
         break;

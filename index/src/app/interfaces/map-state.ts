@@ -5,16 +5,26 @@ import { RoutePair } from "./pair-route";
 import { TravelSummary } from "./route-result";
 
 export interface MapState {
+    //info:
+    agent: AgentProfile | undefined;
     geoItems: GeocodeResult[];
+    //state:
+    selectedTool: ToolType | undefined;
+
+    // 1. dialog
     selectedItem: GeocodeResult | undefined;
+    
+    // 2. dialog
     geoCalculatingItems: GeocodeResult[];
     calculatedResult: TravelSummary | undefined;
-    geoRoutePairs: RoutePair[];
+    // 3. radius:
     distance: number;
-    selectedTool: ToolType | undefined;
+    
     toolState: ToolState[];
-    agent: AgentProfile | undefined;
+
+    //database:
     geoCodeDatabase: Dictionary<GeocodeResult[]>;
+    
 }
 
 export enum ToolType {

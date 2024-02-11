@@ -12,7 +12,7 @@ app-address-autocomplete{
     position: fixed;
     z-index: 100;
     min-width: 80%;
-    top: 10%;
+    top: 10px;
     left: 10px;
     right: 10px;
 }

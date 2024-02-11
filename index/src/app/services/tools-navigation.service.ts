@@ -8,6 +8,7 @@ import { AgentProfile } from '../interfaces/agent-profile';
 import { MeasureToolComponent } from '../components/main/measure-tool/measure-tool.component';
 import { MapState } from '../interfaces/map-state';
 import { RadiusToolComponent } from '../components/main/radius-tool/radius-tool.component';
+import { ToolsDialogComponent } from '../components/main/tools-dialog/tools-dialog.component';
 
 @Injectable({
   providedIn: 'root'
@@ -24,14 +25,23 @@ export class ToolsNavigationService {
     let dialogRef = this.dialog.open(GeoAddedHomeComponent, {
       enterAnimationDuration: '200ms',
       exitAnimationDuration: '200ms',
-      height: '60vh',
-      width: '100vw',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '100%',
+      width: '100%',
+      panelClass: 'warning-dialog'
     });
     let instance = dialogRef.componentInstance;
     instance.item = item;
     instance.agent = agent
     return dialogRef;
   }
+
+  openToolsDialog()
+  {
+    let dialogRef = this.dialog.open(ToolsDialogComponent);
+  }
+  
 
   openBottomSheet(item: GeocodeResult)
   {

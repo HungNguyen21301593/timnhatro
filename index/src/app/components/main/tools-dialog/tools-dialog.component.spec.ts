@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { MapContextMenuComponent } from './map-context-menu.component';
+import { ToolsDialogComponent } from './tools-dialog.component';
 
-describe('MapContextMenuComponent', () => {
-  let component: MapContextMenuComponent;
-  let fixture: ComponentFixture<MapContextMenuComponent>;
+describe('ToolsDialogComponent', () => {
+  let component: ToolsDialogComponent;
+  let fixture: ComponentFixture<ToolsDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MapContextMenuComponent ]
+      declarations: [ ToolsDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MapContextMenuComponent);
+    fixture = TestBed.createComponent(ToolsDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

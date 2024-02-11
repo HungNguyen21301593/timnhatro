@@ -212,31 +212,39 @@ export class MapApiService {
     marker.addEventListener('tap', (event:any)=>{
       interactionCallBack(InteractToItem.Click, geocodeResult);
     })
-    marker.addEventListener('contextmenu', function(evt: any){
-        console.log(evt);
-        evt.items.push(
-          // new H.util.ContextItem({
-          //   label: 'Xem thêm',
-          //   callback: () => { 
-          //     interactionCallBack(InteractToItem.Select, geocodeResult) 
-          //   }
-          // }),
-          // H.util.ContextItem.SEPARATOR,
-          new H.util.ContextItem({
-            label: 'Đo khoảng cách',
-            callback: () => { 
-              interactionCallBack(InteractToItem.Measure, geocodeResult) 
-            }
-          }),
-          H.util.ContextItem.SEPARATOR,
-          new H.util.ContextItem({
-            label: 'Vẽ bán kính',
-            callback: () => { 
-              interactionCallBack(InteractToItem.Radius, geocodeResult) 
-            }
-          }),
-        );
-      });
+    marker.addEventListener('longpress', (event:any)=>{
+      event.preventDefault();
+      interactionCallBack(InteractToItem.Hold, geocodeResult);
+    })
+    marker.addEventListener('contextmenu', function(event:any){
+      event.preventDefault();
+      return false;
+    })
+    // marker.addEventListener('contextmenu', function(evt: any){
+    //     console.log(evt);
+    //     evt.items.push(
+    //       // new H.util.ContextItem({
+    //       //   label: 'Xem thêm',
+    //       //   callback: () => { 
+    //       //     interactionCallBack(InteractToItem.Select, geocodeResult) 
+    //       //   }
+    //       // }),
+    //       // H.util.ContextItem.SEPARATOR,
+    //       new H.util.ContextItem({
+    //         label: 'Đo khoảng cách',
+    //         callback: () => { 
+    //           interactionCallBack(InteractToItem.Measure, geocodeResult) 
+    //         }
+    //       }),
+    //       H.util.ContextItem.SEPARATOR,
+    //       new H.util.ContextItem({
+    //         label: 'Vẽ bán kính',
+    //         callback: () => { 
+    //           interactionCallBack(InteractToItem.Radius, geocodeResult) 
+    //         }
+    //       }),
+    //     );
+    //   });
   }
 
 

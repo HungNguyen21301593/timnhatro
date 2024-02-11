@@ -80,7 +80,8 @@ export class NewItemComponent implements OnInit {
         title: "Đăng bài tự động qua link tài khoản",
         listings: this.listings
       },
-      minWidth:"70vw"
+      minWidth:"70vw",
+      maxHeight:"70vh"
     });
     dialogRef.afterClosed().subscribe(data => {
       this.itemposted.emit(data?.items ?? [])

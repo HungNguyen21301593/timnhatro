@@ -1,10 +1,10 @@
 {
-    // "/api": {
-    //   "target": "http://localhost:5000",
-    //   "secure": false
-    // },
     "/api": {
-      "target": "http://14.186.220.53:80",
+      "target": "http://localhost:5173",
       "secure": false
-    }
+    },
+    // "/api": {
+    //   "target": "http://14.186.220.53:80",
+    //   "secure": false
+    // }
 }
